@@ -3,14 +3,16 @@ import datetime
 from datetime import datetime as dt
 from datetime import timedelta
 import numpy as np
+
 try:
     from netCDF4 import Dataset
 except:
     print("The module netCDF4 needs to be installed for the MPPy-package to work.")
     sys.exit(1)
 
+
 class Device:
-    def getTime(self, input):
+    def CheckInputTime(self, input):
         """
         Checking input for the right dataformat. This can either be a string, then it will be converted to a
         datetime-object, or it already is a datetime-obj, then it will just be passed.
@@ -54,3 +56,12 @@ class Device:
         return _timeObj
 
 
+def getFilePath(device: str):
+    with open("./MPPy/Devices/PATH.txt", "r") as f:
+        while True:
+            try:
+                line = f.readline().rstrip()
+                if device in line:
+                    return line.split(":")[1]
+            except:
+                break
