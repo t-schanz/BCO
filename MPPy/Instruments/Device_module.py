@@ -21,10 +21,10 @@ class Device(object):
         """
 
         def _raiseError(_in):
-            print("Input for start and end can either be a datetime-object or a string.\n" \
-                  "If it is a string the it needs to have the format YYYYMMDDhhmmss, where\n" \
-                  "Y:Year, M:Month, D:Day, h:Hour, m:Minute, s:Second.\n" \
-                  "Missing steps will be appended automatically with the lowest possible value. Example:\n" \
+            print("Input for start and end can either be a datetime-object or a string.\n" 
+                  "If it is a string the it needs to have the format YYYYMMDDhhmmss, where\n" 
+                  "Y:Year, M:Month, D:Day, h:Hour, m:Minute, s:Second.\n" 
+                  "Missing steps will be appended automatically with the lowest possible value. Example:\n" 
                   "input='2017' -> '20170101000000'.")
 
             print("{} is not a valid format for start or end input.".format(_in))
@@ -57,11 +57,11 @@ class Device(object):
 
 
 def getFilePath(device: str):
-    with open("./MPPy/Devices/PATH.txt", "r") as f:
+    with open("./MPPy/Instruments/PATH.txt", "r") as f:
         while True:
             try:
                 line = f.readline().rstrip()
-                if device in line:
+                if device + ":" in line:
                     return line.split(":")[1]
             except:
                 break

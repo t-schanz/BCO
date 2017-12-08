@@ -1,7 +1,7 @@
 import sys
 from datetime import datetime as dt
 import datetime
-from MPPy.Devices.Device_module import Device, getFilePath
+from MPPy.Instruments.Device_module import Device, getFilePath
 import MPPy.tools.tools as tools
 import glob
 import numpy as np
@@ -14,7 +14,6 @@ except:
 
 
 class Radar(Device):
-
     def __init__(self, start, end, device="CORAL", version=2):
         """
         Class for working with radar data from Barbados.  \n
@@ -35,6 +34,13 @@ class Radar(Device):
         self.path = self.__getPath()
         self.__checkInput()
 
+        self.lat = self.__getValueFromNc("lat")
+        self.lon = self.__getValueFromNc("lon")
+        self.azimuth = self.__getValueFromNc("azi")
+        self.elevation = self.__getValueFromNc("elv")
+        self.north = self.__getValueFromNc("north")
+
+
     def __str__(self):
         returnStr = "%s Radar.\nUsed data version %i.\nLoad data from %s to %s." % \
                     (self.device, self.data_version, self.start, self.end)
@@ -49,11 +55,11 @@ class Radar(Device):
         """
 
         if self.device != "CORAL" and self.device != "KATRIN":
-            print("The only devices allowed are CORAL and KATRIN.\n%s is not a valid device!" %self.device)
+            print("The only devices allowed are CORAL and KATRIN.\n%s is not a valid device!" % self.device)
             sys.exit(1)
 
         _versions_avail = [1, 2, 3]
-        if not self.data_version in _versions_avail:
+        if self.data_version not in _versions_avail:
             print(
                 "The version of the Dataset needs to be between %i and %i" % (_versions_avail[0], _versions_avail[-1]))
             sys.exit(1)
@@ -63,10 +69,10 @@ class Radar(Device):
                 _nameStr = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, tools.datestr(_date))
                 _file = glob.glob(self.path + _nameStr)[0]
         except:
-            print("The Device %s was not running on %s. Please adjust timeframe.\n" \
-                  "For more information about device uptimes visit\n" \
+            print("The Device %s was not running on %s. Please adjust timeframe.\n" 
+                  "For more information about device uptimes visit\n" 
                   "http://bcoweb.mpimet.mpg.de/systems/data_availability/DeviceAvailability.html" % (
-                  self.device, _date))
+                      self.device, _date))
             sys.exit(1)
 
     def __getFlag(self):
@@ -80,7 +86,7 @@ class Radar(Device):
         elif self.device == "KATRIN":
             return "KATRIN"
 
-    def __getStartEnd(self,_date,nc):
+    def __getStartEnd(self, _date, nc):
         _start = 0
         _end = -1
         if _date == self.start.date():
@@ -90,31 +96,45 @@ class Radar(Device):
             _end = np.argmin(np.abs(np.subtract(nc.variables["time"][:], tools.time2num(self.end))))
             print("end ", _end)
 
-        return _start,_end
+        return _start, _end
 
-
-    def getReflectivity(self):
+    def getReflectivity(self,postprocessing="Zf"):
         """
         Loads the reflecitivity over the desired timeframe from multiple netCDF-files and returns them as one array.
+        :param postprocessing: see Radar.help() for more inforamation
         :return: 2-D numpy array with getReflectivity in dbz
         """
-        dbz_list = []
-        for _date in tools.daterange(self.start.date(), self.end.date()):
-            _nameStr = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, tools.datestr(_date))
-            _file = glob.glob(self.path + _nameStr)[0]
-            nc = Dataset(_file, mode="r")
-            # print(_date)
-            _start,_end = self.__getStartEnd(_date,nc)
-            dbzFromDate = nc.variables["Zf"][_start:_end].copy()
-            dbz_list.append(dbzFromDate)
-            nc.close()
 
-        dbz = dbz_list[0]
-        if len(dbz_list) > 1:
-            for item in dbz_list:
-                dbz = np.concatenate((dbz, item))
+        if postprocessing in self.__getPostProcessingForVersion():
+            dbz = self.__getArrayFromNc(value=postprocessing)
+            return dbz
+        else:
+            print("ERROR: %s is not a valid postprocessing operator for data version %i."%
+                  (postprocessing,self.data_version))
+            print("Allowed operators are: %s"%(",".join(self.__getPostProcessingForVersion())))
+            return None
 
-        return dbz
+
+    def getVelocity(self,target="hydrometeors"):
+        """
+        Loads the doppler velocity from the netCDF-files and returns them as one array
+        :param target:  'hydrometeors' or 'all'
+        :return: 2-D numpy array with doppler velocity in m/s
+        """
+        targets = ["hydrometeors","all"]
+        if target in targets:
+            if target == "all":
+                key = "VELg"
+            else:
+                key= "VEL"
+
+            velocity = self.__getArrayFromNc(key)
+            return velocity
+        else:
+            print("%s is not a valid target."%target)
+            print("Allowed targets are: %s"%", ".join(targets))
+            return None
+
 
     def getTime(self):
         """
@@ -134,11 +154,12 @@ class Radar(Device):
 
         time = time_list[0]
         if len(time_list) > 1:
-            for item in time_list:
+            for i,item in enumerate(time_list):
                 time = np.concatenate((time, item))
-
+                del time_list[i]
         time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
         return time
+
 
     def getRange(self):
         """
@@ -155,21 +176,66 @@ class Radar(Device):
 
         return range
 
+
+    def __getArrayFromNc(self,value):
+        var_list = []
+        for _date in tools.daterange(self.start.date(), self.end.date()):
+            _nameStr = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, tools.datestr(_date))
+            _file = glob.glob(self.path + _nameStr)[0]
+            nc = Dataset(_file, mode="r")
+            # print(_date)
+            _start, _end = self.__getStartEnd(_date, nc)
+            varFromDate = nc.variables[value][_start:_end].copy()
+            var_list.append(varFromDate)
+            nc.close()
+
+        _var = var_list[0]
+        if len(var_list) > 1:
+            for i,item in enumerate(var_list):
+                _var = np.concatenate((_var, item))
+                del var_list[i] # for more efficiency when handling large amounts of data
+
+        return _var
+
+    def __getValueFromNc(self,value):
+        _date = self.start.date()
+        _nameStr = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, tools.datestr(_date))
+        _file = glob.glob(self.path + _nameStr)[0]
+        nc = Dataset(_file, mode="r")
+        _var= nc.variables[value][:].copy()
+        nc.close()
+        return _var
+
+    def __getPostProcessingForVersion(self):
+        _vars = getFilePath("RADAR_VERSION_%i_REFLECTIVITY_VARIABLES"%self.data_version).split(",")
+        return _vars
+
     def __getPath(self):
         __versionStr = "Version_%i" % self.data_version
         PATH = "%s%s/" % (getFilePath("RADAR"), __versionStr)
         print(PATH)
         return PATH
 
-    def keys(self):
+    @staticmethod
+    def keys():
         __keys = ['getReflectivity', 'getTime', 'getRange']
         return __keys
 
-    def help(self):
+    @staticmethod
+    def help():
         print("This class provides acces to the radar data from the Max-Planck-Institute owned radars on Barbados.\n")
-        print("Input for start and end can either be a datetime-object or a string.\n" \
-              "If it is a string the it needs to have the format YYYYMMDDhhmmss, where\n" \
-              "Y:Year, M:Month, D:Day, h:Hour, m:Minute, s:Second.\n" \
-              "Missing steps will be appended automatically with the lowest possible value. Example:\n" \
-              "input='2017' -> '20170101000000'.")
-        print("Be careful with the timeframe as 1 month of data takes about 1GB of ram.")
+        print("Input for start and end: can either be a datetime-object or a string.\n" 
+              "   If it is a string the it needs to have the format YYYYMMDDhhmmss, where\n" 
+              "   Y:Year, M:Month, D:Day, h:Hour, m:Minute, s:Second.\n" 
+              "   Missing steps will be appended automatically with the lowest possible value. Example:\n" 
+              "   input='2017' -> '20170101000000'.\n")
+        print("Be careful with the timeframe as 1 month of data takes about 1GB of ram.\n")
+        print("Input for Version: Can be one of 1,[2],3\n")
+        print("reflectivity: can be called with parameter 'postprocessing'.\n"
+              "   This can be one of [Zf],Ze,Zg,Zu.\n"
+              "     Zf: Filtered and Mie corrected Radar Reflectivity of all Hydrometeors\n"
+              "     Ze: Unfiltered Equivalent Radar Reflectivity of all Hydrometeors\n"
+              "     Zu: Unfiltered and Mie corrected Radar Reflectivity of all Hydrometeors\n"
+              "     Zg: Unfiltered Equivalent Radar Reflectivity of all Targets (global)\n"
+              "   Note: not all parameters might be available for every data_version")
+
