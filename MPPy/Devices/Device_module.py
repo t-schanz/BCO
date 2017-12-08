@@ -11,7 +11,7 @@ except:
     sys.exit(1)
 
 
-class Device:
+class Device(object):
     def CheckInputTime(self, input):
         """
         Checking input for the right dataformat. This can either be a string, then it will be converted to a

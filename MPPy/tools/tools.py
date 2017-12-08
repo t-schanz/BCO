@@ -10,7 +10,7 @@ def daterange(start_date, end_date):
     :param end_date: datetime.datetime object
     :return:
     """
-    for n in range(int((end_date - start_date).days)):
+    for n in range(int((end_date - start_date).days) +1):
         yield start_date + timedelta(n)
 
 
@@ -28,6 +28,22 @@ def num2time(num):
         date = f(num)
     else:
         date = dt.fromtimestamp(num)
+    return date
+
+
+def time2num(time):
+    """
+    Converts a datetime.datetime object to seconds since 1970 as float.
+    If input is a numpy array, ouput will be a numpy array as well.
+
+    :param time:
+    :return:
+    """
+    if type(time) == np.ndarray:
+        epo = lambda x: x.timestamp()
+        date = np.asarray(list(map(epo,time)))
+    else:
+        date = time.timestamp()
     return date
 
 

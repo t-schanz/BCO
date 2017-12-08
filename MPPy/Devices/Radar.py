@@ -14,11 +14,6 @@ except:
 
 
 class Radar(Device):
-    """
-
-
-
-    """
 
     def __init__(self, start, end, device="CORAL", version=2):
         """
@@ -54,7 +49,7 @@ class Radar(Device):
         """
 
         if self.device != "CORAL" and self.device != "KATRIN":
-            print("The only devices allowed are CORAL and KATRIN.\n%s is not a valid device!" % device)
+            print("The only devices allowed are CORAL and KATRIN.\n%s is not a valid device!" %self.device)
             sys.exit(1)
 
         _versions_avail = [1, 2, 3]
@@ -85,18 +80,32 @@ class Radar(Device):
         elif self.device == "KATRIN":
             return "KATRIN"
 
+    def __getStartEnd(self,_date,nc):
+        _start = 0
+        _end = -1
+        if _date == self.start.date():
+            _start = np.argmin(np.abs(np.subtract(nc.variables["time"][:], tools.time2num(self.start))))
+            print("start", _start)
+        if _date == self.end.date():
+            _end = np.argmin(np.abs(np.subtract(nc.variables["time"][:], tools.time2num(self.end))))
+            print("end ", _end)
+
+        return _start,_end
+
+
     def getReflectivity(self):
         """
         Loads the reflecitivity over the desired timeframe from multiple netCDF-files and returns them as one array.
         :return: 2-D numpy array with getReflectivity in dbz
         """
         dbz_list = []
-        for _date in tools.daterange(self.start, self.end):
+        for _date in tools.daterange(self.start.date(), self.end.date()):
             _nameStr = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, tools.datestr(_date))
             _file = glob.glob(self.path + _nameStr)[0]
-
             nc = Dataset(_file, mode="r")
-            dbzFromDate = nc.variables["Zf"][:].copy()
+            # print(_date)
+            _start,_end = self.__getStartEnd(_date,nc)
+            dbzFromDate = nc.variables["Zf"][_start:_end].copy()
             dbz_list.append(dbzFromDate)
             nc.close()
 
@@ -113,12 +122,13 @@ class Radar(Device):
         :return: numpy array containing datetime.datetime objects
         """
         time_list = []
-        for _date in tools.daterange(self.start, self.end):
+        for _date in tools.daterange(self.start.date(), self.end.date()):
             _nameStr = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, tools.datestr(_date))
             _file = glob.glob(self.path + _nameStr)[0]
 
             nc = Dataset(_file, mode="r")
-            timeFromDate = nc.variables["time"][:].copy()
+            _start, _end = self.__getStartEnd(_date, nc)
+            timeFromDate = nc.variables["time"][_start:_end].copy()
             time_list.append(timeFromDate)
             nc.close()
 
@@ -162,3 +172,4 @@ class Radar(Device):
               "Y:Year, M:Month, D:Day, h:Hour, m:Minute, s:Second.\n" \
               "Missing steps will be appended automatically with the lowest possible value. Example:\n" \
               "input='2017' -> '20170101000000'.")
+        print("Be careful with the timeframe as 1 month of data takes about 1GB of ram.")
