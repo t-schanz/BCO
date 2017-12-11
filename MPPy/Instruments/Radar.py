@@ -24,6 +24,29 @@ class Radar(__Device):
             device: the device you want to use. Currently supported: CORAL, KATRIN
             version: The version of the dataset to use. Currently supported: 1,2,3  [note: 3 is in beta-phase]
 
+    Example:
+        The following example initiates a radar object for the CORAL with a timewindow form the 1st January 2017 to
+        the 2nd January 2017 to 3:30 pm:
+
+        >>> coral = Radar(start="20170101",end="201701021530", device="CORAL")
+
+        To get attributes of the device you just need to call the attribute now:
+
+        >>> coral.lat
+        array(13.162699699401855, dtype=float32)
+
+        To get measured values you need to call the appropriate function:
+
+        >>> coral.getReflectivity(postprocessing="Zf")
+        array([[...]], dtype=float32)
+
+        In most cases you want the timestamp as well:
+
+        >>> coral.getTime()
+        array([datetime.datetime(2017, 1, 1, 1, 0, 18), ...,
+        datetime.datetime(2017, 1, 2, 0, 59, 49)], dtype=object)
+
+
     Attributes:
         device: String of the device being used. ('CORAL' or 'KATRIN')
         start: datetime.datetime object indicating the beginning of the chosen timewindow.
@@ -105,6 +128,20 @@ class Radar(__Device):
             return "KATRIN"
 
     def __getStartEnd(self, _date, nc):
+        """
+        Find the index of the start-date and end-date argument in the netCDF-file. If the time-stamp is not in the
+        actual netCDF-file then return the beginning and end of that file.
+        Args:
+            _date: datetime.datetime-object to compare self.start and self.end with.
+            nc: the netCDF-Dataset
+
+        Returns:
+            _start: index of the _date in the actual netCDF-file. If not index in the netCDF-file then return 0
+                    (beginning of the file)
+            _end: index of the _date in the actual netCDF-file. If not index in the netCDF-file then return -1
+                    (end of the file)
+
+        """
         _start = 0
         _end = -1
         if _date == self.start.date():
@@ -126,6 +163,12 @@ class Radar(__Device):
         Returns:
             2-D numpy array with getReflectivity in dbz
 
+        Example:
+            Getting the unfiltered and mie corrected reflectivity of all hydrometeors with an an already
+            iniciated radar object 'coral':
+
+            >>> coral.getReflectivity(postprocessing="Zu")
+
         """
 
         if postprocessing in self.__getPostProcessingForVersion():
@@ -140,9 +183,21 @@ class Radar(__Device):
     def getVelocity(self, target="hydrometeors"):
         """
         Loads the doppler velocity from the netCDF-files and returns them as one array
-        :param target:  'hydrometeors' or 'all'
-        :return: 2-D numpy array with doppler velocity in m/s
+
+        Args:
+            target: String of which target the velocity you want to get from: 'hydrometeors' or 'all'.
+
+        Returns:
+            2-D numpy array with doppler velocity in m/s
+
+        Example:
+            This is how you could get the velocity from all targets for the 13th August 2016 to the 15th August 2016
+            of CORAL:
+
+            >>> coral = Radar(start="20160813",end="20160815", device="CORAL")
+            >>> velocity = Radar.getVelocity(target="all")
         """
+
         targets = ["hydrometeors", "all"]
         if target in targets:
             if target == "all":

@@ -24,10 +24,6 @@ Another Topic
    MPPy
 
 
-    
-
-
-
 Indices and tables
 ==================
 
