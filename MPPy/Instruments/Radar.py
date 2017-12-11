@@ -140,8 +140,8 @@ class Radar(__Device):
                     (beginning of the file)
             _end: index of the _date in the actual netCDF-file. If not index in the netCDF-file then return -1
                     (end of the file)
-
         """
+
         _start = 0
         _end = -1
         if _date == self.start.date():
@@ -165,10 +165,9 @@ class Radar(__Device):
 
         Example:
             Getting the unfiltered and mie corrected reflectivity of all hydrometeors with an an already
-            iniciated radar object 'coral':
+            initiated radar object 'coral':
 
             >>> coral.getReflectivity(postprocessing="Zu")
-
         """
 
         if postprocessing in self.__getPostProcessingForVersion():
@@ -214,8 +213,15 @@ class Radar(__Device):
 
     def getTime(self):
         """
-        Loads the getTime steps over the desired timeframe from all netCDF-files and returns them as one array.
-        :return: numpy array containing datetime.datetime objects
+        Loads the time steps over the desired timeframe from all netCDF-files and returns them as one array.
+
+        Returns:
+            A numpy array containing datetime.datetime objects
+
+        Example:
+            Getting the time-stamps from an an already initiated radar object 'coral':
+
+            >>> coral.getTime()
         """
         time_list = []
         for _date in tools.daterange(self.start.date(), self.end.date()):
@@ -239,7 +245,16 @@ class Radar(__Device):
     def getRange(self):
         """
         Loads the getRange-gates from the netCDF-file which contains the last entries of the desired timeframe.
-        :return: numpy array with height in meters
+        Note: just containing the range-gates from the last file of all used netCDF-files. If the range-gating canges
+        over the input-timewindow, then you might run into issues.
+
+        Returns:
+            A numpy array with height in meters
+
+        Example:
+            Getting the range-gates of an already initiated radar object called 'coral':
+
+            >>> coral.getRange()
         """
         for _date in tools.daterange(self.start, self.end):
             continue
@@ -252,6 +267,24 @@ class Radar(__Device):
         return range
 
     def __getArrayFromNc(self, value):
+        """
+        Retrieving the 'value' from the netCDF-Dataset reading just the desired timeframe.
+
+        Args:
+            value: String which is a valid key for the Dataset.variables[key].
+
+        Returns:
+            Numpy array with the values of the desired key and the inititated time-window.
+
+        Example:
+            What behind the scenes happens for an example-key 'VEL' is something like:
+
+            >>> nc = Dataset(input_file)
+            >>> _var = nc.variables[value][self.start:self.end].copy()
+
+            Just that in this function we are looping over all files and in the end concatinating them.
+        """
+
         var_list = []
         for _date in tools.daterange(self.start.date(), self.end.date()):
             _nameStr = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, tools.datestr(_date))
@@ -273,13 +306,15 @@ class Radar(__Device):
 
     def __getValueFromNc(self, value:str):
         """
+        This function gets values from the netCDF-Dataset, which stay constant over the whole timeframe. So its very
+        similar to __getArrayFromNc(), but without the looping.
 
         Args:
             value: A string for accessing the netCDF-file.
                     For example: 'Zf'
 
         Returns:
-
+            Numpy array
         """
         _date = self.start.date()
         _nameStr = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, tools.datestr(_date))
@@ -290,6 +325,14 @@ class Radar(__Device):
         return _var
 
     def __getPostProcessingForVersion(self):
+        """
+        Function for reading the valid reflectivity values from the initiation file.
+
+        Returns:
+            List of valid reflectivity-postprocessing strings, for example:
+            ["Zf","Ze","Zu"]
+        """
+
         _vars = getFilePath("RADAR_VERSION_%i_REFLECTIVITY_VARIABLES" % self.data_version).split(",")
         return _vars
 
@@ -299,13 +342,21 @@ class Radar(__Device):
         print(PATH)
         return PATH
 
-    @staticmethod
-    def keys():
-        __keys = ['getReflectivity', 'getTime', 'getRange']
-        return __keys
+    # @staticmethod
+    # def keys():
+    #     __keys = ['getReflectivity', 'getTime', 'getRange']
+    #     return __keys
 
     @staticmethod
     def help():
+        """
+        This is a function for less experienced python-users. It will print some tipps for working with this Radar
+        class. If possible use the documentation, it will be much more likely up to date and contains more information!
+
+        Returns:
+            Just prints some help messages into the console
+        """
+
         print("This class provides acces to the radar data from the Max-Planck-Institute owned radars on Barbados.\n")
         print("Input for start and end: can either be a datetime-object or a string.\n"
               "   If it is a string the it needs to have the format YYYYMMDDhhmmss, where\n"
@@ -321,3 +372,7 @@ class Radar(__Device):
               "     Zu: Unfiltered and Mie corrected Radar Reflectivity of all Hydrometeors\n"
               "     Zg: Unfiltered Equivalent Radar Reflectivity of all Targets (global)\n"
               "   Note: not all parameters might be available for every data_version")
+
+        print("Please have a look at the documentation. It contains examples for many usecases.\n"
+              "www.hereWillBeTheDocumentationAtSomePoint.de \n"
+              "at the moment: docs/_build/html/index.html")

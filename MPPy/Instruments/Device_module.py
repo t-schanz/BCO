@@ -12,15 +12,31 @@ except:
 
 
 class __Device(object):
+    """
+    This class provide some general functions to work with. Many of the instrument classes will inherit from this
+    calass.
+
+    """
     def CheckInputTime(self, input):
         """
         Checking input for the right dataformat. This can either be a string, then it will be converted to a
         datetime-object, or it already is a datetime-obj, then it will just be passed.
-        :param input: str, or datetime.datetime
-        :return: datetime.datetime
+
+        Args:
+            input: str, or datetime.datetime
+
+        Returns:
+            datetime.datetime object
         """
 
         def _raiseError(_in):
+            """
+            This is some kind of error to be raised. If any input is wrong this will tell what is wrond.
+
+            Args:
+                _in: The wrong input by the user.
+
+            """
             print("Input for start and end can either be a datetime-object or a string.\n" 
                   "If it is a string the it needs to have the format YYYYMMDDhhmmss, where\n" 
                   "Y:Year, M:Month, D:Day, h:Hour, m:Minute, s:Second.\n" 
@@ -57,6 +73,17 @@ class __Device(object):
 
 
 def getFilePath(device: str):
+    """
+    This function gets a value from the PATH.txt and returns it:
+
+    Args:
+        device: Straing of the Device of which you want to get the data-path to the netCDF-file from.
+
+    Returns:
+        String of the value which is written in the file PATH.txt behind the ':'. Only the string having the 'device'
+        somewhere in the line will be returned.
+
+    """
     with open("./MPPy/Instruments/PATH.txt", "r") as f:
         while True:
             try:

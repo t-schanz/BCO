@@ -186,7 +186,21 @@
 <dl class="function">
 <dt id="MPPy.Instruments.Device_module.getFilePath">
 <code class="descclassname">MPPy.Instruments.Device_module.</code><code class="descname">getFilePath</code><span class="sig-paren">(</span><em>device: str</em><span class="sig-paren">)</span><a class="headerlink" href="#MPPy.Instruments.Device_module.getFilePath" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This function gets a value from the PATH.txt and returns it:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>device</strong> – Straing of the Device of which you want to get the data-path to the netCDF-file from.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">‘. Only the string having the ‘device’
+somewhere in the line will be returned.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">String of the value which is written in the file PATH.txt behind the ‘</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </div>
 <div class="section" id="module-MPPy.Instruments.Radar">
@@ -291,7 +305,21 @@ the 2nd January 2017 to 3:30 pm:</p>
 <dt id="MPPy.Instruments.Radar.Radar.getRange">
 <code class="descname">getRange</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.getRange" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads the getRange-gates from the netCDF-file which contains the last entries of the desired timeframe.
-:return: numpy array with height in meters</p>
+Note: just containing the range-gates from the last file of all used netCDF-files. If the range-gating canges
+over the input-timewindow, then you might run into issues.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A numpy array with height in meters</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<p>Getting the range-gates of an already initiated radar object called ‘coral’:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span><span class="o">.</span><span class="n">getRange</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -310,7 +338,7 @@ the 2nd January 2017 to 3:30 pm:</p>
 </table>
 <p class="rubric">Example</p>
 <p>Getting the unfiltered and mie corrected reflectivity of all hydrometeors with an an already
-iniciated radar object ‘coral’:</p>
+initiated radar object ‘coral’:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span><span class="o">.</span><span class="n">getReflectivity</span><span class="p">(</span><span class="n">postprocessing</span><span class="o">=</span><span class="s2">&quot;Zu&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -319,21 +347,26 @@ iniciated radar object ‘coral’:</p>
 <dl class="method">
 <dt id="MPPy.Instruments.Radar.Radar.getTime">
 <code class="descname">getTime</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.getTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads the getTime steps over the desired timeframe from all netCDF-files and returns them as one array.
-:return: numpy array containing datetime.datetime objects</p>
+<dd><p>Loads the time steps over the desired timeframe from all netCDF-files and returns them as one array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A numpy array containing datetime.datetime objects</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<p>Getting the time-stamps from an an already initiated radar object ‘coral’:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span><span class="o">.</span><span class="n">getTime</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="MPPy.Instruments.Radar.Radar.getVelocity">
 <code class="descname">getVelocity</code><span class="sig-paren">(</span><em>target='hydrometeors'</em><span class="sig-paren">)</span><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.getVelocity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads the doppler velocity from the netCDF-files and returns them as one array</p>
-<p class="rubric">Example</p>
-<p>This is how you could get the velocity from all targets for the 13th August 2016 to the 15th August 2016
-of CORAL:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span> <span class="o">=</span> <span class="n">Radar</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;20160813&quot;</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s2">&quot;20160815&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;CORAL&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">velocity</span> <span class="o">=</span> <span class="n">Radar</span><span class="o">.</span><span class="n">getVelocity</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -344,17 +377,29 @@ of CORAL:</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Example</p>
+<p>This is how you could get the velocity from all targets for the 13th August 2016 to the 15th August 2016
+of CORAL:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span> <span class="o">=</span> <span class="n">Radar</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;20160813&quot;</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s2">&quot;20160815&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;CORAL&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">velocity</span> <span class="o">=</span> <span class="n">Radar</span><span class="o">.</span><span class="n">getVelocity</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="MPPy.Instruments.Radar.Radar.help">
 <em class="property">static </em><code class="descname">help</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.help" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="staticmethod">
-<dt id="MPPy.Instruments.Radar.Radar.keys">
-<em class="property">static </em><code class="descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.keys" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This is a function for less experienced python-users. It will print some tipps for working with this Radar
+class. If possible use the documentation, it will be much more likely up to date and contains more information!</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Just prints some help messages into the console</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
