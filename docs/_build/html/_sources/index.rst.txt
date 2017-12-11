@@ -21,7 +21,9 @@ Another Topic
 .. toctree::
    :maxdepth: 2
 
-   help
+   MPPy
+
+
     
 
 

@@ -1,4 +1,4 @@
-from MPPy.Instruments.Radar import Radar
+from MPPy.Instruments import Radar
 from MPPy.tools import tools
 import numpy as np
 

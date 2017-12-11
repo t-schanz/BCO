@@ -1,7 +1,7 @@
 import sys
 from datetime import datetime as dt
 import datetime
-from MPPy.Instruments.Device_module import Device, getFilePath
+from MPPy.Instruments.Device_module import __Device, getFilePath
 import MPPy.tools.tools as tools
 import glob
 import numpy as np
@@ -13,17 +13,36 @@ except:
     sys.exit(1)
 
 
-class Radar(Device):
+class Radar(__Device):
+    """
+    Class for working with radar data from Barbados.  \n
+    Currently supported devices: CORAL, KATRIN     \n
+
+    Args:
+            start: Either String or datetime.datetime-object indicating the start of the timefwindow
+            end: Either String or datetime.datetime-object indicating the end of the timefwindow
+            device: the device you want to use. Currently supported: CORAL, KATRIN
+            version: The version of the dataset to use. Currently supported: 1,2,3  [note: 3 is in beta-phase]
+
+    Attributes:
+        device: String of the device being used. ('CORAL' or 'KATRIN')
+        start: datetime.datetime object indicating the beginning of the chosen timewindow.
+        end: datetime.datetime object indicating the end of the chosen timewindow.
+        data_version: An Integer conatining the used version of the data (1,2,3[beta]) .
+        lat: Latitude of the instrument.
+        lon: Longitude of the instrument.
+        azimuth: Azimuth angle of where the instrument is pointing to.
+        elevation: Elevation angle of where the instrument is pointing to.
+        north: Degrees of where from the instrument seen is north.
+    """
+
     def __init__(self, start, end, device="CORAL", version=2):
         """
-        Class for working with radar data from Barbados.  \n
-        Currently supported devices: -CORAL     \n
-                                     -KATRIN    \n
-
-        :param start: start of the timeframe ( for more info run Radar.help() )
-        :param end: end of the timeframe ( for more info run Radar.help() )
-        :param device: the device you want to use. Currently supported: CORAL, KATRIN
-        :param version: The version of the dataset to use. Currently supported: 1,2,3  [note: 3 is in beta-phase]
+        Args:
+            start: start of the timeframe ( for more info run Radar.help() )
+            end: end of the timeframe ( for more info run Radar.help() )
+            device: the device you want to use. Currently supported: CORAL, KATRIN
+            version: The version of the dataset to use. Currently supported: 1,2,3  [note: 3 is in beta-phase]
         """
 
         self.device = device
@@ -39,7 +58,6 @@ class Radar(Device):
         self.azimuth = self.__getValueFromNc("azi")
         self.elevation = self.__getValueFromNc("elv")
         self.north = self.__getValueFromNc("north")
-
 
     def __str__(self):
         returnStr = "%s Radar.\nUsed data version %i.\nLoad data from %s to %s." % \
@@ -69,8 +87,8 @@ class Radar(Device):
                 _nameStr = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, tools.datestr(_date))
                 _file = glob.glob(self.path + _nameStr)[0]
         except:
-            print("The Device %s was not running on %s. Please adjust timeframe.\n" 
-                  "For more information about device uptimes visit\n" 
+            print("The Device %s was not running on %s. Please adjust timeframe.\n"
+                  "For more information about device uptimes visit\n"
                   "http://bcoweb.mpimet.mpg.de/systems/data_availability/DeviceAvailability.html" % (
                       self.device, _date))
             sys.exit(1)
@@ -98,43 +116,46 @@ class Radar(Device):
 
         return _start, _end
 
-    def getReflectivity(self,postprocessing="Zf"):
+    def getReflectivity(self, postprocessing="Zf"):
         """
         Loads the reflecitivity over the desired timeframe from multiple netCDF-files and returns them as one array.
-        :param postprocessing: see Radar.help() for more inforamation
-        :return: 2-D numpy array with getReflectivity in dbz
+
+        Args:
+            postprocessing: see Radar.help() for more inforamation
+
+        Returns:
+            2-D numpy array with getReflectivity in dbz
+
         """
 
         if postprocessing in self.__getPostProcessingForVersion():
             dbz = self.__getArrayFromNc(value=postprocessing)
             return dbz
         else:
-            print("ERROR: %s is not a valid postprocessing operator for data version %i."%
-                  (postprocessing,self.data_version))
-            print("Allowed operators are: %s"%(",".join(self.__getPostProcessingForVersion())))
+            print("ERROR: %s is not a valid postprocessing operator for data version %i." %
+                  (postprocessing, self.data_version))
+            print("Allowed operators are: %s" % (",".join(self.__getPostProcessingForVersion())))
             return None
 
-
-    def getVelocity(self,target="hydrometeors"):
+    def getVelocity(self, target="hydrometeors"):
         """
         Loads the doppler velocity from the netCDF-files and returns them as one array
         :param target:  'hydrometeors' or 'all'
         :return: 2-D numpy array with doppler velocity in m/s
         """
-        targets = ["hydrometeors","all"]
+        targets = ["hydrometeors", "all"]
         if target in targets:
             if target == "all":
                 key = "VELg"
             else:
-                key= "VEL"
+                key = "VEL"
 
             velocity = self.__getArrayFromNc(key)
             return velocity
         else:
-            print("%s is not a valid target."%target)
-            print("Allowed targets are: %s"%", ".join(targets))
+            print("%s is not a valid target." % target)
+            print("Allowed targets are: %s" % ", ".join(targets))
             return None
-
 
     def getTime(self):
         """
@@ -154,12 +175,11 @@ class Radar(Device):
 
         time = time_list[0]
         if len(time_list) > 1:
-            for i,item in enumerate(time_list):
+            for i, item in enumerate(time_list):
                 time = np.concatenate((time, item))
                 del time_list[i]
         time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
         return time
-
 
     def getRange(self):
         """
@@ -176,8 +196,7 @@ class Radar(Device):
 
         return range
 
-
-    def __getArrayFromNc(self,value):
+    def __getArrayFromNc(self, value):
         var_list = []
         for _date in tools.daterange(self.start.date(), self.end.date()):
             _nameStr = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, tools.datestr(_date))
@@ -191,23 +210,32 @@ class Radar(Device):
 
         _var = var_list[0]
         if len(var_list) > 1:
-            for i,item in enumerate(var_list):
+            for i, item in enumerate(var_list):
                 _var = np.concatenate((_var, item))
-                del var_list[i] # for more efficiency when handling large amounts of data
+                del var_list[i]  # for more efficiency when handling large amounts of data
 
         return _var
 
-    def __getValueFromNc(self,value):
+    def __getValueFromNc(self, value:str):
+        """
+
+        Args:
+            value: A string for accessing the netCDF-file.
+                    For example: 'Zf'
+
+        Returns:
+
+        """
         _date = self.start.date()
         _nameStr = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, tools.datestr(_date))
         _file = glob.glob(self.path + _nameStr)[0]
         nc = Dataset(_file, mode="r")
-        _var= nc.variables[value][:].copy()
+        _var = nc.variables[value][:].copy()
         nc.close()
         return _var
 
     def __getPostProcessingForVersion(self):
-        _vars = getFilePath("RADAR_VERSION_%i_REFLECTIVITY_VARIABLES"%self.data_version).split(",")
+        _vars = getFilePath("RADAR_VERSION_%i_REFLECTIVITY_VARIABLES" % self.data_version).split(",")
         return _vars
 
     def __getPath(self):
@@ -224,10 +252,10 @@ class Radar(Device):
     @staticmethod
     def help():
         print("This class provides acces to the radar data from the Max-Planck-Institute owned radars on Barbados.\n")
-        print("Input for start and end: can either be a datetime-object or a string.\n" 
-              "   If it is a string the it needs to have the format YYYYMMDDhhmmss, where\n" 
-              "   Y:Year, M:Month, D:Day, h:Hour, m:Minute, s:Second.\n" 
-              "   Missing steps will be appended automatically with the lowest possible value. Example:\n" 
+        print("Input for start and end: can either be a datetime-object or a string.\n"
+              "   If it is a string the it needs to have the format YYYYMMDDhhmmss, where\n"
+              "   Y:Year, M:Month, D:Day, h:Hour, m:Minute, s:Second.\n"
+              "   Missing steps will be appended automatically with the lowest possible value. Example:\n"
               "   input='2017' -> '20170101000000'.\n")
         print("Be careful with the timeframe as 1 month of data takes about 1GB of ram.\n")
         print("Input for Version: Can be one of 1,[2],3\n")
@@ -238,4 +266,3 @@ class Radar(Device):
               "     Zu: Unfiltered and Mie corrected Radar Reflectivity of all Hydrometeors\n"
               "     Zg: Unfiltered Equivalent Radar Reflectivity of all Targets (global)\n"
               "   Note: not all parameters might be available for every data_version")
-
