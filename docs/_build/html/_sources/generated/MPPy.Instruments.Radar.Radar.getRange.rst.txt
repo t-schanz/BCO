@@ -1,4 +1,4 @@
-getTime
+getRange
 ==================================
 
 .. currentmodule:: MPPy.Instruments.Radar

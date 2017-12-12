@@ -1,4 +1,4 @@
-getTime
+getReflectivity
 ==================================
 
 .. currentmodule:: MPPy.Instruments.Radar

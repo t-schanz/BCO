@@ -1,4 +1,4 @@
-getTime
+quickplot2D
 ==================================
 
 .. currentmodule:: MPPy.Instruments.Radar
