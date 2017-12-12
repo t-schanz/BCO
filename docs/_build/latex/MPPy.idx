@@ -1,0 +1,22 @@
+\indexentry{MPPy.Instruments.Radar (module)|hyperpage}{5}
+\indexentry{Radar (class in MPPy.Instruments.Radar)|hyperpage}{5}
+\indexentry{device (MPPy.Instruments.Radar.Radar attribute)|hyperpage}{6}
+\indexentry{start (MPPy.Instruments.Radar.Radar attribute)|hyperpage}{6}
+\indexentry{end (MPPy.Instruments.Radar.Radar attribute)|hyperpage}{6}
+\indexentry{data\_version (MPPy.Instruments.Radar.Radar attribute)|hyperpage}{6}
+\indexentry{lat (MPPy.Instruments.Radar.Radar attribute)|hyperpage}{6}
+\indexentry{lon (MPPy.Instruments.Radar.Radar attribute)|hyperpage}{6}
+\indexentry{azimuth (MPPy.Instruments.Radar.Radar attribute)|hyperpage}{6}
+\indexentry{elevation (MPPy.Instruments.Radar.Radar attribute)|hyperpage}{6}
+\indexentry{north (MPPy.Instruments.Radar.Radar attribute)|hyperpage}{6}
+\indexentry{getTime() (MPPy.Instruments.Radar.Radar method)|hyperpage}{7}
+\indexentry{getRange() (MPPy.Instruments.Radar.Radar method)|hyperpage}{7}
+\indexentry{getReflectivity() (MPPy.Instruments.Radar.Radar method)|hyperpage}{7}
+\indexentry{getVelocity() (MPPy.Instruments.Radar.Radar method)|hyperpage}{7}
+\indexentry{quickplot2D() (MPPy.Instruments.Radar.Radar method)|hyperpage}{8}
+\indexentry{help() (MPPy.Instruments.Radar.Radar static method)|hyperpage}{8}
+\indexentry{MPPy.tools.tools (module)|hyperpage}{9}
+\indexentry{daterange() (in module MPPy.tools.tools)|hyperpage}{9}
+\indexentry{num2time() (in module MPPy.tools.tools)|hyperpage}{9}
+\indexentry{time2num() (in module MPPy.tools.tools)|hyperpage}{10}
+\indexentry{datestr() (in module MPPy.tools.tools)|hyperpage}{10}

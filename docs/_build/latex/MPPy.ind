@@ -1,0 +1,61 @@
+\begin{sphinxtheindex}
+\def\bigletter#1{{\Large\sffamily#1}\nopagebreak\vspace{1mm}}
+
+  \bigletter A
+  \item azimuth (MPPy.Instruments.Radar.Radar attribute), \hyperpage{6}
+
+  \indexspace
+  \bigletter D
+  \item data\_version (MPPy.Instruments.Radar.Radar attribute), \hyperpage{6}
+  \item daterange() (in module MPPy.tools.tools), \hyperpage{9}
+  \item datestr() (in module MPPy.tools.tools), \hyperpage{10}
+  \item device (MPPy.Instruments.Radar.Radar attribute), \hyperpage{6}
+
+  \indexspace
+  \bigletter E
+  \item elevation (MPPy.Instruments.Radar.Radar attribute), \hyperpage{6}
+  \item end (MPPy.Instruments.Radar.Radar attribute), \hyperpage{6}
+
+  \indexspace
+  \bigletter G
+  \item getRange() (MPPy.Instruments.Radar.Radar method), \hyperpage{7}
+  \item getReflectivity() (MPPy.Instruments.Radar.Radar method), \hyperpage{7}
+  \item getTime() (MPPy.Instruments.Radar.Radar method), \hyperpage{7}
+  \item getVelocity() (MPPy.Instruments.Radar.Radar method), \hyperpage{7}
+
+  \indexspace
+  \bigletter H
+  \item help() (MPPy.Instruments.Radar.Radar static method), \hyperpage{8}
+
+  \indexspace
+  \bigletter L
+  \item lat (MPPy.Instruments.Radar.Radar attribute), \hyperpage{6}
+  \item lon (MPPy.Instruments.Radar.Radar attribute), \hyperpage{6}
+
+  \indexspace
+  \bigletter M
+  \item MPPy.Instruments.Radar (module), \hyperpage{5}
+  \item MPPy.tools.tools (module), \hyperpage{9}
+
+  \indexspace
+  \bigletter N
+  \item north (MPPy.Instruments.Radar.Radar attribute), \hyperpage{6}
+  \item num2time() (in module MPPy.tools.tools), \hyperpage{9}
+
+  \indexspace
+  \bigletter Q
+  \item quickplot2D() (MPPy.Instruments.Radar.Radar method), \hyperpage{8}
+
+  \indexspace
+  \bigletter R
+  \item Radar (class in MPPy.Instruments.Radar), \hyperpage{5}
+
+  \indexspace
+  \bigletter S
+  \item start (MPPy.Instruments.Radar.Radar attribute), \hyperpage{6}
+
+  \indexspace
+  \bigletter T
+  \item time2num() (in module MPPy.tools.tools), \hyperpage{10}
+
+\end{sphinxtheindex}
