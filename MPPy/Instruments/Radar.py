@@ -1,7 +1,7 @@
 import sys
 from datetime import datetime as dt
 import datetime
-from MPPy.Instruments.Device_module import __Device, getFilePath
+from MPPy.Instruments.Device_module import __Device, getValueFromSettings
 import MPPy.tools.tools as tools
 import glob
 import numpy as np
@@ -70,8 +70,8 @@ class Radar(__Device):
 
         self.device = device
         self.pathFlag = self.__getFlag()
-        self.start = self.CheckInputTime(start)
-        self.end = self.CheckInputTime(end)
+        self.start = self.checkInputTime(start)
+        self.end = self.checkInputTime(end)
         self.data_version = version
         self.path = self.__getPath()
         self.__checkInput()
@@ -81,6 +81,7 @@ class Radar(__Device):
         self.azimuth = self.__getValueFromNc("azi")
         self.elevation = self.__getValueFromNc("elv")
         self.north = self.__getValueFromNc("north")
+        self.skipped = None
 
     def __str__(self):
         returnStr = "%s Radar.\nUsed data version %i.\nLoad data from %s to %s." % \
@@ -143,15 +144,23 @@ class Radar(__Device):
         """
 
         _start = 0
-        _end = -1
+        _end = 0
         if _date == self.start.date():
             _start = np.argmin(np.abs(np.subtract(nc.variables["time"][:], tools.time2num(self.start))))
-            print("start", _start)
+            # print("start", _start)
         if _date == self.end.date():
             _end = np.argmin(np.abs(np.subtract(nc.variables["time"][:], tools.time2num(self.end))))
-            print("end ", _end)
+            # print("end ", _end)
 
         return _start, _end
+
+
+    def __FileNotAvail(self,skipped):
+        print("For the following days of the chosen timewindow no files exists:")
+        for element in skipped:
+            print(element)
+        self.skipped = skipped
+
 
     def getReflectivity(self, postprocessing="Zf"):
         """
@@ -223,30 +232,17 @@ class Radar(__Device):
 
             >>> coral.getTime()
         """
-        time_list = []
-        for _date in tools.daterange(self.start.date(), self.end.date()):
-            _nameStr = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, tools.datestr(_date))
-            _file = glob.glob(self.path + _nameStr)[0]
 
-            nc = Dataset(_file, mode="r")
-            _start, _end = self.__getStartEnd(_date, nc)
-            timeFromDate = nc.variables["time"][_start:_end].copy()
-            time_list.append(timeFromDate)
-            nc.close()
+        time = self.__getArrayFromNc('time')
 
-        time = time_list[0]
-        if len(time_list) > 1:
-            for i, item in enumerate(time_list):
-                time = np.concatenate((time, item))
-                del time_list[i]
         time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
         return time
 
     def getRange(self):
         """
         Loads the getRange-gates from the netCDF-file which contains the last entries of the desired timeframe.
-        Note: just containing the range-gates from the last file of all used netCDF-files. If the range-gating canges
-        over the input-timewindow, then you might run into issues.
+        Note: just containing the range-gates from the first valid file of all used netCDF-files. If the range-gating
+        changes over the input-timewindow, then you might run into issues.
 
         Returns:
             A numpy array with height in meters
@@ -256,15 +252,60 @@ class Radar(__Device):
 
             >>> coral.getRange()
         """
+
+        range = None
         for _date in tools.daterange(self.start, self.end):
-            continue
+            if not range:
+                try:
+                    _nameStr = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, tools.datestr(_date))
+                    _file = glob.glob(self.path + _nameStr)[0]
+                    nc = Dataset(_file, mode="r")
+                    range = nc.variables["range"][:].copy()
+                    return range
+                except:
+                    continue
 
-        _nameStr = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, tools.datestr(_date))
-        _file = glob.glob(self.path + _nameStr)[0]
-        nc = Dataset(_file, mode="r")
-        range = nc.variables["range"][:].copy()
+        return None
 
-        return range
+
+    def quickplot2D(self,value,save_name=None,save_path=None,ylim=None):
+        """
+        Creates a fast Quickplot from the input value. Start and end date are the initialization-dates. To save the
+        picture you can provide a name for the picture (save_name). If no savepath is provided, the picture will be
+        stored in the current working directory.
+
+        Args:
+            value: A 2-D array which you want to plot.
+            save_name: String: If provided picture will be saved under the given name. Example: 'quicklook.png'
+            save_path: String: If provided, the picture will be saved at this location. Example: '/user/hoe/testuer/'
+            ylim: Tuple: If provided the y-axis will be limited to these values.
+
+        Example:
+            To just get a quicklook of the reflectivity to your screen try:
+
+            >>> coral = Radar(start="2017040215",end="201704021530", device="CORAL")
+            >>> coral.quickplot2D(value=coral.getReflectivity(),ylim=(100,2000))
+
+        """
+        import matplotlib.pyplot as plt
+
+
+        _time =self.getTime()
+        _range = self.getRange()
+
+        fig,ax1 = plt.subplots(nrows=1,ncols=1,figsize =(9,6))
+        con = ax1.contourf(_time,_range,value.transpose(),cmap="jet")
+        if ylim:
+            ax1.set_ylim(ylim)
+        ax1.grid()
+        cl = plt.colorbar(con, ax=ax1)
+        plt.show()
+
+        if save_name:
+            if not save_path:
+                save_path = ""
+            plt.savefig(save_path + save_name)
+
 
     def __getArrayFromNc(self, value):
         """
@@ -286,21 +327,31 @@ class Radar(__Device):
         """
 
         var_list = []
+        skippedDates = []
         for _date in tools.daterange(self.start.date(), self.end.date()):
             _nameStr = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, tools.datestr(_date))
             _file = glob.glob(self.path + _nameStr)[0]
-            nc = Dataset(_file, mode="r")
-            # print(_date)
-            _start, _end = self.__getStartEnd(_date, nc)
-            varFromDate = nc.variables[value][_start:_end].copy()
-            var_list.append(varFromDate)
-            nc.close()
+            try:
+                nc = Dataset(_file, mode="r")
+                # print(_date)
+                _start, _end = self.__getStartEnd(_date, nc)
+                if _end != 0:
+                    varFromDate = nc.variables[value][_start:_end].copy()
+                else:
+                    varFromDate = nc.variables[value][_start:].copy()
+                var_list.append(varFromDate)
+                nc.close()
+            except:
+                skippedDates.append(_date)
+                continue
 
         _var = var_list[0]
         if len(var_list) > 1:
-            for i, item in enumerate(var_list):
+            for item in var_list[1:]:
                 _var = np.concatenate((_var, item))
-                del var_list[i]  # for more efficiency when handling large amounts of data
+
+        if skippedDates:
+            self.__FileNotAvail(skippedDates)
 
         return _var
 
@@ -333,12 +384,20 @@ class Radar(__Device):
             ["Zf","Ze","Zu"]
         """
 
-        _vars = getFilePath("RADAR_VERSION_%i_REFLECTIVITY_VARIABLES" % self.data_version).split(",")
+        _vars = getValueFromSettings("RADAR_VERSION_%i_REFLECTIVITY_VARIABLES" % self.data_version).split(",")
         return _vars
 
     def __getPath(self):
+        """
+        This function calls the getValueFromSettings-function from the __Device class with the right arguments. It then
+        concatenates it with the right version of the dataset.
+        To change the Filepath you need to edit the settings.ini file
+
+        Returns:
+            Filepath as string.
+        """
         __versionStr = "Version_%i" % self.data_version
-        PATH = "%s%s/" % (getFilePath("RADAR"), __versionStr)
+        PATH = "%s%s/" % (getValueFromSettings("RADAR_PATH"), __versionStr)
         print(PATH)
         return PATH
 

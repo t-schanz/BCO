@@ -184,9 +184,9 @@
 <div class="section" id="module-MPPy.Instruments.Device_module">
 <span id="mppy-instruments-device-module-module"></span><h2>MPPy.Instruments.Device_module module<a class="headerlink" href="#module-MPPy.Instruments.Device_module" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="MPPy.Instruments.Device_module.getFilePath">
-<code class="descclassname">MPPy.Instruments.Device_module.</code><code class="descname">getFilePath</code><span class="sig-paren">(</span><em>device: str</em><span class="sig-paren">)</span><a class="headerlink" href="#MPPy.Instruments.Device_module.getFilePath" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function gets a value from the PATH.txt and returns it:</p>
+<dt id="MPPy.Instruments.Device_module.getValueFromSettings">
+<code class="descclassname">MPPy.Instruments.Device_module.</code><code class="descname">getValueFromSettings</code><span class="sig-paren">(</span><em>device: str</em><span class="sig-paren">)</span><a class="headerlink" href="#MPPy.Instruments.Device_module.getValueFromSettings" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function gets a value from the settings.ini and returns it:</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -196,7 +196,7 @@
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">‘. Only the string having the ‘device’
 somewhere in the line will be returned.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">String of the value which is written in the file PATH.txt behind the ‘</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">String of the value which is written in the file settings.ini behind the ‘</td>
 </tr>
 </tbody>
 </table>
@@ -305,8 +305,8 @@ the 2nd January 2017 to 3:30 pm:</p>
 <dt id="MPPy.Instruments.Radar.Radar.getRange">
 <code class="descname">getRange</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.getRange" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads the getRange-gates from the netCDF-file which contains the last entries of the desired timeframe.
-Note: just containing the range-gates from the last file of all used netCDF-files. If the range-gating canges
-over the input-timewindow, then you might run into issues.</p>
+Note: just containing the range-gates from the first valid file of all used netCDF-files. If the range-gating
+changes over the input-timewindow, then you might run into issues.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -399,6 +399,34 @@ class. If possible use the documentation, it will be much more likely up to date
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="MPPy.Instruments.Radar.Radar.quickplot2D">
+<code class="descname">quickplot2D</code><span class="sig-paren">(</span><em>value</em>, <em>save_name=None</em>, <em>save_path=None</em>, <em>ylim=None</em><span class="sig-paren">)</span><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.quickplot2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a fast Quickplot from the input value. Start and end date are the initialization-dates. To save the
+picture you can provide a name for the picture (save_name). If no savepath is provided, the picture will be
+stored in the current working directory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>value</strong> – A 2-D array which you want to plot.</li>
+<li><strong>save_name</strong> – String: If provided picture will be saved under the given name. Example: ‘quicklook.png’</li>
+<li><strong>save_path</strong> – String: If provided, the picture will be saved at this location. Example: ‘/user/hoe/testuer/’</li>
+<li><strong>ylim</strong> – Tuple: If provided the y-axis will be limited to these values.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<p>To just get a quicklook of the reflectivity to your screen try:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span> <span class="o">=</span> <span class="n">Radar</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;2017040215&quot;</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s2">&quot;201704021530&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;CORAL&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span><span class="o">.</span><span class="n">quickplot2D</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">coral</span><span class="o">.</span><span class="n">getReflectivity</span><span class="p">(),</span><span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">2000</span><span class="p">))</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>

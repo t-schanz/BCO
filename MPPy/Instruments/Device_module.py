@@ -17,7 +17,7 @@ class __Device(object):
     calass.
 
     """
-    def CheckInputTime(self, input):
+    def checkInputTime(self, input):
         """
         Checking input for the right dataformat. This can either be a string, then it will be converted to a
         datetime-object, or it already is a datetime-obj, then it will just be passed.
@@ -72,19 +72,19 @@ class __Device(object):
         return _timeObj
 
 
-def getFilePath(device: str):
+def getValueFromSettings(device: str):
     """
-    This function gets a value from the PATH.txt and returns it:
+    This function gets a value from the settings.ini and returns it:
 
     Args:
         device: Straing of the Device of which you want to get the data-path to the netCDF-file from.
 
     Returns:
-        String of the value which is written in the file PATH.txt behind the ':'. Only the string having the 'device'
+        String of the value which is written in the file settings.ini behind the ':'. Only the string having the 'device'
         somewhere in the line will be returned.
 
     """
-    with open("./MPPy/Instruments/PATH.txt", "r") as f:
+    with open("./MPPy/Instruments/settings.ini", "r") as f:
         while True:
             try:
                 line = f.readline().rstrip()

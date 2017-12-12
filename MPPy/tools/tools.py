@@ -88,3 +88,4 @@ def datestr(dt_obj):
     """
 
     return dt_obj.strftime("%y%m%d")
+
