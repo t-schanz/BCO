@@ -1,0 +1,7 @@
+daterange
+==================================
+
+.. currentmodule:: MPPy.tools.tools
+
+.. autofunction:: daterange
+

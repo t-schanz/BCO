@@ -9,3 +9,12 @@ Instruments
 
    MPPy.Instruments
 
+
+Tools
+-----------
+
+.. toctree::
+   :maxdepth: 2
+
+   MPPy.tools
+

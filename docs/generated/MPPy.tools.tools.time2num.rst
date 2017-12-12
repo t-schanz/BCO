@@ -1,0 +1,7 @@
+time2num
+==================================
+
+.. currentmodule:: MPPy.tools.tools
+
+.. autofunction:: time2num
+

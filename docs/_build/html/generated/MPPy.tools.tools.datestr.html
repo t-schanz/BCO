@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>getReflectivity &mdash; MPPy 0.0.1 documentation</title>
+  <title>datestr &mdash; MPPy 0.0.1 documentation</title>
   
 
   
@@ -38,9 +38,9 @@
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="MPPy 0.0.1 documentation" href="../index.html"/>
-        <link rel="up" title="Radar class" href="MPPy.Instruments.Radar.Radar.html"/>
-        <link rel="next" title="getVelocity" href="MPPy.Instruments.Radar.Radar.getVelocity.html"/>
-        <link rel="prev" title="getRange" href="MPPy.Instruments.Radar.Radar.getRange.html"/> 
+        <link rel="up" title="Tools" href="../MPPy.tools.html"/>
+        <link rel="next" title="HELP" href="../help.html"/>
+        <link rel="prev" title="time2num" href="MPPy.tools.tools.time2num.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -99,8 +99,12 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Modules</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../modules.html#instruments">Instruments</a><ul class="current">
-<li class="toctree-l3 current"><a class="reference internal" href="../MPPy.Instruments.html">Radar</a><ul class="current">
-<li class="toctree-l4 current"><a class="reference internal" href="MPPy.Instruments.Radar.Radar.html">Radar class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../MPPy.Instruments.html">Radar</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../MPPy.tools.html">Tools</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="MPPy.tools.tools.daterange.html">daterange</a></li>
+<li class="toctree-l4"><a class="reference internal" href="MPPy.tools.tools.num2time.html">num2time</a></li>
+<li class="toctree-l4"><a class="reference internal" href="MPPy.tools.tools.time2num.html">time2num</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">datestr</a></li>
 </ul>
 </li>
 </ul>
@@ -158,17 +162,15 @@
         
           <li><a href="../modules.html">Modules</a> &raquo;</li>
         
-          <li><a href="../MPPy.Instruments.html">Radar</a> &raquo;</li>
+          <li><a href="../MPPy.tools.html">Tools</a> &raquo;</li>
         
-          <li><a href="MPPy.Instruments.Radar.Radar.html">Radar class</a> &raquo;</li>
-        
-      <li>getReflectivity</li>
+      <li>datestr</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/generated/MPPy.Instruments.Radar.Radar.getReflectivity.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/generated/MPPy.tools.tools.datestr.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -181,28 +183,22 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="getreflectivity">
-<h1>getReflectivity<a class="headerlink" href="#getreflectivity" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="MPPy.Instruments.Radar.Radar.getReflectivity">
-<code class="descclassname">Radar.</code><code class="descname">getReflectivity</code><span class="sig-paren">(</span><em>postprocessing='Zf'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MPPy/Instruments/Radar.html#Radar.getReflectivity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.getReflectivity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads the reflecitivity over the desired timeframe from multiple netCDF-files and returns them as one array.</p>
+  <div class="section" id="datestr">
+<h1>datestr<a class="headerlink" href="#datestr" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="MPPy.tools.tools.datestr">
+<code class="descclassname">MPPy.tools.tools.</code><code class="descname">datestr</code><span class="sig-paren">(</span><em>dt_obj</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MPPy/tools/tools.html#datestr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MPPy.tools.tools.datestr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a datetime.datetime object to a string in the commonly used shape for this module.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>postprocessing</strong> – see Radar.help() for more inforamation</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dt_obj</strong> – datetime.datetime object.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">2-D numpy array with getReflectivity in dbz</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">String of the format YYMMDD. Y=Year, M=Month, D=Day.</td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Example</p>
-<p>Getting the unfiltered and mie corrected reflectivity of all hydrometeors with an an already
-initiated radar object ‘coral’:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span><span class="o">.</span><span class="n">getReflectivity</span><span class="p">(</span><span class="n">postprocessing</span><span class="o">=</span><span class="s2">&quot;Zu&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
 </dd></dl>
 
 </div>
@@ -217,10 +213,10 @@ initiated radar object ‘coral’:</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="MPPy.Instruments.Radar.Radar.getVelocity.html" class="btn btn-neutral float-right" title="getVelocity" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../help.html" class="btn btn-neutral float-right" title="HELP" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="MPPy.Instruments.Radar.Radar.getRange.html" class="btn btn-neutral" title="getRange" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="MPPy.tools.tools.time2num.html" class="btn btn-neutral" title="time2num" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
