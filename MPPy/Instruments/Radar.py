@@ -1,3 +1,7 @@
+"""
+This Module contains the Radar class. This class is for easy working with the BCO radar data.
+"""
+
 import sys
 from datetime import datetime as dt
 import datetime
@@ -43,7 +47,7 @@ class Radar(__Device):
         >>> coral.lat
         array(13.162699699401855, dtype=float32)
 
-        To get measured values you need to call the appropriate function:
+        To get measured values you need to call the appropriate method:
 
         >>> coral.getReflectivity(postprocessing="Zf")
         array([[...]], dtype=float32)

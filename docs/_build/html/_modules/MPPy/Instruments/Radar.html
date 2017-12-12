@@ -92,7 +92,13 @@
             
             
               <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">First Steps</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Modules</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../help.html">HELP</a></li>
 </ul>
 
             
@@ -157,7 +163,11 @@
            <div itemprop="articleBody">
             
   <h1>Source code for MPPy.Instruments.Radar</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This Module contains the Radar class. This class is for easy working with the BCO radar data.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span> <span class="k">as</span> <span class="n">dt</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">from</span> <span class="nn">MPPy.Instruments.Device_module</span> <span class="k">import</span> <span class="n">__Device</span><span class="p">,</span> <span class="n">getValueFromSettings</span>
@@ -173,7 +183,7 @@
 
 <span class="n">__all__</span> <span class="o">=</span><span class="p">[</span><span class="s1">&#39;Radar&#39;</span><span class="p">]</span>
 
-<div class="viewcode-block" id="Radar"><a class="viewcode-back" href="../../../generated/MPPy.Instruments.Radar.Radar.html#MPPy.Instruments.Radar.Radar">[docs]</a><span class="k">class</span> <span class="nc">Radar</span><span class="p">(</span><span class="n">__Device</span><span class="p">):</span>
+<div class="viewcode-block" id="Radar"><a class="viewcode-back" href="../../../generated_tst/MPPy.Instruments.Radar.Radar.html#MPPy.Instruments.Radar.Radar">[docs]</a><span class="k">class</span> <span class="nc">Radar</span><span class="p">(</span><span class="n">__Device</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class for working with radar data from Barbados.  \n</span>
 <span class="sd">    Currently supported devices: CORAL, KATRIN     \n</span>
@@ -202,7 +212,7 @@
 <span class="sd">        &gt;&gt;&gt; coral.lat</span>
 <span class="sd">        array(13.162699699401855, dtype=float32)</span>
 
-<span class="sd">        To get measured values you need to call the appropriate function:</span>
+<span class="sd">        To get measured values you need to call the appropriate method:</span>
 
 <span class="sd">        &gt;&gt;&gt; coral.getReflectivity(postprocessing=&quot;Zf&quot;)</span>
 <span class="sd">        array([[...]], dtype=float32)</span>
@@ -328,7 +338,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">skipped</span> <span class="o">=</span> <span class="n">skipped</span>
 
 
-<div class="viewcode-block" id="Radar.getReflectivity"><a class="viewcode-back" href="../../../generated/MPPy.Instruments.Radar.Radar.getReflectivity.html#MPPy.Instruments.Radar.Radar.getReflectivity">[docs]</a>    <span class="k">def</span> <span class="nf">getReflectivity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">postprocessing</span><span class="o">=</span><span class="s2">&quot;Zf&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="Radar.getReflectivity"><a class="viewcode-back" href="../../../generated_tst/MPPy.Instruments.Radar.Radar.getReflectivity.html#MPPy.Instruments.Radar.Radar.getReflectivity">[docs]</a>    <span class="k">def</span> <span class="nf">getReflectivity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">postprocessing</span><span class="o">=</span><span class="s2">&quot;Zf&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the reflecitivity over the desired timeframe from multiple netCDF-files and returns them as one array.</span>
 
@@ -354,7 +364,7 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Allowed operators are: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__getPostProcessingForVersion</span><span class="p">())))</span>
             <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="Radar.getVelocity"><a class="viewcode-back" href="../../../generated/MPPy.Instruments.Radar.Radar.getVelocity.html#MPPy.Instruments.Radar.Radar.getVelocity">[docs]</a>    <span class="k">def</span> <span class="nf">getVelocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;hydrometeors&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="Radar.getVelocity"><a class="viewcode-back" href="../../../generated_tst/MPPy.Instruments.Radar.Radar.getVelocity.html#MPPy.Instruments.Radar.Radar.getVelocity">[docs]</a>    <span class="k">def</span> <span class="nf">getVelocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;hydrometeors&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the doppler velocity from the netCDF-files and returns them as one array</span>
 
@@ -386,7 +396,7 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Allowed targets are: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">targets</span><span class="p">))</span>
             <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="Radar.getTime"><a class="viewcode-back" href="../../../generated/MPPy.Instruments.Radar.Radar.getTime.html#MPPy.Instruments.Radar.Radar.getTime">[docs]</a>    <span class="k">def</span> <span class="nf">getTime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Radar.getTime"><a class="viewcode-back" href="../../../generated_tst/MPPy.Instruments.Radar.Radar.getTime.html#MPPy.Instruments.Radar.Radar.getTime">[docs]</a>    <span class="k">def</span> <span class="nf">getTime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the time steps over the desired timeframe from all netCDF-files and returns them as one array.</span>
 
@@ -404,7 +414,7 @@
         <span class="n">time</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">num2time</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>  <span class="c1"># converting seconds since 1970 to datetime objects</span>
         <span class="k">return</span> <span class="n">time</span></div>
 
-<div class="viewcode-block" id="Radar.getRange"><a class="viewcode-back" href="../../../generated/MPPy.Instruments.Radar.Radar.getRange.html#MPPy.Instruments.Radar.Radar.getRange">[docs]</a>    <span class="k">def</span> <span class="nf">getRange</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Radar.getRange"><a class="viewcode-back" href="../../../generated_tst/MPPy.Instruments.Radar.Radar.getRange.html#MPPy.Instruments.Radar.Radar.getRange">[docs]</a>    <span class="k">def</span> <span class="nf">getRange</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads the getRange-gates from the netCDF-file which contains the last entries of the desired timeframe.</span>
 <span class="sd">        Note: just containing the range-gates from the first valid file of all used netCDF-files. If the range-gating</span>
@@ -434,7 +444,7 @@
         <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="Radar.quickplot2D"><a class="viewcode-back" href="../../../generated/MPPy.Instruments.Radar.Radar.quickplot2D.html#MPPy.Instruments.Radar.Radar.quickplot2D">[docs]</a>    <span class="k">def</span> <span class="nf">quickplot2D</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">value</span><span class="p">,</span><span class="n">save_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">save_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">ylim</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Radar.quickplot2D"><a class="viewcode-back" href="../../../generated_tst/MPPy.Instruments.Radar.Radar.quickplot2D.html#MPPy.Instruments.Radar.Radar.quickplot2D">[docs]</a>    <span class="k">def</span> <span class="nf">quickplot2D</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">value</span><span class="p">,</span><span class="n">save_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">save_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">ylim</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Creates a fast Quickplot from the input value. Start and end date are the initialization-dates. To save the</span>
 <span class="sd">        picture you can provide a name for the picture (save_name). If no savepath is provided, the picture will be</span>
@@ -572,7 +582,7 @@
     <span class="c1">#     __keys = [&#39;getReflectivity&#39;, &#39;getTime&#39;, &#39;getRange&#39;]</span>
     <span class="c1">#     return __keys</span>
 
-<div class="viewcode-block" id="Radar.help"><a class="viewcode-back" href="../../../generated/MPPy.Instruments.Radar.Radar.help.html#MPPy.Instruments.Radar.Radar.help">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Radar.help"><a class="viewcode-back" href="../../../generated_tst/MPPy.Instruments.Radar.Radar.help.html#MPPy.Instruments.Radar.Radar.help">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">help</span><span class="p">():</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This is a function for less experienced python-users. It will print some tipps for working with this Radar</span>
