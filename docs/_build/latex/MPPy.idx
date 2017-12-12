@@ -12,11 +12,18 @@
 \indexentry{getTime() (MPPy.Instruments.Radar.Radar method)|hyperpage}{7}
 \indexentry{getRange() (MPPy.Instruments.Radar.Radar method)|hyperpage}{7}
 \indexentry{getReflectivity() (MPPy.Instruments.Radar.Radar method)|hyperpage}{7}
-\indexentry{getVelocity() (MPPy.Instruments.Radar.Radar method)|hyperpage}{7}
-\indexentry{quickplot2D() (MPPy.Instruments.Radar.Radar method)|hyperpage}{8}
-\indexentry{help() (MPPy.Instruments.Radar.Radar static method)|hyperpage}{8}
-\indexentry{MPPy.tools.tools (module)|hyperpage}{9}
-\indexentry{daterange() (in module MPPy.tools.tools)|hyperpage}{9}
-\indexentry{num2time() (in module MPPy.tools.tools)|hyperpage}{9}
-\indexentry{time2num() (in module MPPy.tools.tools)|hyperpage}{10}
-\indexentry{datestr() (in module MPPy.tools.tools)|hyperpage}{10}
+\indexentry{getVelocity() (MPPy.Instruments.Radar.Radar method)|hyperpage}{8}
+\indexentry{getRadarConstant() (MPPy.Instruments.Radar.Radar method)|hyperpage}{8}
+\indexentry{getMeltHeight() (MPPy.Instruments.Radar.Radar method)|hyperpage}{8}
+\indexentry{getNoisePower() (MPPy.Instruments.Radar.Radar method)|hyperpage}{8}
+\indexentry{getLDR() (MPPy.Instruments.Radar.Radar method)|hyperpage}{9}
+\indexentry{getRMS() (MPPy.Instruments.Radar.Radar method)|hyperpage}{9}
+\indexentry{getSNR() (MPPy.Instruments.Radar.Radar method)|hyperpage}{9}
+\indexentry{getTransmitPower() (MPPy.Instruments.Radar.Radar method)|hyperpage}{9}
+\indexentry{quickplot2D() (MPPy.Instruments.Radar.Radar method)|hyperpage}{9}
+\indexentry{help() (MPPy.Instruments.Radar.Radar static method)|hyperpage}{10}
+\indexentry{MPPy.tools.tools (module)|hyperpage}{10}
+\indexentry{daterange() (in module MPPy.tools.tools)|hyperpage}{10}
+\indexentry{num2time() (in module MPPy.tools.tools)|hyperpage}{11}
+\indexentry{time2num() (in module MPPy.tools.tools)|hyperpage}{11}
+\indexentry{datestr() (in module MPPy.tools.tools)|hyperpage}{11}

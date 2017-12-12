@@ -72,7 +72,7 @@ This package provides some tools for working with the data from the Barbados Clo
 
 
 \chapter{First Steps}
-\label{\detokenize{intro::doc}}\label{\detokenize{intro:documentation-of-the-mppy-project}}\label{\detokenize{intro:first-steps}}
+\label{\detokenize{intro:first-steps}}\label{\detokenize{intro:documentation-of-the-mppy-project}}\label{\detokenize{intro::doc}}
 In this section I will try to cover some basics to work with this module.
 
 
@@ -83,13 +83,13 @@ In this section I will try to cover some basics to work with this module.
 \label{\detokenize{intro:tools}}
 
 \chapter{Modules}
-\label{\detokenize{modules::doc}}\label{\detokenize{modules:modules}}
+\label{\detokenize{modules:modules}}\label{\detokenize{modules::doc}}
 
 \section{Instruments}
 \label{\detokenize{modules:instruments}}
 
 \subsection{Radar}
-\label{\detokenize{MPPy.Instruments:module-MPPy.Instruments.Radar}}\label{\detokenize{MPPy.Instruments::doc}}\label{\detokenize{MPPy.Instruments:radar}}\index{MPPy.Instruments.Radar (module)}
+\label{\detokenize{MPPy.Instruments:radar}}\label{\detokenize{MPPy.Instruments:module-MPPy.Instruments.Radar}}\label{\detokenize{MPPy.Instruments::doc}}\index{MPPy.Instruments.Radar (module)}
 This Module contains the Radar class. This class is for easy working with the BCO radar data.
 
 
@@ -119,7 +119,7 @@ Class for working with radar data from Barbados.
 
 
 \subsubsection{Radar class}
-\label{\detokenize{generated/MPPy.Instruments.Radar.Radar::doc}}\label{\detokenize{generated/MPPy.Instruments.Radar.Radar:radar-class}}\index{Radar (class in MPPy.Instruments.Radar)}
+\label{\detokenize{generated/MPPy.Instruments.Radar.Radar:radar-class}}\label{\detokenize{generated/MPPy.Instruments.Radar.Radar::doc}}\index{Radar (class in MPPy.Instruments.Radar)}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{generated/MPPy.Instruments.Radar.Radar:MPPy.Instruments.Radar.Radar}}\pysiglinewithargsret{\sphinxbfcode{class }\sphinxcode{MPPy.Instruments.Radar.}\sphinxbfcode{Radar}}{\emph{start}, \emph{end}, \emph{device='CORAL'}, \emph{version=2}}{}
@@ -281,7 +281,7 @@ Loads the time steps over the desired timeframe from all netCDF-files and return
 \hline
 {\hyperref[\detokenize{generated/MPPy.Instruments.Radar.Radar.getRange:MPPy.Instruments.Radar.Radar.getRange}]{\sphinxcrossref{\sphinxcode{getRange}}}}()
 &
-Loads the getRange-gates from the netCDF-file which contains the last entries of the desired timeframe.
+Loads the range-gates from the netCDF-file which contains the last entries of the desired timeframe.
 \\
 \hline
 {\hyperref[\detokenize{generated/MPPy.Instruments.Radar.Radar.getReflectivity:MPPy.Instruments.Radar.Radar.getReflectivity}]{\sphinxcrossref{\sphinxcode{getReflectivity}}}}({[}postprocessing{]})
@@ -292,6 +292,41 @@ Loads the reflecitivity over the desired timeframe from multiple netCDF-files an
 {\hyperref[\detokenize{generated/MPPy.Instruments.Radar.Radar.getVelocity:MPPy.Instruments.Radar.Radar.getVelocity}]{\sphinxcrossref{\sphinxcode{getVelocity}}}}({[}target{]})
 &
 Loads the doppler velocity from the netCDF-files and returns them as one array
+\\
+\hline
+{\hyperref[\detokenize{generated/MPPy.Instruments.Radar.Radar.getRadarConstant:MPPy.Instruments.Radar.Radar.getRadarConstant}]{\sphinxcrossref{\sphinxcode{getRadarConstant}}}}()
+&
+Loads the radar constant from all netCDF-Files and returns them as one array.
+\\
+\hline
+{\hyperref[\detokenize{generated/MPPy.Instruments.Radar.Radar.getMeltHeight:MPPy.Instruments.Radar.Radar.getMeltHeight}]{\sphinxcrossref{\sphinxcode{getMeltHeight}}}}()
+&
+Loads the melting layer height from all netCDF-Files and returns them as one array.
+\\
+\hline
+{\hyperref[\detokenize{generated/MPPy.Instruments.Radar.Radar.getNoisePower:MPPy.Instruments.Radar.Radar.getNoisePower}]{\sphinxcrossref{\sphinxcode{getNoisePower}}}}(channel)
+&
+Loads the HSdiv Noise Power in DSP of the desired channel from all netCDF-Files returns them as one array.
+\\
+\hline
+{\hyperref[\detokenize{generated/MPPy.Instruments.Radar.Radar.getLDR:MPPy.Instruments.Radar.Radar.getLDR}]{\sphinxcrossref{\sphinxcode{getLDR}}}}({[}target{]})
+&
+Loads the linear depolarization ratio (LDR) in dbZ of the desired target from all netCDF-Files returns them as one  array.
+\\
+\hline
+{\hyperref[\detokenize{generated/MPPy.Instruments.Radar.Radar.getRMS:MPPy.Instruments.Radar.Radar.getRMS}]{\sphinxcrossref{\sphinxcode{getRMS}}}}({[}target{]})
+&
+Loads the Peak Width RMS in m/s of the desired target from all netCDF-Files returns them as one  array.
+\\
+\hline
+{\hyperref[\detokenize{generated/MPPy.Instruments.Radar.Radar.getSNR:MPPy.Instruments.Radar.Radar.getSNR}]{\sphinxcrossref{\sphinxcode{getSNR}}}}({[}target{]})
+&
+Loads the reflectivity SNR in dbZ of the desired target from all netCDF-Files returns them as one  array.
+\\
+\hline
+{\hyperref[\detokenize{generated/MPPy.Instruments.Radar.Radar.getTransmitPower:MPPy.Instruments.Radar.Radar.getTransmitPower}]{\sphinxcrossref{\sphinxcode{getTransmitPower}}}}()
+&
+Loads the average transmit power in Watt of the desired target from all netCDF-Files returns them as one  array.
 \\
 \hline
 {\hyperref[\detokenize{generated/MPPy.Instruments.Radar.Radar.quickplot2D:MPPy.Instruments.Radar.Radar.quickplot2D}]{\sphinxcrossref{\sphinxcode{quickplot2D}}}}(value{[}, save\_name, save\_path, ylim{]})
@@ -308,7 +343,7 @@ This is a function for less experienced python-users.
 
 
 \paragraph{getTime}
-\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getTime::doc}}\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getTime:gettime}}\index{getTime() (MPPy.Instruments.Radar.Radar method)}
+\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getTime:gettime}}\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getTime::doc}}\index{getTime() (MPPy.Instruments.Radar.Radar method)}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getTime:MPPy.Instruments.Radar.Radar.getTime}}\pysiglinewithargsret{\sphinxcode{Radar.}\sphinxbfcode{getTime}}{}{}
@@ -331,11 +366,11 @@ Getting the time-stamps from an an already initiated radar object ‘coral’:
 
 
 \paragraph{getRange}
-\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getRange::doc}}\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getRange:getrange}}\index{getRange() (MPPy.Instruments.Radar.Radar method)}
+\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getRange:getrange}}\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getRange::doc}}\index{getRange() (MPPy.Instruments.Radar.Radar method)}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getRange:MPPy.Instruments.Radar.Radar.getRange}}\pysiglinewithargsret{\sphinxcode{Radar.}\sphinxbfcode{getRange}}{}{}
-Loads the getRange-gates from the netCDF-file which contains the last entries of the desired timeframe.
+Loads the range-gates from the netCDF-file which contains the last entries of the desired timeframe.
 Note: just containing the range-gates from the first valid file of all used netCDF-files. If the range-gating
 changes over the input-timewindow, then you might run into issues.
 \begin{quote}\begin{description}
@@ -356,7 +391,7 @@ Getting the range-gates of an already initiated radar object called ‘coral’:
 
 
 \paragraph{getReflectivity}
-\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getReflectivity::doc}}\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getReflectivity:getreflectivity}}\index{getReflectivity() (MPPy.Instruments.Radar.Radar method)}
+\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getReflectivity:getreflectivity}}\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getReflectivity::doc}}\index{getReflectivity() (MPPy.Instruments.Radar.Radar method)}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getReflectivity:MPPy.Instruments.Radar.Radar.getReflectivity}}\pysiglinewithargsret{\sphinxcode{Radar.}\sphinxbfcode{getReflectivity}}{\emph{postprocessing='Zf'}}{}
@@ -410,8 +445,144 @@ of CORAL:
 
 
 
+\paragraph{getRadarConstant}
+\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getRadarConstant:getradarconstant}}\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getRadarConstant::doc}}\index{getRadarConstant() (MPPy.Instruments.Radar.Radar method)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getRadarConstant:MPPy.Instruments.Radar.Radar.getRadarConstant}}\pysiglinewithargsret{\sphinxcode{Radar.}\sphinxbfcode{getRadarConstant}}{}{}
+Loads the radar constant from all netCDF-Files and returns them as one array.
+\begin{quote}\begin{description}
+\item[{Returns}] \leavevmode
+A numpy array containing the radar constant in mm\textasciicircum{}6/m\textasciicircum{}3 for each timestep.
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+
+\paragraph{getMeltHeight}
+\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getMeltHeight:getmeltheight}}\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getMeltHeight::doc}}\index{getMeltHeight() (MPPy.Instruments.Radar.Radar method)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getMeltHeight:MPPy.Instruments.Radar.Radar.getMeltHeight}}\pysiglinewithargsret{\sphinxcode{Radar.}\sphinxbfcode{getMeltHeight}}{}{}
+Loads the melting layer height from all netCDF-Files and returns them as one array.
+\begin{quote}\begin{description}
+\item[{Returns}] \leavevmode
+A numpy array containing the melting layer height in meters.
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+
+\paragraph{getNoisePower}
+\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getNoisePower::doc}}\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getNoisePower:getnoisepower}}\index{getNoisePower() (MPPy.Instruments.Radar.Radar method)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getNoisePower:MPPy.Instruments.Radar.Radar.getNoisePower}}\pysiglinewithargsret{\sphinxcode{Radar.}\sphinxbfcode{getNoisePower}}{\emph{channel}}{}
+Loads the HSdiv Noise Power in DSP of the desired channel from all netCDF-Files returns them as one array.
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\sphinxstyleliteralstrong{channel} \textendash{} String: can be either “Co” or “Cross”.
+
+\item[{Returns}] \leavevmode
+2D-numpy array containing the HSdiv Noise Power in DSP for all heigts and timesteps.
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+
+\paragraph{getLDR}
+\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getLDR:getldr}}\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getLDR::doc}}\index{getLDR() (MPPy.Instruments.Radar.Radar method)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getLDR:MPPy.Instruments.Radar.Radar.getLDR}}\pysiglinewithargsret{\sphinxcode{Radar.}\sphinxbfcode{getLDR}}{\emph{target='hydrometeors'}}{}~\begin{description}
+\item[{Loads the linear depolarization ratio (LDR) in dbZ of the desired target from all netCDF-Files returns them as one}] \leavevmode
+array. Allowed targets are: “hydrometeors” or “all”. The default is “hydrometeors”.
+
+\end{description}
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\sphinxstyleliteralstrong{target} \textendash{} String: can be either “hydrometeors” or “all”
+
+\item[{Returns}] \leavevmode
+2D-numpy array containing LDR in dbZ for all heigts and timesteps.
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+
+\paragraph{getRMS}
+\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getRMS:getrms}}\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getRMS::doc}}\index{getRMS() (MPPy.Instruments.Radar.Radar method)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getRMS:MPPy.Instruments.Radar.Radar.getRMS}}\pysiglinewithargsret{\sphinxcode{Radar.}\sphinxbfcode{getRMS}}{\emph{target='hydrometeors'}}{}~\begin{description}
+\item[{Loads the Peak Width RMS in m/s of the desired target from all netCDF-Files returns them as one}] \leavevmode
+array. Allowed targets are: “hydrometeors” or “all”. The default is “hydrometeors”.
+
+\end{description}
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\sphinxstyleliteralstrong{target} \textendash{} String: can be either “hydrometeors” or “all”
+
+\item[{Returns}] \leavevmode
+2D-numpy array containing LDR in m/s for all heigts and timesteps.
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+
+\paragraph{getSNR}
+\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getSNR:getsnr}}\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getSNR::doc}}\index{getSNR() (MPPy.Instruments.Radar.Radar method)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getSNR:MPPy.Instruments.Radar.Radar.getSNR}}\pysiglinewithargsret{\sphinxcode{Radar.}\sphinxbfcode{getSNR}}{\emph{target='hydrometeors'}}{}~\begin{description}
+\item[{Loads the reflectivity SNR in dbZ of the desired target from all netCDF-Files returns them as one}] \leavevmode
+array. Allowed targets are: “hydrometeors”, “all” or “plank”. The default is “hydrometeors”.
+
+\end{description}
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\sphinxstyleliteralstrong{target} \textendash{} String: can be either “hydrometeors”,”plank” or “all”
+
+\item[{Returns}] \leavevmode
+2D-numpy array containing LDR in dbZ for all heigts and timesteps.
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+
+\paragraph{getTransmitPower}
+\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getTransmitPower:gettransmitpower}}\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getTransmitPower::doc}}\index{getTransmitPower() (MPPy.Instruments.Radar.Radar method)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.getTransmitPower:MPPy.Instruments.Radar.Radar.getTransmitPower}}\pysiglinewithargsret{\sphinxcode{Radar.}\sphinxbfcode{getTransmitPower}}{}{}~\begin{quote}
+
+Loads the average transmit power in Watt of the desired target from all netCDF-Files returns them as one
+array.
+\end{quote}
+\begin{quote}\begin{description}
+\item[{Returns}] \leavevmode
+2D-numpy array containing average transmit power for all heigts and timesteps in W.
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+
 \paragraph{quickplot2D}
-\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.quickplot2D::doc}}\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.quickplot2D:quickplot2d}}\index{quickplot2D() (MPPy.Instruments.Radar.Radar method)}
+\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.quickplot2D:quickplot2d}}\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.quickplot2D::doc}}\index{quickplot2D() (MPPy.Instruments.Radar.Radar method)}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.quickplot2D:MPPy.Instruments.Radar.Radar.quickplot2D}}\pysiglinewithargsret{\sphinxcode{Radar.}\sphinxbfcode{quickplot2D}}{\emph{value}, \emph{save\_name=None}, \emph{save\_path=None}, \emph{ylim=None}}{}
@@ -449,7 +620,7 @@ To just get a quicklook of the reflectivity to your screen try:
 
 
 \paragraph{help}
-\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.help::doc}}\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.help:help}}\index{help() (MPPy.Instruments.Radar.Radar static method)}
+\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.help:help}}\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.help::doc}}\index{help() (MPPy.Instruments.Radar.Radar static method)}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{generated/MPPy.Instruments.Radar.Radar.help:MPPy.Instruments.Radar.Radar.help}}\pysiglinewithargsret{\sphinxbfcode{static }\sphinxcode{Radar.}\sphinxbfcode{help}}{}{}
@@ -472,7 +643,7 @@ Just prints some help messages into the console
 \label{\detokenize{modules:tools}}
 
 \subsection{Tools}
-\label{\detokenize{MPPy.tools::doc}}\label{\detokenize{MPPy.tools:tools}}\label{\detokenize{MPPy.tools:module-MPPy.tools.tools}}\index{MPPy.tools.tools (module)}
+\label{\detokenize{MPPy.tools:module-MPPy.tools.tools}}\label{\detokenize{MPPy.tools:tools}}\label{\detokenize{MPPy.tools::doc}}\index{MPPy.tools.tools (module)}
 This toolbox contains some functions which are being used by the MPPy package but might be usefull to the
 enduser, as well.
 
@@ -557,7 +728,7 @@ If you want to loop over the dates from the 1st January 2017 to the 3rd January 
 
 
 \subsubsection{num2time}
-\label{\detokenize{generated/MPPy.tools.tools.num2time::doc}}\label{\detokenize{generated/MPPy.tools.tools.num2time:num2time}}\index{num2time() (in module MPPy.tools.tools)}
+\label{\detokenize{generated/MPPy.tools.tools.num2time:num2time}}\label{\detokenize{generated/MPPy.tools.tools.num2time::doc}}\index{num2time() (in module MPPy.tools.tools)}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{generated/MPPy.tools.tools.num2time:MPPy.tools.tools.num2time}}\pysiglinewithargsret{\sphinxcode{MPPy.tools.tools.}\sphinxbfcode{num2time}}{\emph{num}}{}
@@ -577,7 +748,7 @@ datetime.datetime object
 
 
 \subsubsection{time2num}
-\label{\detokenize{generated/MPPy.tools.tools.time2num::doc}}\label{\detokenize{generated/MPPy.tools.tools.time2num:time2num}}\index{time2num() (in module MPPy.tools.tools)}
+\label{\detokenize{generated/MPPy.tools.tools.time2num:time2num}}\label{\detokenize{generated/MPPy.tools.tools.time2num::doc}}\index{time2num() (in module MPPy.tools.tools)}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{generated/MPPy.tools.tools.time2num:MPPy.tools.tools.time2num}}\pysiglinewithargsret{\sphinxcode{MPPy.tools.tools.}\sphinxbfcode{time2num}}{\emph{time}}{}
@@ -597,7 +768,7 @@ Float of seconds since 1970 / ndarray of floats.
 
 
 \subsubsection{datestr}
-\label{\detokenize{generated/MPPy.tools.tools.datestr::doc}}\label{\detokenize{generated/MPPy.tools.tools.datestr:datestr}}\index{datestr() (in module MPPy.tools.tools)}
+\label{\detokenize{generated/MPPy.tools.tools.datestr:datestr}}\label{\detokenize{generated/MPPy.tools.tools.datestr::doc}}\index{datestr() (in module MPPy.tools.tools)}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{generated/MPPy.tools.tools.datestr:MPPy.tools.tools.datestr}}\pysiglinewithargsret{\sphinxcode{MPPy.tools.tools.}\sphinxbfcode{datestr}}{\emph{dt\_obj}}{}
@@ -616,7 +787,7 @@ String of the format YYMMDD. Y=Year, M=Month, D=Day.
 
 
 \chapter{HELP}
-\label{\detokenize{help::doc}}\label{\detokenize{help:help}}
+\label{\detokenize{help:help}}\label{\detokenize{help::doc}}
 If you need any help or have trouble with the project please contact \sphinxhref{mailto:tobias.machnitzki@mpimet.mpg.de}{tobias.machnitzki@mpimet.mpg.de}
 
 
