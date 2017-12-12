@@ -382,19 +382,16 @@
 <span class="sd">            &gt;&gt;&gt; velocity = Radar.getVelocity(target=&quot;all&quot;)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;hydrometeors&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">target</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
-                <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;VELg&quot;</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;VEL&quot;</span>
+        <span class="n">targets</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;hydrometeors&quot;</span><span class="p">:</span> <span class="s2">&quot;VEL&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;all&quot;</span><span class="p">:</span> <span class="s2">&quot;VELg&quot;</span><span class="p">}</span>
 
-            <span class="n">velocity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getArrayFromNc</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">velocity</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is not a valid target.&quot;</span> <span class="o">%</span> <span class="n">target</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Allowed targets are: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">targets</span><span class="p">))</span>
-            <span class="k">return</span> <span class="kc">None</span></div>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is not a valid target. Please use on of </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">targets</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">velocity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getArrayFromNc</span><span class="p">(</span><span class="n">targets</span><span class="p">[</span><span class="n">target</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">velocity</span></div>
 
 <div class="viewcode-block" id="Radar.getTime"><a class="viewcode-back" href="../../../generated/MPPy.Instruments.Radar.Radar.getTime.html#MPPy.Instruments.Radar.Radar.getTime">[docs]</a>    <span class="k">def</span> <span class="nf">getTime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -414,9 +411,127 @@
         <span class="n">time</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">num2time</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>  <span class="c1"># converting seconds since 1970 to datetime objects</span>
         <span class="k">return</span> <span class="n">time</span></div>
 
+<div class="viewcode-block" id="Radar.getMeltHeight"><a class="viewcode-back" href="../../../generated/MPPy.Instruments.Radar.Radar.getMeltHeight.html#MPPy.Instruments.Radar.Radar.getMeltHeight">[docs]</a>    <span class="k">def</span> <span class="nf">getMeltHeight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads the melting layer height from all netCDF-Files and returns them as one array.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A numpy array containing the melting layer height in meters.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">meltHeight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getArrayFromNc</span><span class="p">(</span><span class="s1">&#39;MeltHei&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">meltHeight</span></div>
+
+
+<div class="viewcode-block" id="Radar.getRadarConstant"><a class="viewcode-back" href="../../../generated/MPPy.Instruments.Radar.Radar.getRadarConstant.html#MPPy.Instruments.Radar.Radar.getRadarConstant">[docs]</a>    <span class="k">def</span> <span class="nf">getRadarConstant</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads the radar constant from all netCDF-Files and returns them as one array.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A numpy array containing the radar constant in mm^6/m^3 for each timestep.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">radarConstant</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getArrayFromNc</span><span class="p">(</span><span class="s1">&#39;RadarConst&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">radarConstant</span></div>
+
+<div class="viewcode-block" id="Radar.getNoisePower"><a class="viewcode-back" href="../../../generated/MPPy.Instruments.Radar.Radar.getNoisePower.html#MPPy.Instruments.Radar.Radar.getNoisePower">[docs]</a>    <span class="k">def</span> <span class="nf">getNoisePower</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">channel</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads the HSdiv Noise Power in DSP of the desired channel from all netCDF-Files returns them as one array.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            channel: String: can be either &quot;Co&quot; or &quot;Cross&quot;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            2D-numpy array containing the HSdiv Noise Power in DSP for all heigts and timesteps.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">channels</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Co&quot;</span><span class="p">:</span><span class="s2">&quot;HSDco&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Cross&quot;</span><span class="p">:</span><span class="s2">&quot;HSDcx&quot;</span><span class="p">}</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">channel</span> <span class="ow">in</span> <span class="n">channels</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is not a valid channel. Please use on of </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">channels</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">noise</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getArrayFromNc</span><span class="p">(</span><span class="n">channels</span><span class="p">[</span><span class="n">channel</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">noise</span></div>
+
+<div class="viewcode-block" id="Radar.getLDR"><a class="viewcode-back" href="../../../generated/MPPy.Instruments.Radar.Radar.getLDR.html#MPPy.Instruments.Radar.Radar.getLDR">[docs]</a>    <span class="k">def</span> <span class="nf">getLDR</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">target</span><span class="o">=</span><span class="s2">&quot;hydrometeors&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads the linear depolarization ratio (LDR) in dbZ of the desired target from all netCDF-Files returns them as one</span>
+<span class="sd">         array. Allowed targets are: &quot;hydrometeors&quot; or &quot;all&quot;. The default is &quot;hydrometeors&quot;.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            target: String: can be either &quot;hydrometeors&quot; or &quot;all&quot;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            2D-numpy array containing LDR in dbZ for all heigts and timesteps.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">targets</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;hydrometeors&quot;</span><span class="p">:</span><span class="s2">&quot;LDR&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;all&quot;</span><span class="p">:</span><span class="s2">&quot;LDRg&quot;</span><span class="p">}</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is not a valid target. Please use on of </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">target</span><span class="p">,</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">targets</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">ldr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getArrayFromNc</span><span class="p">(</span><span class="n">targets</span><span class="p">[</span><span class="n">target</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">ldr</span></div>
+
+<div class="viewcode-block" id="Radar.getRMS"><a class="viewcode-back" href="../../../generated/MPPy.Instruments.Radar.Radar.getRMS.html#MPPy.Instruments.Radar.Radar.getRMS">[docs]</a>    <span class="k">def</span> <span class="nf">getRMS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">target</span><span class="o">=</span><span class="s2">&quot;hydrometeors&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads the Peak Width RMS in m/s of the desired target from all netCDF-Files returns them as one</span>
+<span class="sd">         array. Allowed targets are: &quot;hydrometeors&quot; or &quot;all&quot;. The default is &quot;hydrometeors&quot;.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            target: String: can be either &quot;hydrometeors&quot; or &quot;all&quot;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            2D-numpy array containing LDR in m/s for all heigts and timesteps.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">targets</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;hydrometeors&quot;</span><span class="p">:</span><span class="s2">&quot;RMS&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;all&quot;</span><span class="p">:</span><span class="s2">&quot;RMSg&quot;</span><span class="p">}</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is not a valid target. Please use on of </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">target</span><span class="p">,</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">targets</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">rms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getArrayFromNc</span><span class="p">(</span><span class="n">targets</span><span class="p">[</span><span class="n">target</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">rms</span></div>
+
+<div class="viewcode-block" id="Radar.getSNR"><a class="viewcode-back" href="../../../generated/MPPy.Instruments.Radar.Radar.getSNR.html#MPPy.Instruments.Radar.Radar.getSNR">[docs]</a>    <span class="k">def</span> <span class="nf">getSNR</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">target</span><span class="o">=</span><span class="s2">&quot;hydrometeors&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads the reflectivity SNR in dbZ of the desired target from all netCDF-Files returns them as one</span>
+<span class="sd">         array. Allowed targets are: &quot;hydrometeors&quot;, &quot;all&quot; or &quot;plank&quot;. The default is &quot;hydrometeors&quot;.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            target: String: can be either &quot;hydrometeors&quot;,&quot;plank&quot; or &quot;all&quot;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            2D-numpy array containing LDR in dbZ for all heigts and timesteps.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">targets</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;hydrometeors&quot;</span><span class="p">:</span><span class="s2">&quot;SNRg&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;all&quot;</span><span class="p">:</span><span class="s2">&quot;SNR&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;plank&quot;</span><span class="p">:</span><span class="s2">&quot;SNRplank&quot;</span><span class="p">}</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is not a valid target. Please use on of </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">target</span><span class="p">,</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">targets</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">snr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getArrayFromNc</span><span class="p">(</span><span class="n">targets</span><span class="p">[</span><span class="n">target</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">snr</span></div>
+
 <div class="viewcode-block" id="Radar.getRange"><a class="viewcode-back" href="../../../generated/MPPy.Instruments.Radar.Radar.getRange.html#MPPy.Instruments.Radar.Radar.getRange">[docs]</a>    <span class="k">def</span> <span class="nf">getRange</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Loads the getRange-gates from the netCDF-file which contains the last entries of the desired timeframe.</span>
+<span class="sd">        Loads the range-gates from the netCDF-file which contains the last entries of the desired timeframe.</span>
 <span class="sd">        Note: just containing the range-gates from the first valid file of all used netCDF-files. If the range-gating</span>
 <span class="sd">        changes over the input-timewindow, then you might run into issues.</span>
 
@@ -442,6 +557,20 @@
                     <span class="k">continue</span>
 
         <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Radar.getTransmitPower"><a class="viewcode-back" href="../../../generated/MPPy.Instruments.Radar.Radar.getTransmitPower.html#MPPy.Instruments.Radar.Radar.getTransmitPower">[docs]</a>    <span class="k">def</span> <span class="nf">getTransmitPower</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         Loads the average transmit power in Watt of the desired target from all netCDF-Files returns them as one</span>
+<span class="sd">         array.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            2D-numpy array containing average transmit power for all heigts and timesteps in W.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+
+        <span class="n">tpow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getArrayFromNc</span><span class="p">(</span><span class="s2">&quot;tpow&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">tpow</span></div>
 
 
 <div class="viewcode-block" id="Radar.quickplot2D"><a class="viewcode-back" href="../../../generated/MPPy.Instruments.Radar.Radar.quickplot2D.html#MPPy.Instruments.Radar.Radar.quickplot2D">[docs]</a>    <span class="k">def</span> <span class="nf">quickplot2D</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">value</span><span class="p">,</span><span class="n">save_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">save_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">ylim</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>

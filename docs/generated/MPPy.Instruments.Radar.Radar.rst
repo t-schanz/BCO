@@ -16,5 +16,13 @@ Radar class
       ~Radar.getRange
       ~Radar.getReflectivity
       ~Radar.getVelocity
+      ~Radar.getRadarConstant
+      ~Radar.getMeltHeight
+      ~Radar.getNoisePower
+      ~Radar.getLDR
+      ~Radar.getRMS
+      ~Radar.getSNR
+      ~Radar.getTransmitPower
+
       ~Radar.quickplot2D
       ~Radar.help

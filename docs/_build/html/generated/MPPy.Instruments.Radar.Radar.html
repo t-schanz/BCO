@@ -295,7 +295,7 @@ the 2nd January 2017 to 3:30 pm:</p>
 <td>Loads the time steps over the desired timeframe from all netCDF-files and returns them as one array.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="MPPy.Instruments.Radar.Radar.getRange.html#MPPy.Instruments.Radar.Radar.getRange" title="MPPy.Instruments.Radar.Radar.getRange"><code class="xref py py-obj docutils literal"><span class="pre">getRange</span></code></a>()</td>
-<td>Loads the getRange-gates from the netCDF-file which contains the last entries of the desired timeframe.</td>
+<td>Loads the range-gates from the netCDF-file which contains the last entries of the desired timeframe.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="MPPy.Instruments.Radar.Radar.getReflectivity.html#MPPy.Instruments.Radar.Radar.getReflectivity" title="MPPy.Instruments.Radar.Radar.getReflectivity"><code class="xref py py-obj docutils literal"><span class="pre">getReflectivity</span></code></a>([postprocessing])</td>
 <td>Loads the reflecitivity over the desired timeframe from multiple netCDF-files and returns them as one array.</td>
@@ -303,10 +303,31 @@ the 2nd January 2017 to 3:30 pm:</p>
 <tr class="row-even"><td><a class="reference internal" href="MPPy.Instruments.Radar.Radar.getVelocity.html#MPPy.Instruments.Radar.Radar.getVelocity" title="MPPy.Instruments.Radar.Radar.getVelocity"><code class="xref py py-obj docutils literal"><span class="pre">getVelocity</span></code></a>([target])</td>
 <td>Loads the doppler velocity from the netCDF-files and returns them as one array</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="MPPy.Instruments.Radar.Radar.quickplot2D.html#MPPy.Instruments.Radar.Radar.quickplot2D" title="MPPy.Instruments.Radar.Radar.quickplot2D"><code class="xref py py-obj docutils literal"><span class="pre">quickplot2D</span></code></a>(value[,&nbsp;save_name,&nbsp;save_path,&nbsp;ylim])</td>
+<tr class="row-odd"><td><a class="reference internal" href="MPPy.Instruments.Radar.Radar.getRadarConstant.html#MPPy.Instruments.Radar.Radar.getRadarConstant" title="MPPy.Instruments.Radar.Radar.getRadarConstant"><code class="xref py py-obj docutils literal"><span class="pre">getRadarConstant</span></code></a>()</td>
+<td>Loads the radar constant from all netCDF-Files and returns them as one array.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="MPPy.Instruments.Radar.Radar.getMeltHeight.html#MPPy.Instruments.Radar.Radar.getMeltHeight" title="MPPy.Instruments.Radar.Radar.getMeltHeight"><code class="xref py py-obj docutils literal"><span class="pre">getMeltHeight</span></code></a>()</td>
+<td>Loads the melting layer height from all netCDF-Files and returns them as one array.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="MPPy.Instruments.Radar.Radar.getNoisePower.html#MPPy.Instruments.Radar.Radar.getNoisePower" title="MPPy.Instruments.Radar.Radar.getNoisePower"><code class="xref py py-obj docutils literal"><span class="pre">getNoisePower</span></code></a>(channel)</td>
+<td>Loads the HSdiv Noise Power in DSP of the desired channel from all netCDF-Files returns them as one array.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="MPPy.Instruments.Radar.Radar.getLDR.html#MPPy.Instruments.Radar.Radar.getLDR" title="MPPy.Instruments.Radar.Radar.getLDR"><code class="xref py py-obj docutils literal"><span class="pre">getLDR</span></code></a>([target])</td>
+<td>Loads the linear depolarization ratio (LDR) in dbZ of the desired target from all netCDF-Files returns them as one  array.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="MPPy.Instruments.Radar.Radar.getRMS.html#MPPy.Instruments.Radar.Radar.getRMS" title="MPPy.Instruments.Radar.Radar.getRMS"><code class="xref py py-obj docutils literal"><span class="pre">getRMS</span></code></a>([target])</td>
+<td>Loads the Peak Width RMS in m/s of the desired target from all netCDF-Files returns them as one  array.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="MPPy.Instruments.Radar.Radar.getSNR.html#MPPy.Instruments.Radar.Radar.getSNR" title="MPPy.Instruments.Radar.Radar.getSNR"><code class="xref py py-obj docutils literal"><span class="pre">getSNR</span></code></a>([target])</td>
+<td>Loads the reflectivity SNR in dbZ of the desired target from all netCDF-Files returns them as one  array.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="MPPy.Instruments.Radar.Radar.getTransmitPower.html#MPPy.Instruments.Radar.Radar.getTransmitPower" title="MPPy.Instruments.Radar.Radar.getTransmitPower"><code class="xref py py-obj docutils literal"><span class="pre">getTransmitPower</span></code></a>()</td>
+<td>Loads the average transmit power in Watt of the desired target from all netCDF-Files returns them as one  array.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="MPPy.Instruments.Radar.Radar.quickplot2D.html#MPPy.Instruments.Radar.Radar.quickplot2D" title="MPPy.Instruments.Radar.Radar.quickplot2D"><code class="xref py py-obj docutils literal"><span class="pre">quickplot2D</span></code></a>(value[,&nbsp;save_name,&nbsp;save_path,&nbsp;ylim])</td>
 <td>Creates a fast Quickplot from the input value.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="MPPy.Instruments.Radar.Radar.help.html#MPPy.Instruments.Radar.Radar.help" title="MPPy.Instruments.Radar.Radar.help"><code class="xref py py-obj docutils literal"><span class="pre">help</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="MPPy.Instruments.Radar.Radar.help.html#MPPy.Instruments.Radar.Radar.help" title="MPPy.Instruments.Radar.Radar.help"><code class="xref py py-obj docutils literal"><span class="pre">help</span></code></a>()</td>
 <td>This is a function for less experienced python-users.</td>
 </tr>
 </tbody>

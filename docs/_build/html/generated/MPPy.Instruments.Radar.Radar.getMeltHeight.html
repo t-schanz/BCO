@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>getVelocity &mdash; MPPy 0.0.1 documentation</title>
+  <title>getMeltHeight &mdash; MPPy 0.0.1 documentation</title>
   
 
   
@@ -39,8 +39,8 @@
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="MPPy 0.0.1 documentation" href="../index.html"/>
         <link rel="up" title="Radar class" href="MPPy.Instruments.Radar.Radar.html"/>
-        <link rel="next" title="getRadarConstant" href="MPPy.Instruments.Radar.Radar.getRadarConstant.html"/>
-        <link rel="prev" title="getReflectivity" href="MPPy.Instruments.Radar.Radar.getReflectivity.html"/> 
+        <link rel="next" title="getNoisePower" href="MPPy.Instruments.Radar.Radar.getNoisePower.html"/>
+        <link rel="prev" title="getRadarConstant" href="MPPy.Instruments.Radar.Radar.getRadarConstant.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -163,13 +163,13 @@
         
           <li><a href="MPPy.Instruments.Radar.Radar.html">Radar class</a> &raquo;</li>
         
-      <li>getVelocity</li>
+      <li>getMeltHeight</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/generated/MPPy.Instruments.Radar.Radar.getVelocity.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/generated/MPPy.Instruments.Radar.Radar.getMeltHeight.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -182,29 +182,20 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="getvelocity">
-<h1>getVelocity<a class="headerlink" href="#getvelocity" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="getmeltheight">
+<h1>getMeltHeight<a class="headerlink" href="#getmeltheight" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
-<dt id="MPPy.Instruments.Radar.Radar.getVelocity">
-<code class="descclassname">Radar.</code><code class="descname">getVelocity</code><span class="sig-paren">(</span><em>target='hydrometeors'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MPPy/Instruments/Radar.html#Radar.getVelocity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.getVelocity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads the doppler velocity from the netCDF-files and returns them as one array</p>
+<dt id="MPPy.Instruments.Radar.Radar.getMeltHeight">
+<code class="descclassname">Radar.</code><code class="descname">getMeltHeight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MPPy/Instruments/Radar.html#Radar.getMeltHeight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.getMeltHeight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the melting layer height from all netCDF-Files and returns them as one array.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>target</strong> – String of which target the velocity you want to get from: ‘hydrometeors’ or ‘all’.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">2-D numpy array with doppler velocity in m/s</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A numpy array containing the melting layer height in meters.</td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Example</p>
-<p>This is how you could get the velocity from all targets for the 13th August 2016 to the 15th August 2016
-of CORAL:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span> <span class="o">=</span> <span class="n">Radar</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;20160813&quot;</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s2">&quot;20160815&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;CORAL&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">velocity</span> <span class="o">=</span> <span class="n">Radar</span><span class="o">.</span><span class="n">getVelocity</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
 </dd></dl>
 
 </div>
@@ -219,10 +210,10 @@ of CORAL:</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="MPPy.Instruments.Radar.Radar.getRadarConstant.html" class="btn btn-neutral float-right" title="getRadarConstant" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="MPPy.Instruments.Radar.Radar.getNoisePower.html" class="btn btn-neutral float-right" title="getNoisePower" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="MPPy.Instruments.Radar.Radar.getReflectivity.html" class="btn btn-neutral" title="getReflectivity" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="MPPy.Instruments.Radar.Radar.getRadarConstant.html" class="btn btn-neutral" title="getRadarConstant" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

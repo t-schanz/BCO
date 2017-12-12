@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>getVelocity &mdash; MPPy 0.0.1 documentation</title>
+  <title>getRMS &mdash; MPPy 0.0.1 documentation</title>
   
 
   
@@ -39,8 +39,8 @@
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="MPPy 0.0.1 documentation" href="../index.html"/>
         <link rel="up" title="Radar class" href="MPPy.Instruments.Radar.Radar.html"/>
-        <link rel="next" title="getRadarConstant" href="MPPy.Instruments.Radar.Radar.getRadarConstant.html"/>
-        <link rel="prev" title="getReflectivity" href="MPPy.Instruments.Radar.Radar.getReflectivity.html"/> 
+        <link rel="next" title="getSNR" href="MPPy.Instruments.Radar.Radar.getSNR.html"/>
+        <link rel="prev" title="getLDR" href="MPPy.Instruments.Radar.Radar.getLDR.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -163,13 +163,13 @@
         
           <li><a href="MPPy.Instruments.Radar.Radar.html">Radar class</a> &raquo;</li>
         
-      <li>getVelocity</li>
+      <li>getRMS</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/generated/MPPy.Instruments.Radar.Radar.getVelocity.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/generated/MPPy.Instruments.Radar.Radar.getRMS.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -182,29 +182,25 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="getvelocity">
-<h1>getVelocity<a class="headerlink" href="#getvelocity" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="getrms">
+<h1>getRMS<a class="headerlink" href="#getrms" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
-<dt id="MPPy.Instruments.Radar.Radar.getVelocity">
-<code class="descclassname">Radar.</code><code class="descname">getVelocity</code><span class="sig-paren">(</span><em>target='hydrometeors'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MPPy/Instruments/Radar.html#Radar.getVelocity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.getVelocity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads the doppler velocity from the netCDF-files and returns them as one array</p>
+<dt id="MPPy.Instruments.Radar.Radar.getRMS">
+<code class="descclassname">Radar.</code><code class="descname">getRMS</code><span class="sig-paren">(</span><em>target='hydrometeors'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MPPy/Instruments/Radar.html#Radar.getRMS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.getRMS" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Loads the Peak Width RMS in m/s of the desired target from all netCDF-Files returns them as one</dt>
+<dd>array. Allowed targets are: “hydrometeors” or “all”. The default is “hydrometeors”.</dd>
+</dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>target</strong> – String of which target the velocity you want to get from: ‘hydrometeors’ or ‘all’.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>target</strong> – String: can be either “hydrometeors” or “all”</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">2-D numpy array with doppler velocity in m/s</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">2D-numpy array containing LDR in m/s for all heigts and timesteps.</td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Example</p>
-<p>This is how you could get the velocity from all targets for the 13th August 2016 to the 15th August 2016
-of CORAL:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span> <span class="o">=</span> <span class="n">Radar</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;20160813&quot;</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s2">&quot;20160815&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;CORAL&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">velocity</span> <span class="o">=</span> <span class="n">Radar</span><span class="o">.</span><span class="n">getVelocity</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
 </dd></dl>
 
 </div>
@@ -219,10 +215,10 @@ of CORAL:</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="MPPy.Instruments.Radar.Radar.getRadarConstant.html" class="btn btn-neutral float-right" title="getRadarConstant" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="MPPy.Instruments.Radar.Radar.getSNR.html" class="btn btn-neutral float-right" title="getSNR" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="MPPy.Instruments.Radar.Radar.getReflectivity.html" class="btn btn-neutral" title="getReflectivity" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="MPPy.Instruments.Radar.Radar.getLDR.html" class="btn btn-neutral" title="getLDR" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

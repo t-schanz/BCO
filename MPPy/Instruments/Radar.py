@@ -217,19 +217,16 @@ class Radar(__Device):
             >>> velocity = Radar.getVelocity(target="all")
         """
 
-        targets = ["hydrometeors", "all"]
-        if target in targets:
-            if target == "all":
-                key = "VELg"
-            else:
-                key = "VEL"
+        targets = {"hydrometeors": "VEL",
+                   "all": "VELg"}
 
-            velocity = self.__getArrayFromNc(key)
-            return velocity
-        else:
-            print("%s is not a valid target." % target)
-            print("Allowed targets are: %s" % ", ".join(targets))
+        if not target in targets:
+            print("%s is not a valid target. Please use on of %s" % (target, ", ".join(targets.keys())))
             return None
+
+        velocity = self.__getArrayFromNc(targets[target])
+
+        return velocity
 
     def getTime(self):
         """
@@ -249,9 +246,127 @@ class Radar(__Device):
         time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
         return time
 
+    def getMeltHeight(self):
+        """
+        Loads the melting layer height from all netCDF-Files and returns them as one array.
+
+        Returns:
+            A numpy array containing the melting layer height in meters.
+
+        """
+        meltHeight = self.__getArrayFromNc('MeltHei')
+        return meltHeight
+
+
+    def getRadarConstant(self):
+        """
+        Loads the radar constant from all netCDF-Files and returns them as one array.
+
+        Returns:
+            A numpy array containing the radar constant in mm^6/m^3 for each timestep.
+
+        """
+
+        radarConstant = self.__getArrayFromNc('RadarConst')
+        return radarConstant
+
+    def getNoisePower(self,channel):
+        """
+        Loads the HSdiv Noise Power in DSP of the desired channel from all netCDF-Files returns them as one array.
+
+        Args:
+            channel: String: can be either "Co" or "Cross".
+
+        Returns:
+            2D-numpy array containing the HSdiv Noise Power in DSP for all heigts and timesteps.
+        """
+
+        channels = {"Co":"HSDco",
+                    "Cross":"HSDcx"}
+        if not channel in channels:
+            print("%s is not a valid channel. Please use on of %s"%(channel,", ".join(channels.keys())))
+            return None
+
+        noise = self.__getArrayFromNc(channels[channel])
+
+        return noise
+
+    def getLDR(self,target="hydrometeors"):
+        """
+        Loads the linear depolarization ratio (LDR) in dbZ of the desired target from all netCDF-Files returns them as one
+         array. Allowed targets are: "hydrometeors" or "all". The default is "hydrometeors".
+
+        Args:
+            target: String: can be either "hydrometeors" or "all"
+
+        Returns:
+            2D-numpy array containing LDR in dbZ for all heigts and timesteps.
+
+        """
+
+        targets = {"hydrometeors":"LDR",
+                    "all":"LDRg"}
+
+        if not target in targets:
+            print("%s is not a valid target. Please use on of %s"%(target,", ".join(targets.keys())))
+            return None
+
+        ldr = self.__getArrayFromNc(targets[target])
+
+        return ldr
+
+    def getRMS(self,target="hydrometeors"):
+        """
+        Loads the Peak Width RMS in m/s of the desired target from all netCDF-Files returns them as one
+         array. Allowed targets are: "hydrometeors" or "all". The default is "hydrometeors".
+
+        Args:
+            target: String: can be either "hydrometeors" or "all"
+
+        Returns:
+            2D-numpy array containing LDR in m/s for all heigts and timesteps.
+
+        """
+
+        targets = {"hydrometeors":"RMS",
+                    "all":"RMSg"}
+
+        if not target in targets:
+            print("%s is not a valid target. Please use on of %s"%(target,", ".join(targets.keys())))
+            return None
+
+        rms = self.__getArrayFromNc(targets[target])
+
+        return rms
+
+    def getSNR(self,target="hydrometeors"):
+        """
+        Loads the reflectivity SNR in dbZ of the desired target from all netCDF-Files returns them as one
+         array. Allowed targets are: "hydrometeors", "all" or "plank". The default is "hydrometeors".
+
+        Args:
+            target: String: can be either "hydrometeors","plank" or "all"
+
+        Returns:
+            2D-numpy array containing LDR in dbZ for all heigts and timesteps.
+
+        """
+
+        targets = {"hydrometeors":"SNRg",
+                    "all":"SNR",
+                    "plank":"SNRplank"}
+
+        if not target in targets:
+            print("%s is not a valid target. Please use on of %s"%(target,", ".join(targets.keys())))
+            return None
+
+        snr = self.__getArrayFromNc(targets[target])
+
+        return snr
+
     def getRange(self):
         """
-        Loads the getRange-gates from the netCDF-file which contains the last entries of the desired timeframe.
+        Loads the range-gates from the netCDF-file which contains the last entries of the desired timeframe.
         Note: just containing the range-gates from the first valid file of all used netCDF-files. If the range-gating
         changes over the input-timewindow, then you might run into issues.
 
@@ -277,6 +392,20 @@ class Radar(__Device):
                     continue
 
         return None
+
+    def getTransmitPower(self):
+        """
+         Loads the average transmit power in Watt of the desired target from all netCDF-Files returns them as one
+         array.
+
+        Returns:
+            2D-numpy array containing average transmit power for all heigts and timesteps in W.
+        """
+
+
+        tpow = self.__getArrayFromNc("tpow")
+
+        return tpow
 
 
     def quickplot2D(self,value,save_name=None,save_path=None,ylim=None):
