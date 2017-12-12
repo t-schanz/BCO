@@ -1,6 +1,0 @@
-getTime
-=====================================================
-
-.. currentmodule:: MPPy.Instruments.Radar
-
-.. autofunction:: Radar.getTime
