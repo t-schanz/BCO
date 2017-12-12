@@ -18,5 +18,3 @@ Radar class
       ~Radar.getVelocity
       ~Radar.quickplot2D
       ~Radar.help
-
-
