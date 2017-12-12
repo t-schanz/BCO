@@ -12,6 +12,7 @@ except:
     print("The module netCDF4 needs to be installed for the MPPy-package to work.")
     sys.exit(1)
 
+__all__ =['Radar']
 
 class Radar(__Device):
     """
@@ -29,6 +30,13 @@ class Radar(__Device):
         the 2nd January 2017 to 3:30 pm:
 
         >>> coral = Radar(start="20170101",end="201701021530", device="CORAL")
+
+        To review the attributes of your class you can use:
+
+        >>> print(coral)
+        CORAL Radar.
+        Used data version 2.
+        Load data from 2017-01-01 00:00:00 to 2017-01-02 15:30:00.
 
         To get attributes of the device you just need to call the attribute now:
 
@@ -58,7 +66,6 @@ class Radar(__Device):
         elevation: Elevation angle of where the instrument is pointing to.
         north: Degrees of where from the instrument seen is north.
     """
-
     def __init__(self, start, end, device="CORAL", version=2):
         """
         Args:

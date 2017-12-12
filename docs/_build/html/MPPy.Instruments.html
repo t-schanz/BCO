@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>MPPy.Instruments package &mdash; MPPy 0.0.1 documentation</title>
+  <title>Radar &mdash; MPPy 0.0.1 documentation</title>
   
 
   
@@ -38,9 +38,9 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="MPPy 0.0.1 documentation" href="index.html"/>
-        <link rel="up" title="MPPy package" href="MPPy.html"/>
-        <link rel="next" title="MPPy.tools package" href="MPPy.tools.html"/>
-        <link rel="prev" title="MPPy package" href="MPPy.html"/> 
+        <link rel="up" title="Modules" href="modules.html"/>
+        <link rel="next" title="Radar class" href="generated/MPPy.Instruments.Radar.Radar.html"/>
+        <link rel="prev" title="Modules" href="modules.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -94,19 +94,14 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="MPPy.html">MPPy package</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="MPPy.html#subpackages">Subpackages</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">MPPy.Instruments package</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-MPPy.Instruments.Device_module">MPPy.Instruments.Device_module module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-MPPy.Instruments.Radar">MPPy.Instruments.Radar module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-MPPy.Instruments">Module contents</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html#instruments">Instruments</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Radar</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/MPPy.Instruments.Radar.Radar.html">Radar class</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="MPPy.tools.html">MPPy.tools package</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="MPPy.html#module-MPPy">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -155,9 +150,9 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-          <li><a href="MPPy.html">MPPy package</a> &raquo;</li>
+          <li><a href="modules.html">Modules</a> &raquo;</li>
         
-      <li>MPPy.Instruments package</li>
+      <li>Radar</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -176,265 +171,19 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="mppy-instruments-package">
-<h1>MPPy.Instruments package<a class="headerlink" href="#mppy-instruments-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-MPPy.Instruments.Device_module">
-<span id="mppy-instruments-device-module-module"></span><h2>MPPy.Instruments.Device_module module<a class="headerlink" href="#module-MPPy.Instruments.Device_module" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="MPPy.Instruments.Device_module.getValueFromSettings">
-<code class="descclassname">MPPy.Instruments.Device_module.</code><code class="descname">getValueFromSettings</code><span class="sig-paren">(</span><em>device: str</em><span class="sig-paren">)</span><a class="headerlink" href="#MPPy.Instruments.Device_module.getValueFromSettings" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function gets a value from the settings.ini and returns it:</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
+  <div class="section" id="module-MPPy.Instruments.Radar">
+<span id="radar"></span><h1>Radar<a class="headerlink" href="#module-MPPy.Instruments.Radar" title="Permalink to this headline">¶</a></h1>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>device</strong> – Straing of the Device of which you want to get the data-path to the netCDF-file from.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">‘. Only the string having the ‘device’
-somewhere in the line will be returned.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">String of the value which is written in the file settings.ini behind the ‘</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/MPPy.Instruments.Radar.Radar.html#MPPy.Instruments.Radar.Radar" title="MPPy.Instruments.Radar.Radar"><code class="xref py py-obj docutils literal"><span class="pre">Radar</span></code></a>(start,&nbsp;end[,&nbsp;device,&nbsp;version])</td>
+<td>Class for working with radar data from Barbados.</td>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-</div>
-<div class="section" id="module-MPPy.Instruments.Radar">
-<span id="mppy-instruments-radar-module"></span><h2>MPPy.Instruments.Radar module<a class="headerlink" href="#module-MPPy.Instruments.Radar" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="MPPy.Instruments.Radar.Radar">
-<em class="property">class </em><code class="descclassname">MPPy.Instruments.Radar.</code><code class="descname">Radar</code><span class="sig-paren">(</span><em>start</em>, <em>end</em>, <em>device='CORAL'</em>, <em>version=2</em><span class="sig-paren">)</span><a class="headerlink" href="#MPPy.Instruments.Radar.Radar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">MPPy.Instruments.Device_module.__Device</span></code></p>
-<p>Class for working with radar data from Barbados.</p>
-<p>Currently supported devices: CORAL, KATRIN</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>start</strong> – Either String or datetime.datetime-object indicating the start of the timefwindow</li>
-<li><strong>end</strong> – Either String or datetime.datetime-object indicating the end of the timefwindow</li>
-<li><strong>device</strong> – the device you want to use. Currently supported: CORAL, KATRIN</li>
-<li><strong>version</strong> – The version of the dataset to use. Currently supported: 1,2,3  [note: 3 is in beta-phase]</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Example</p>
-<p>The following example initiates a radar object for the CORAL with a timewindow form the 1st January 2017 to
-the 2nd January 2017 to 3:30 pm:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span> <span class="o">=</span> <span class="n">Radar</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;20170101&quot;</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s2">&quot;201701021530&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;CORAL&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>To get attributes of the device you just need to call the attribute now:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span><span class="o">.</span><span class="n">lat</span>
-<span class="go">array(13.162699699401855, dtype=float32)</span>
-</pre></div>
-</div>
-<p>To get measured values you need to call the appropriate function:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span><span class="o">.</span><span class="n">getReflectivity</span><span class="p">(</span><span class="n">postprocessing</span><span class="o">=</span><span class="s2">&quot;Zf&quot;</span><span class="p">)</span>
-<span class="go">array([[...]], dtype=float32)</span>
-</pre></div>
-</div>
-<p>In most cases you want the timestamp as well:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span><span class="o">.</span><span class="n">getTime</span><span class="p">()</span>
-<span class="go">array([datetime.datetime(2017, 1, 1, 1, 0, 18), ...,</span>
-<span class="go">datetime.datetime(2017, 1, 2, 0, 59, 49)], dtype=object)</span>
-</pre></div>
-</div>
-<dl class="attribute">
-<dt id="MPPy.Instruments.Radar.Radar.device">
-<code class="descname">device</code><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.device" title="Permalink to this definition">¶</a></dt>
-<dd><p>String of the device being used. (‘CORAL’ or ‘KATRIN’)</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="MPPy.Instruments.Radar.Radar.start">
-<code class="descname">start</code><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.start" title="Permalink to this definition">¶</a></dt>
-<dd><p>datetime.datetime object indicating the beginning of the chosen timewindow.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="MPPy.Instruments.Radar.Radar.end">
-<code class="descname">end</code><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.end" title="Permalink to this definition">¶</a></dt>
-<dd><p>datetime.datetime object indicating the end of the chosen timewindow.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="MPPy.Instruments.Radar.Radar.data_version">
-<code class="descname">data_version</code><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.data_version" title="Permalink to this definition">¶</a></dt>
-<dd><p>An Integer conatining the used version of the data (1,2,3[beta]) .</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="MPPy.Instruments.Radar.Radar.lat">
-<code class="descname">lat</code><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.lat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Latitude of the instrument.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="MPPy.Instruments.Radar.Radar.lon">
-<code class="descname">lon</code><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.lon" title="Permalink to this definition">¶</a></dt>
-<dd><p>Longitude of the instrument.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="MPPy.Instruments.Radar.Radar.azimuth">
-<code class="descname">azimuth</code><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.azimuth" title="Permalink to this definition">¶</a></dt>
-<dd><p>Azimuth angle of where the instrument is pointing to.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="MPPy.Instruments.Radar.Radar.elevation">
-<code class="descname">elevation</code><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.elevation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Elevation angle of where the instrument is pointing to.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="MPPy.Instruments.Radar.Radar.north">
-<code class="descname">north</code><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.north" title="Permalink to this definition">¶</a></dt>
-<dd><p>Degrees of where from the instrument seen is north.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="MPPy.Instruments.Radar.Radar.getRange">
-<code class="descname">getRange</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.getRange" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads the getRange-gates from the netCDF-file which contains the last entries of the desired timeframe.
-Note: just containing the range-gates from the first valid file of all used netCDF-files. If the range-gating
-changes over the input-timewindow, then you might run into issues.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A numpy array with height in meters</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Example</p>
-<p>Getting the range-gates of an already initiated radar object called ‘coral’:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span><span class="o">.</span><span class="n">getRange</span><span class="p">()</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="MPPy.Instruments.Radar.Radar.getReflectivity">
-<code class="descname">getReflectivity</code><span class="sig-paren">(</span><em>postprocessing='Zf'</em><span class="sig-paren">)</span><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.getReflectivity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads the reflecitivity over the desired timeframe from multiple netCDF-files and returns them as one array.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>postprocessing</strong> – see Radar.help() for more inforamation</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">2-D numpy array with getReflectivity in dbz</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Example</p>
-<p>Getting the unfiltered and mie corrected reflectivity of all hydrometeors with an an already
-initiated radar object ‘coral’:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span><span class="o">.</span><span class="n">getReflectivity</span><span class="p">(</span><span class="n">postprocessing</span><span class="o">=</span><span class="s2">&quot;Zu&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="MPPy.Instruments.Radar.Radar.getTime">
-<code class="descname">getTime</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.getTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads the time steps over the desired timeframe from all netCDF-files and returns them as one array.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A numpy array containing datetime.datetime objects</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Example</p>
-<p>Getting the time-stamps from an an already initiated radar object ‘coral’:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span><span class="o">.</span><span class="n">getTime</span><span class="p">()</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="MPPy.Instruments.Radar.Radar.getVelocity">
-<code class="descname">getVelocity</code><span class="sig-paren">(</span><em>target='hydrometeors'</em><span class="sig-paren">)</span><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.getVelocity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads the doppler velocity from the netCDF-files and returns them as one array</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>target</strong> – String of which target the velocity you want to get from: ‘hydrometeors’ or ‘all’.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">2-D numpy array with doppler velocity in m/s</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Example</p>
-<p>This is how you could get the velocity from all targets for the 13th August 2016 to the 15th August 2016
-of CORAL:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span> <span class="o">=</span> <span class="n">Radar</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;20160813&quot;</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s2">&quot;20160815&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;CORAL&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">velocity</span> <span class="o">=</span> <span class="n">Radar</span><span class="o">.</span><span class="n">getVelocity</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="MPPy.Instruments.Radar.Radar.help">
-<em class="property">static </em><code class="descname">help</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.help" title="Permalink to this definition">¶</a></dt>
-<dd><p>This is a function for less experienced python-users. It will print some tipps for working with this Radar
-class. If possible use the documentation, it will be much more likely up to date and contains more information!</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Just prints some help messages into the console</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="MPPy.Instruments.Radar.Radar.quickplot2D">
-<code class="descname">quickplot2D</code><span class="sig-paren">(</span><em>value</em>, <em>save_name=None</em>, <em>save_path=None</em>, <em>ylim=None</em><span class="sig-paren">)</span><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.quickplot2D" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a fast Quickplot from the input value. Start and end date are the initialization-dates. To save the
-picture you can provide a name for the picture (save_name). If no savepath is provided, the picture will be
-stored in the current working directory.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>value</strong> – A 2-D array which you want to plot.</li>
-<li><strong>save_name</strong> – String: If provided picture will be saved under the given name. Example: ‘quicklook.png’</li>
-<li><strong>save_path</strong> – String: If provided, the picture will be saved at this location. Example: ‘/user/hoe/testuer/’</li>
-<li><strong>ylim</strong> – Tuple: If provided the y-axis will be limited to these values.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Example</p>
-<p>To just get a quicklook of the reflectivity to your screen try:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span> <span class="o">=</span> <span class="n">Radar</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;2017040215&quot;</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s2">&quot;201704021530&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;CORAL&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span><span class="o">.</span><span class="n">quickplot2D</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">coral</span><span class="o">.</span><span class="n">getReflectivity</span><span class="p">(),</span><span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">2000</span><span class="p">))</span>
-</pre></div>
-</div>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-MPPy.Instruments">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-MPPy.Instruments" title="Permalink to this headline">¶</a></h2>
-</div>
 </div>
 
 
@@ -447,10 +196,10 @@ stored in the current working directory.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="MPPy.tools.html" class="btn btn-neutral float-right" title="MPPy.tools package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="generated/MPPy.Instruments.Radar.Radar.html" class="btn btn-neutral float-right" title="Radar class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="MPPy.html" class="btn btn-neutral" title="MPPy package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="modules.html" class="btn btn-neutral" title="Modules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -492,6 +241,7 @@ stored in the current working directory.</p>
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
