@@ -575,3 +575,6 @@ class Radar(__Device):
         print("Please have a look at the documentation. It contains examples for many usecases.\n"
               "www.hereWillBeTheDocumentationAtSomePoint.de \n"
               "at the moment: docs/_build/html/index.html")
+
+if __name__ == "main":
+    pass
