@@ -97,3 +97,32 @@ def datestr(dt_obj):
 
     return dt_obj.strftime("%y%m%d")
 
+
+def bz2Dataset(bz2file: str):
+    """
+    Generates a netCDF Dataset from a .nc.bz2 file. It therefore needs the "dummy_nc_file.nc".
+
+    Args:
+        bz2file: String: Path to the .nc.bz2 file.
+
+    Returns:
+        netCDF4.Dataset of the .nc.bz2 file.
+    
+    Example:
+        To open a usual Dataset as known from the netCDF4 module use
+
+        >>> nc = bz2Dataset("radar_testfile.nc.bz2")
+
+        You then can work with this dataset the same as you would with a common netCDF4.Dataset:
+
+        >>> reflectivity = nc.variables["zf"][:].copy()
+
+    """
+    from netCDF4 import Dataset
+    import bz2
+
+    bz2Obj = bz2.BZ2File(bz2file)
+    dummy_nc_file = "MPPy/tools/dummy_nc_file.nc"
+    nc = Dataset(dummy_nc_file,memory=bz2Obj.read())
+    return nc
+

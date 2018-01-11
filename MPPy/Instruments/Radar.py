@@ -341,7 +341,7 @@ class Radar(__Device):
 
     def getSNR(self,target="hydrometeors"):
         """
-        Loads the reflectivity SNR in dbZ of the desired target from all netCDF-Files returns them as one
+        Loads the reflectivity SNR in dbZ of the desired target from all netCDF-Files and returns them as one
          array. Allowed targets are: "hydrometeors", "all" or "plank". The default is "hydrometeors".
 
         Args:

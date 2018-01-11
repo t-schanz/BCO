@@ -12,5 +12,6 @@ Tools
    num2time
    time2num
    datestr
+   bz2Dataset
 
 

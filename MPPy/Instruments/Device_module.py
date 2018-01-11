@@ -3,6 +3,7 @@ import datetime
 from datetime import datetime as dt
 from datetime import timedelta
 import numpy as np
+import bz2
 
 try:
     from netCDF4 import Dataset

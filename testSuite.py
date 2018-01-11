@@ -18,7 +18,7 @@ def testRadar():
     coral.quickplot2D(vel,ylim=(100,2000))
 
 if __name__ == "__main__":
-    lidar = Windlidar(start="20140813092350",end="20140913000050")
+    lidar = Windlidar(start="20180101",end="20180101")
 
 
 
