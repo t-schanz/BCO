@@ -139,39 +139,6 @@ class Radar(__Device):
         elif self.device == "KATRIN":
             return "KATRIN"
 
-    def __getStartEnd(self, _date, nc):
-        """
-        Find the index of the start-date and end-date argument in the netCDF-file. If the time-stamp is not in the
-        actual netCDF-file then return the beginning and end of that file.
-        Args:
-            _date: datetime.datetime-object to compare self.start and self.end with.
-            nc: the netCDF-Dataset
-
-        Returns:
-            _start: index of the _date in the actual netCDF-file. If not index in the netCDF-file then return 0
-                    (beginning of the file)
-            _end: index of the _date in the actual netCDF-file. If not index in the netCDF-file then return -1
-                    (end of the file)
-        """
-
-        _start = 0
-        _end = 0
-        if _date == self.start.date():
-            _start = np.argmin(np.abs(np.subtract(nc.variables["time"][:], tools.time2num(self.start))))
-            # print("start", _start)
-        if _date == self.end.date():
-            _end = np.argmin(np.abs(np.subtract(nc.variables["time"][:], tools.time2num(self.end))))
-            # print("end ", _end)
-
-        return _start, _end
-
-
-    def __FileNotAvail(self,skipped):
-        print("For the following days of the chosen timewindow no files exists:")
-        for element in skipped:
-            print(element)
-        self.skipped = skipped
-
 
     def getReflectivity(self, postprocessing="Zf"):
         """
@@ -461,7 +428,7 @@ class Radar(__Device):
             What behind the scenes happens for an example-key 'VEL' is something like:
 
             >>> nc = Dataset(input_file)
-            >>> _var = nc.variables[value][self.start:self.end].copy()
+            >>> _var = nc.variables["VEL"][self.start:self.end].copy()
 
             Just that in this function we are looping over all files and in the end concatinating them.
         """
@@ -474,7 +441,7 @@ class Radar(__Device):
             try:
                 nc = Dataset(_file, mode="r")
                 # print(_date)
-                _start, _end = self.__getStartEnd(_date, nc)
+                _start, _end = self.getStartEnd(_date, nc)
                 if _end != 0:
                     varFromDate = nc.variables[value][_start:_end].copy()
                 else:
@@ -491,7 +458,7 @@ class Radar(__Device):
                 _var = np.concatenate((_var, item))
 
         if skippedDates:
-            self.__FileNotAvail(skippedDates)
+            self.FileNotAvail(skippedDates)
 
         return _var
 

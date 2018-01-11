@@ -1,0 +1,343 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Windlidar class &mdash; MPPy 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+  
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="MPPy 0.0.1 documentation" href="../index.html"/>
+        <link rel="up" title="Radar" href="../MPPy.Instruments.html"/>
+        <link rel="next" title="getTime" href="MPPy.Instruments.Windlidar.Windlidar.getTime.html"/>
+        <link rel="prev" title="help" href="MPPy.Instruments.Radar.Radar.help.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> MPPy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">First Steps</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../modules.html#instruments">Instruments</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../MPPy.Instruments.html">Radar</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../MPPy.Instruments.html#module-MPPy.Instruments.Windlidar">Windlidar</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Windlidar class</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../modules.html#tools">Tools</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../help.html">HELP</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">MPPy</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../modules.html">Modules</a> &raquo;</li>
+        
+          <li><a href="../MPPy.Instruments.html">Radar</a> &raquo;</li>
+        
+      <li>Windlidar class</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/generated/MPPy.Instruments.Windlidar.Windlidar.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="windlidar-class">
+<h1>Windlidar class<a class="headerlink" href="#windlidar-class" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="MPPy.Instruments.Windlidar.Windlidar">
+<em class="property">class </em><code class="descclassname">MPPy.Instruments.Windlidar.</code><code class="descname">Windlidar</code><span class="sig-paren">(</span><em>start</em>, <em>end</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MPPy/Instruments/Windlidar.html#Windlidar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MPPy.Instruments.Windlidar.Windlidar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for working with the Windlidar Data from the BCO.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>start</strong> – Either String or datetime.datetime-object indicating the start of the timefwindow</li>
+<li><strong>end</strong> – Either String or datetime.datetime-object indicating the end of the timefwindow</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="MPPy.Instruments.Windlidar.Windlidar.title">
+<code class="descname">title</code><a class="headerlink" href="#MPPy.Instruments.Windlidar.Windlidar.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Title of the netCDF file.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MPPy.Instruments.Windlidar.Windlidar.device">
+<code class="descname">device</code><a class="headerlink" href="#MPPy.Instruments.Windlidar.Windlidar.device" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the instrument.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MPPy.Instruments.Windlidar.Windlidar.systemID">
+<code class="descname">systemID</code><a class="headerlink" href="#MPPy.Instruments.Windlidar.Windlidar.systemID" title="Permalink to this definition">¶</a></dt>
+<dd><p>ID of the instrument.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MPPy.Instruments.Windlidar.Windlidar.scanType">
+<code class="descname">scanType</code><a class="headerlink" href="#MPPy.Instruments.Windlidar.Windlidar.scanType" title="Permalink to this definition">¶</a></dt>
+<dd><p>For example “stare”.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MPPy.Instruments.Windlidar.Windlidar.focusRange">
+<code class="descname">focusRange</code><a class="headerlink" href="#MPPy.Instruments.Windlidar.Windlidar.focusRange" title="Permalink to this definition">¶</a></dt>
+<dd><p>The focus range.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MPPy.Instruments.Windlidar.Windlidar.temporalResolution">
+<code class="descname">temporalResolution</code><a class="headerlink" href="#MPPy.Instruments.Windlidar.Windlidar.temporalResolution" title="Permalink to this definition">¶</a></dt>
+<dd><p>String of the temporal resolution.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="MPPy.Instruments.Windlidar.Windlidar.location">
+<code class="descname">location</code><a class="headerlink" href="#MPPy.Instruments.Windlidar.Windlidar.location" title="Permalink to this definition">¶</a></dt>
+<dd><p>Location of the instrument.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="MPPy.Instruments.Windlidar.Windlidar.getTime.html#MPPy.Instruments.Windlidar.Windlidar.getTime" title="MPPy.Instruments.Windlidar.Windlidar.getTime"><code class="xref py py-obj docutils literal"><span class="pre">getTime</span></code></a>()</td>
+<td>Loads the time steps over the desired timeframe from all netCDF-files and returns them as one array.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="MPPy.Instruments.Windlidar.Windlidar.getRange.html#MPPy.Instruments.Windlidar.Windlidar.getRange" title="MPPy.Instruments.Windlidar.Windlidar.getRange"><code class="xref py py-obj docutils literal"><span class="pre">getRange</span></code></a>()</td>
+<td>Loads the range-gates from the netCDF-file which contains the last entries of the desired timeframe.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="MPPy.Instruments.Windlidar.Windlidar.getVelocity.html#MPPy.Instruments.Windlidar.Windlidar.getVelocity" title="MPPy.Instruments.Windlidar.Windlidar.getVelocity"><code class="xref py py-obj docutils literal"><span class="pre">getVelocity</span></code></a>()</td>
+<td>The radial velocity of of scatterers away from the instrument.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="MPPy.Instruments.Windlidar.Windlidar.getIntensity.html#MPPy.Instruments.Windlidar.Windlidar.getIntensity" title="MPPy.Instruments.Windlidar.Windlidar.getIntensity"><code class="xref py py-obj docutils literal"><span class="pre">getIntensity</span></code></a>()</td>
+<td>Loads the volume attenuated backwards scattering from the “volume attenuated backwarts scattering function in air”.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="MPPy.Instruments.Windlidar.Windlidar.getTime.html" class="btn btn-neutral float-right" title="getTime" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="MPPy.Instruments.Radar.Radar.help.html" class="btn btn-neutral" title="help" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Tobias Machnitzki.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.0.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

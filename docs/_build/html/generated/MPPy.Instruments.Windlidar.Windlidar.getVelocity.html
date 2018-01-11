@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>getMeltHeight &mdash; MPPy 0.0.1 documentation</title>
+  <title>getVelocity &mdash; MPPy 0.0.1 documentation</title>
   
 
   
@@ -38,9 +38,9 @@
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="MPPy 0.0.1 documentation" href="../index.html"/>
-        <link rel="up" title="Radar class" href="MPPy.Instruments.Radar.Radar.html"/>
-        <link rel="next" title="getNoisePower" href="MPPy.Instruments.Radar.Radar.getNoisePower.html"/>
-        <link rel="prev" title="getRadarConstant" href="MPPy.Instruments.Radar.Radar.getRadarConstant.html"/> 
+        <link rel="up" title="Windlidar class" href="MPPy.Instruments.Windlidar.Windlidar.html"/>
+        <link rel="next" title="getIntensity" href="MPPy.Instruments.Windlidar.Windlidar.getIntensity.html"/>
+        <link rel="prev" title="getRange" href="MPPy.Instruments.Windlidar.Windlidar.getRange.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -99,11 +99,11 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Modules</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../modules.html#instruments">Instruments</a><ul class="current">
-<li class="toctree-l3 current"><a class="reference internal" href="../MPPy.Instruments.html">Radar</a><ul class="current">
-<li class="toctree-l4 current"><a class="reference internal" href="MPPy.Instruments.Radar.Radar.html">Radar class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../MPPy.Instruments.html">Radar</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../MPPy.Instruments.html#module-MPPy.Instruments.Windlidar">Windlidar</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="MPPy.Instruments.Windlidar.Windlidar.html">Windlidar class</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../MPPy.Instruments.html#module-MPPy.Instruments.Windlidar">Windlidar</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../modules.html#tools">Tools</a></li>
@@ -162,15 +162,15 @@
         
           <li><a href="../MPPy.Instruments.html">Radar</a> &raquo;</li>
         
-          <li><a href="MPPy.Instruments.Radar.Radar.html">Radar class</a> &raquo;</li>
+          <li><a href="MPPy.Instruments.Windlidar.Windlidar.html">Windlidar class</a> &raquo;</li>
         
-      <li>getMeltHeight</li>
+      <li>getVelocity</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/generated/MPPy.Instruments.Radar.Radar.getMeltHeight.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/generated/MPPy.Instruments.Windlidar.Windlidar.getVelocity.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -183,17 +183,17 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="getmeltheight">
-<h1>getMeltHeight<a class="headerlink" href="#getmeltheight" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="getvelocity">
+<h1>getVelocity<a class="headerlink" href="#getvelocity" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
-<dt id="MPPy.Instruments.Radar.Radar.getMeltHeight">
-<code class="descclassname">Radar.</code><code class="descname">getMeltHeight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MPPy/Instruments/Radar.html#Radar.getMeltHeight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.getMeltHeight" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads the melting layer height from all netCDF-Files and returns them as one array.</p>
+<dt id="MPPy.Instruments.Windlidar.Windlidar.getVelocity">
+<code class="descclassname">Windlidar.</code><code class="descname">getVelocity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MPPy/Instruments/Windlidar.html#Windlidar.getVelocity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MPPy.Instruments.Windlidar.Windlidar.getVelocity" title="Permalink to this definition">¶</a></dt>
+<dd><p>The radial velocity of of scatterers away from the instrument.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A numpy array containing the melting layer height in meters.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A numpy array with the velocity.</td>
 </tr>
 </tbody>
 </table>
@@ -211,10 +211,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="MPPy.Instruments.Radar.Radar.getNoisePower.html" class="btn btn-neutral float-right" title="getNoisePower" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="MPPy.Instruments.Windlidar.Windlidar.getIntensity.html" class="btn btn-neutral float-right" title="getIntensity" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="MPPy.Instruments.Radar.Radar.getRadarConstant.html" class="btn btn-neutral" title="getRadarConstant" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="MPPy.Instruments.Windlidar.Windlidar.getRange.html" class="btn btn-neutral" title="getRange" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

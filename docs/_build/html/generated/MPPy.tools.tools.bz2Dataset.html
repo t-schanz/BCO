@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>getMeltHeight &mdash; MPPy 0.0.1 documentation</title>
+  <title>bz2Dataset &mdash; MPPy 0.0.1 documentation</title>
   
 
   
@@ -38,9 +38,9 @@
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="MPPy 0.0.1 documentation" href="../index.html"/>
-        <link rel="up" title="Radar class" href="MPPy.Instruments.Radar.Radar.html"/>
-        <link rel="next" title="getNoisePower" href="MPPy.Instruments.Radar.Radar.getNoisePower.html"/>
-        <link rel="prev" title="getRadarConstant" href="MPPy.Instruments.Radar.Radar.getRadarConstant.html"/> 
+        <link rel="up" title="Tools" href="../MPPy.tools.html"/>
+        <link rel="next" title="HELP" href="../help.html"/>
+        <link rel="prev" title="datestr" href="MPPy.tools.tools.datestr.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -98,15 +98,18 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Modules</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../modules.html#instruments">Instruments</a><ul class="current">
-<li class="toctree-l3 current"><a class="reference internal" href="../MPPy.Instruments.html">Radar</a><ul class="current">
-<li class="toctree-l4 current"><a class="reference internal" href="MPPy.Instruments.Radar.Radar.html">Radar class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../modules.html#instruments">Instruments</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../modules.html#tools">Tools</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../MPPy.tools.html">Tools</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="MPPy.tools.tools.daterange.html">daterange</a></li>
+<li class="toctree-l4"><a class="reference internal" href="MPPy.tools.tools.num2time.html">num2time</a></li>
+<li class="toctree-l4"><a class="reference internal" href="MPPy.tools.tools.time2num.html">time2num</a></li>
+<li class="toctree-l4"><a class="reference internal" href="MPPy.tools.tools.datestr.html">datestr</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">bz2Dataset</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../MPPy.Instruments.html#module-MPPy.Instruments.Windlidar">Windlidar</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../modules.html#tools">Tools</a></li>
 </ul>
 </li>
 </ul>
@@ -160,17 +163,15 @@
         
           <li><a href="../modules.html">Modules</a> &raquo;</li>
         
-          <li><a href="../MPPy.Instruments.html">Radar</a> &raquo;</li>
+          <li><a href="../MPPy.tools.html">Tools</a> &raquo;</li>
         
-          <li><a href="MPPy.Instruments.Radar.Radar.html">Radar class</a> &raquo;</li>
-        
-      <li>getMeltHeight</li>
+      <li>bz2Dataset</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/generated/MPPy.Instruments.Radar.Radar.getMeltHeight.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/generated/MPPy.tools.tools.bz2Dataset.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -183,20 +184,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="getmeltheight">
-<h1>getMeltHeight<a class="headerlink" href="#getmeltheight" title="Permalink to this headline">¶</a></h1>
-<dl class="method">
-<dt id="MPPy.Instruments.Radar.Radar.getMeltHeight">
-<code class="descclassname">Radar.</code><code class="descname">getMeltHeight</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MPPy/Instruments/Radar.html#Radar.getMeltHeight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MPPy.Instruments.Radar.Radar.getMeltHeight" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads the melting layer height from all netCDF-Files and returns them as one array.</p>
+  <div class="section" id="bz2dataset">
+<h1>bz2Dataset<a class="headerlink" href="#bz2dataset" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="MPPy.tools.tools.bz2Dataset">
+<code class="descclassname">MPPy.tools.tools.</code><code class="descname">bz2Dataset</code><span class="sig-paren">(</span><em>bz2file: str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MPPy/tools/tools.html#bz2Dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MPPy.tools.tools.bz2Dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a netCDF Dataset from a .nc.bz2 file. It therefore needs the “dummy_nc_file.nc”.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A numpy array containing the melting layer height in meters.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bz2file</strong> – String: Path to the .nc.bz2 file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">netCDF4.Dataset of the .nc.bz2 file.</td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Example</p>
+<p>To open a usual Dataset as known from the netCDF4 module use</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nc</span> <span class="o">=</span> <span class="n">bz2Dataset</span><span class="p">(</span><span class="s2">&quot;radar_testfile.nc.bz2&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You then can work with this dataset the same as you would with a common netCDF4.Dataset:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reflectivity</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;zf&quot;</span><span class="p">][:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -211,10 +223,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="MPPy.Instruments.Radar.Radar.getNoisePower.html" class="btn btn-neutral float-right" title="getNoisePower" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../help.html" class="btn btn-neutral float-right" title="HELP" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="MPPy.Instruments.Radar.Radar.getRadarConstant.html" class="btn btn-neutral" title="getRadarConstant" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="MPPy.tools.tools.datestr.html" class="btn btn-neutral" title="datestr" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
