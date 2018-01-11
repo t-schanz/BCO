@@ -49,6 +49,12 @@ class Windlidar(__Device):
         self.focusRange = None
         self.temporalResolution = None
         self.location = None
+        self.lat = None
+        self.lon = None
+        self.ele = None
+        self.azi = None
+        self.roll = None
+        self.pitch = None
 
         self.__getAttributes()
 
@@ -195,7 +201,6 @@ class Windlidar(__Device):
         _file = glob.glob(self.path + _datestr + "/" +  _nameStr)[0]
 
         nc = tools.bz2Dataset(_file)
-
         self.title = nc.title
         self.device = nc.devices
         self.systemID = nc.systemID
@@ -203,8 +208,14 @@ class Windlidar(__Device):
         self.focusRange = nc.focusRange
         self.temporalResolution = nc.resolution.split(";")[0]
         self.location = nc.location
-
         nc.close()
+
+        self.lat = self.__getValueFromNc("lat")
+        self.lon = self.__getValueFromNc("lon")
+        self.pitch = self.__getValueFromNc("pitch")
+        self.azi = self.__getValueFromNc("azi")
+        self.ele = self.__getValueFromNc("ele")
+        self.roll = self.__getValueFromNc("roll")
 
 
     def __getValueFromNc(self, value: str):
