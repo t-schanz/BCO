@@ -1,6 +1,6 @@
-from MPPy.Instruments import Radar
-from MPPy.Instruments import Windlidar
-from MPPy.tools import tools
+from BCO.Instruments import Radar
+from BCO.Instruments import Windlidar
+from BCO.tools import tools
 
 import numpy as np
 from datetime import datetime as dt
