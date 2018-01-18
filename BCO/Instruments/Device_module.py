@@ -5,12 +5,12 @@ from datetime import timedelta
 import numpy as np
 import bz2
 
-from MPPy.tools import tools
+from BCO.tools import tools
 
 try:
     from netCDF4 import Dataset
 except:
-    print("The module netCDF4 needs to be installed for the MPPy-package to work.")
+    print("The module netCDF4 needs to be installed for the BCO-package to work.")
     sys.exit(1)
 
 
@@ -119,7 +119,7 @@ def getValueFromSettings(device: str):
         somewhere in the line will be returned.
 
     """
-    with open("./MPPy/Instruments/settings.ini", "r") as f:
+    with open("./BCO/Instruments/settings.ini", "r") as f:
         while True:
             try:
                 line = f.readline().rstrip()

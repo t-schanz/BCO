@@ -122,7 +122,7 @@ def bz2Dataset(bz2file: str):
     import bz2
 
     bz2Obj = bz2.BZ2File(bz2file)
-    dummy_nc_file = "MPPy/tools/dummy_nc_file.nc"
+    dummy_nc_file = "BCO/tools/dummy_nc_file.nc"
     nc = Dataset(dummy_nc_file,memory=bz2Obj.read())
     return nc
 

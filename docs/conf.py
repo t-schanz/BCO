@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# MPPy documentation build configuration file, created by
+# BCO documentation build configuration file, created by
 # sphinx-quickstart on Mon Dec 11 08:54:46 2017.
 #
 # This file is execfile()d with the current directory set to its
@@ -77,7 +77,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'MPPy'
+project = 'BCO'
 copyright = '2017, Tobias Machnitzki'
 author = 'Tobias Machnitzki'
 
@@ -174,7 +174,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'MPPy.tex', 'MPPy Documentation',
+    (master_doc, 'BCO.tex', 'BCO Documentation',
      'Tobias Machnitzki', 'manual'),
 ]
 
@@ -184,7 +184,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'mppy', 'MPPy Documentation',
+    (master_doc, 'mppy', 'BCO Documentation',
      [author], 1)
 ]
 
@@ -195,8 +195,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'MPPy', 'MPPy Documentation',
-     author, 'MPPy', 'One line description of project.',
+    (master_doc, 'BCO', 'BCO Documentation',
+     author, 'BCO', 'One line description of project.',
      'Miscellaneous'),
 ]
 

@@ -5,15 +5,15 @@ This Module contains the Radar class. This class is for easy working with the BC
 import sys
 from datetime import datetime as dt
 import datetime
-from MPPy.Instruments.Device_module import __Device, getValueFromSettings
-import MPPy.tools.tools as tools
+from BCO.Instruments.Device_module import __Device, getValueFromSettings
+import BCO.tools.tools as tools
 import glob
 import numpy as np
 
 try:
     from netCDF4 import Dataset
 except:
-    print("The module netCDF4 needs to be installed for the MPPy-package to work.")
+    print("The module netCDF4 needs to be installed for the BCO-package to work.")
     sys.exit(1)
 
 __all__ =['Radar']

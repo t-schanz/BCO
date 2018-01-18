@@ -7,13 +7,13 @@ import bz2
 import glob
 import numpy as np
 
-import MPPy.tools.tools as tools
-from MPPy.Instruments.Device_module import __Device,getValueFromSettings
+import BCO.tools.tools as tools
+from BCO.Instruments.Device_module import __Device,getValueFromSettings
 
 try:
     from netCDF4 import Dataset
 except:
-    print("The module netCDF4 needs to be installed for the MPPy-package to work.")
+    print("The module netCDF4 needs to be installed for the BCO-package to work.")
     sys.exit(1)
 
 
