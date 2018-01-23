@@ -6,6 +6,7 @@ import sys
 import bz2
 import glob
 import numpy as np
+from datetime import timedelta
 
 import BCO.tools.tools as tools
 from BCO.Instruments.Device_module import __Device,getValueFromSettings
@@ -37,9 +38,10 @@ class Windlidar(__Device):
 
     def __init__(self, start, end):
 
-        self.start = self.checkInputTime(start)
-        self.end = self.checkInputTime(end)
+        self.start = self.checkInputTime(start) + timedelta(hours=0)
+        self.end = self.checkInputTime(end) + timedelta(hours=0)
         self.path = self.__getPath()
+        print(self.path)
 
         # Attributes:
         self.title = None
@@ -76,7 +78,15 @@ class Windlidar(__Device):
         time = self.__getArrayFromNc('time')
 
         time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
+        # noOffset = np.vectorize(self.__removeTimeOffset)
+        # time = noOffset(time)
+
+
         return time
+
+    @staticmethod
+    def __removeTimeOffset(time):
+        return time - timedelta(hours=1)
 
     def getRange(self):
         """
@@ -98,10 +108,16 @@ class Windlidar(__Device):
             if not range:
                 try:
                     _datestr = _date.strftime("%Y%m")
-                    _nameStr = "WindLidar__Deebles_Point__VerticalVelocity__STARE__1s__%s.nc.bz2" % _date.strftime(
+                    _nameStr = "WindLidar__Deebles_Point__VerticalVelocity__STARE__1s__%s.nc*" % _date.strftime(
                         "%Y%m%d")
-                    _file = glob.glob(self.path + _datestr + "/" + _nameStr)[0]
-                    nc = tools.bz2Dataset(_file)
+                    # _file = glob.glob(self.path + _datestr + "/" + _nameStr)[0]
+                    _file = glob.glob(self.path + _nameStr)[0]
+
+                    if "bz2" in _file[-5:]:
+                        nc = tools.bz2Dataset(_file)
+                    else:
+                        nc = Dataset(_file)
+
                     range = nc.variables["range"][:].copy()
                     return range
                 except:
@@ -155,10 +171,15 @@ class Windlidar(__Device):
         skippedDates = []
         for _date in tools.daterange(self.start.date(), self.end.date()):
             _datestr = _date.strftime("%Y%m")
-            _nameStr = "WindLidar__Deebles_Point__VerticalVelocity__STARE__1s__%s.nc.bz2" % _date.strftime("%Y%m%d")
-            _file = glob.glob(self.path + _datestr + "/" + _nameStr)[0]
+            _nameStr = "WindLidar__Deebles_Point__VerticalVelocity__STARE__1s__%s.nc*" % _date.strftime("%Y%m%d")
+            # _file = glob.glob(self.path + _datestr + "/" + _nameStr)[0]
+            _file = glob.glob(self.path + _nameStr)[0]
             try:
-                nc = tools.bz2Dataset(_file)
+                if "bz2" in _file[-5:]:
+                    nc = tools.bz2Dataset(_file)
+                else:
+                    nc = Dataset(_file)
+
                 # print(_date)
                 _start, _end = self.getStartEnd(_date, nc)
                 # print(_start,_end)
@@ -191,16 +212,32 @@ class Windlidar(__Device):
         """
         return getValueFromSettings("WINDLIDAR_PATH")
 
+    def get_nc(self):
+        for _date in tools.daterange(self.start.date(), self.end.date()):
+            _datestr = _date.strftime("%Y%m")
+            _nameStr = "WindLidar__Deebles_Point__VerticalVelocity__STARE__1s__%s.nc*" % _date.strftime("%Y%m%d")
+            # _file = glob.glob(self.path + _datestr + "/" + _nameStr)[0]
+            _file = glob.glob(self.path + _nameStr)[0]
+            if "bz2" in _file[-5:]:
+                nc = tools.bz2Dataset(_file)
+            else:
+                nc = Dataset(_file)
+        return nc
+
     def __getAttributes(self):
         """
         Function to load the static attributes from the netCDF file.
         """
         _date = self.start.date()
         _datestr = _date.strftime("%Y%m")
-        _nameStr = "WindLidar__Deebles_Point__VerticalVelocity__STARE__1s__%s.nc.bz2" % _date.strftime("%Y%m%d")
-        _file = glob.glob(self.path + _datestr + "/" +  _nameStr)[0]
+        _nameStr = "WindLidar__Deebles_Point__VerticalVelocity__STARE__1s__%s.nc*" % _date.strftime("%Y%m%d")
+        # _file = glob.glob(self.path + _datestr + "/" +  _nameStr)[0]
+        _file = glob.glob(self.path + _nameStr)[0]
 
-        nc = tools.bz2Dataset(_file)
+        if "bz2" in _file[-5:]:
+            nc = tools.bz2Dataset(_file)
+        else:
+            nc = Dataset(_file)
         self.title = nc.title
         self.device = nc.devices
         self.systemID = nc.systemID
@@ -232,10 +269,15 @@ class Windlidar(__Device):
         """
         _date = self.start.date()
         _datestr = _date.strftime("%Y%m")
-        _nameStr = "WindLidar__Deebles_Point__VerticalVelocity__STARE__1s__%s.nc.bz2" % _date.strftime("%Y%m%d")
-        _file = glob.glob(self.path + _datestr + "/" +  _nameStr)[0]
+        _nameStr = "WindLidar__Deebles_Point__VerticalVelocity__STARE__1s__%s.nc*" % _date.strftime("%Y%m%d")
+        # _file = glob.glob(self.path + _datestr + "/" +  _nameStr)[0]
+        _file = glob.glob(self.path + _nameStr)[0]
 
-        nc = tools.bz2Dataset(_file)
+        if "bz2" in _file[-5:]:
+            nc = tools.bz2Dataset(_file)
+        else:
+            nc = Dataset(_file)
+
         _var = nc.variables[value][:].copy()
         nc.close()
 

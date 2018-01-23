@@ -4,6 +4,7 @@ from datetime import datetime as dt
 from datetime import timedelta
 import numpy as np
 import bz2
+import os
 
 from BCO.tools import tools
 
@@ -119,7 +120,9 @@ def getValueFromSettings(device: str):
         somewhere in the line will be returned.
 
     """
-    with open("./BCO/Instruments/settings.ini", "r") as f:
+    package_directory = os.path.dirname(os.path.abspath(__file__))
+    ini_file = package_directory + "/settings.ini"
+    with open(ini_file, "r") as f:
         while True:
             try:
                 line = f.readline().rstrip()

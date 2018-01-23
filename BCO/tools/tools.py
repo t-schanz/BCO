@@ -6,7 +6,7 @@ enduser, as well.
 import numpy as np
 from datetime import datetime as dt
 from datetime import timedelta
-
+import os
 
 
 __all__ = [
@@ -121,8 +121,10 @@ def bz2Dataset(bz2file: str):
     from netCDF4 import Dataset
     import bz2
 
+    package_directory = os.path.dirname(os.path.abspath(__file__))
+    dummy_nc_file = package_directory + "/dummy_nc_file.nc"
+
     bz2Obj = bz2.BZ2File(bz2file)
-    dummy_nc_file = "BCO/tools/dummy_nc_file.nc"
     nc = Dataset(dummy_nc_file,memory=bz2Obj.read())
     return nc
 
