@@ -44,6 +44,28 @@ def daterange(start_date, end_date):
         yield start_date + timedelta(n)
 
 
+def local2UTC(time):
+    """
+    BETA!!! NOT completly working yet!!!
+
+    Converts the local Time to UTC .
+
+    Args:
+        time: datetime.datetime-obj or array of datetime.datetime-objects.
+    Returns:
+        Output in the same shape as input.
+    """
+    def newdate(time1):
+        return time1 - timedelta(hours=1)
+
+    if type(time) == np.ndarray:
+        new_vec = np.vectorize(newdate)
+        date = new_vec(time)
+    else:
+        date = newdate(time)
+    return date
+
+
 def num2time(num):
     """
     Converts seconds since 1970 to datetime objects.

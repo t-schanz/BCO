@@ -1,10 +1,11 @@
 from BCO.Instruments import Radar,Windlidar
-from BCO.tools.tools import time2num,num2time
+from BCO.tools.tools import time2num,num2time,local2UTC
 from datetime import datetime as dt
 from datetime import timedelta
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import matplotlib.patches as mpatches
+import matplotlib.dates as mdates
 import numpy as np
 from scipy import ndimage
 from scipy.ndimage.morphology import binary_erosion
@@ -81,6 +82,13 @@ def noDataMask(lidarVel):
     mask[0,0] = -9999
     return mask
 
+def get_xlims(time):
+    start_date = dt(time.year,time.month,time.day,0,0,0)
+    dates = []
+    for n in range(0,25,6):
+        dates.append( start_date + timedelta(hours=n))
+    return dates
+
 def plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRef,threshold):
     """
     Function for actually creating the plot.
@@ -89,8 +97,12 @@ def plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRe
     font_size = 16
     colors = "bwr"
 
-    fig,(ax1,ax2,ax3,ax4) = plt.subplots(nrows=4,ncols=1,figsize=(16,9),sharex=False,sharey=True)
-    fig.suptitle("Vertical Velocities from Radar and Lidar", fontsize=20)
+    fig,(ax1,ax2,ax3,ax4) = plt.subplots(nrows=4,ncols=1,figsize=(16,9))
+    fig.suptitle("Vertical Velocities from Radar and Lidar on the %s"%(lidarTime[0].strftime("%d.%m.%Y")), fontsize=20)
+
+    hourlocators = [mdates.HourLocator() for _ in range(4)]
+    time_fmts = [mdates.DateFormatter("%H") for i in range(4)]
+
 
     rain_patch = mpatches.Patch(color='lime', label='Precipitation')
     noData_patch = mpatches.Patch(color='dimgrey', label='Out of Lidar Range')
@@ -101,25 +113,26 @@ def plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRe
     noData = noDataMask(lidarVel)
 
     axes = [ax1,ax2,ax3,ax4]
-    timesteps = [int((len(coralTime)/4)*i) for i in range(5)]
-    timesteps[-1] -= 1
+    timesteps = get_xlims(coralTime[10])
     timetups = [(timesteps[i],timesteps[i+1]) for i in range(4)]
 
     ax1.legend(handles=[rain_patch, noData_patch], bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.,fontsize=font_size)
-    for ax,step in zip(axes,timetups):
-        print(step)
+    for ax,step,hourlocator,time_fmt in zip(axes,timetups,hourlocators,time_fmts):
+        # print(step)
         ax.set_ylim(0,2000)
-        ax.set_xlim(coralTime[step[0]],coralTime[step[1]])
+        ax.set_xlim(step[0],step[1])
         ax.contourf(lidarTime, lidarRange, lidarVel.transpose(), cmap=colors) # Lidar Data
         ax.contourf(lidarTime,lidarRange,noData.transpose(),cmap="Accent") # Above Lidar Range
         im = ax.contourf(coralTime, coralRange, coralVel.transpose(), cmap=colors) # Rada Data
         ax.contourf(coralTime,coralRange,rainmask.transpose(),cmap="brg") # Mask for Rain
         ax.contourf(coralTime, coralRange, label_im.transpose(), cmap="binary") # Mask for cloud contours
+
+        ax.xaxis.set_major_locator(hourlocator)
+        ax.xaxis.set_major_formatter(time_fmt)
+
         ax.tick_params(labelsize=font_size)
 
         ax.set_ylabel("Height [m]",fontsize=font_size)
-
-
 
     ax.set_xlabel("Time [UTC]",fontsize=font_size) # set xlabel just on the last plot
 
@@ -186,8 +199,8 @@ if __name__ == "__main__":
     coral = Radar(start,end,version=2)
     lidar = Windlidar(start,end)
 
-    coralTime = coral.getTime()
-    lidarTime = lidar.getTime()
+    coralTime = local2UTC(coral.getTime())
+    lidarTime = local2UTC(lidar.getTime())
 
     coralRange = coral.getRange()
     lidarRange = lidar.getRange()
