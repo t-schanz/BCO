@@ -98,10 +98,10 @@ def plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRe
     colors = "bwr"
 
     fig,(ax1,ax2,ax3,ax4) = plt.subplots(nrows=4,ncols=1,figsize=(16,9))
-    fig.suptitle("Vertical Velocities from Radar and Lidar on the %s"%(lidarTime[0].strftime("%d.%m.%Y")), fontsize=20)
+    fig.suptitle("%s, Vertical Velocities from Radar and Lidar"%(lidarTime[0].strftime("%d.%m.%Y")), fontsize=20)
 
     hourlocators = [mdates.HourLocator() for _ in range(4)]
-    time_fmts = [mdates.DateFormatter("%H") for i in range(4)]
+    time_fmts = [mdates.DateFormatter("%H:00") for i in range(4)]
 
 
     rain_patch = mpatches.Patch(color='lime', label='Precipitation')
@@ -144,7 +144,7 @@ def plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRe
     norm = mpl.colors.Normalize(vmin=-threshold,vmax=threshold)
     cb = mpl.colorbar.ColorbarBase(cbar_ax,cmap=colors,norm=norm,orientation="vertical",extend="both")
     cb.ax.tick_params(labelsize=font_size)
-    cb.set_label("Vertical Velocity [ms$^{-1}$]",fontsize=font_size)
+    cb.set_label("Vertical Velocity [m$\,$s$^{-1}$]",fontsize=font_size)
 
     plt.savefig("Velocities.png")
 
