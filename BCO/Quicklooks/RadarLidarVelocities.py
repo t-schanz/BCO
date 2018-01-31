@@ -1,3 +1,18 @@
+"""
+Module for plotting a combined vertical velocities plot. Inside clouds data from the Radar is being used.
+Outside the clouds, the data comes from the lidar.
+
+Usage:
+    >>> python3 RadarLidarVelocies.py YYYYMMDD
+
+        where YYYYMMDD is the date, e.g.: 20180130 would be the 30th of January in 2018.
+
+    If no date is provided, the day before the actual system time will be used (usually yesterday).
+
+"""
+import sys
+sys.path.insert(0,"/home/mpim/m300517/MPI/working/BCO")
+
 from BCO.Instruments import Radar,Windlidar
 from BCO.tools.tools import time2num,num2time,local2UTC
 from datetime import datetime as dt
@@ -9,9 +24,10 @@ import matplotlib.dates as mdates
 import numpy as np
 from scipy import ndimage
 from scipy.ndimage.morphology import binary_erosion
-import seaborn
 
-def getStartEnd():
+
+
+def getStartEnd(datestr):
     """
     Determine the start and end values for this script.
 
@@ -19,7 +35,12 @@ def getStartEnd():
         start: datetime.datetime-obj
         end: datetime.datetime-obj
     """
-    date = dt.today() - timedelta(days=1)
+
+    if datestr:
+        date = dt.strptime(datestr,"%Y%m%d")
+
+    else:
+        date = dt.today() - timedelta(days=1)
     start = dt(date.year,date.month,date.day,0,0,0)
     end = dt(date.year,date.month,date.day,23,59,59)
 
@@ -68,10 +89,24 @@ def cloudShapes(im):
 
     return im
 
+def rainRate(ref):
+    """
+    Rain rate calculated with Mashall-Palmer Relationship
+
+    Args:
+        ref: Radar reflectivity
+
+    Returns: Array with rain intensities
+
+    """
+    return np.multiply(0.036,np.power(10,np.multiply(0.0625,ref)))
+
 def getRainmask(vel,ref):
-    mask = np.asarray(ref)
+    mask = np.asarray(ref.copy())
     mask[np.less(mask,999999)] = np.nan #setting whole mask to nan
-    mask[np.less(vel,-1.5)] = 1
+    rain = rainRate(ref.copy())
+    mask[np.logical_and(np.less(vel,-1),np.greater_equal(rain,0.1))] = 1
+
     mask[0,0] = -9999
     return mask
 
@@ -89,7 +124,8 @@ def get_xlims(time):
         dates.append( start_date + timedelta(hours=n))
     return dates
 
-def plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRef,threshold):
+
+def plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRef,threshold,datestr):
     """
     Function for actually creating the plot.
 
@@ -108,9 +144,9 @@ def plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRe
     noData_patch = mpatches.Patch(color='dimgrey', label='Out of Lidar Range')
 
     label_im,nb_labels = countClouds(coralVel.copy())
-    label_im = cloudShapes(label_im)
-    rainmask = getRainmask(coralVel,coralRef)
-    noData = noDataMask(lidarVel)
+    label_im = cloudShapes(label_im.copy())
+    rainmask = getRainmask(coralVel.copy(),coralRef.copy())
+    noData = noDataMask(lidarVel.copy())
 
     axes = [ax1,ax2,ax3,ax4]
     timesteps = get_xlims(coralTime[10])
@@ -146,7 +182,7 @@ def plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRe
     cb.ax.tick_params(labelsize=font_size)
     cb.set_label("Vertical Velocity [m$\,$s$^{-1}$]",fontsize=font_size)
 
-    plt.savefig("Velocities.png")
+    plt.savefig("Velocities_%s.png"%datestr)
 
 def roundLidarVel(lidarTime,lidarVel,lidarInt):
     """
@@ -189,13 +225,21 @@ def filterWindLidar(lidarVel,lidarInt,windFilter=-18.3):
 
 
 if __name__ == "__main__":
-    # seaborn.set()
+
+    # ================================
+    # Get Parameters:
+    # ================================
+
+    try:
+        datestr = sys.argv[1]
+    except:
+        datestr = None
 
     # ================================
     # Load Data:
     # ================================
 
-    start,end = getStartEnd()
+    start,end = getStartEnd(datestr)
     coral = Radar(start,end,version=2)
     lidar = Windlidar(start,end)
 
@@ -207,10 +251,12 @@ if __name__ == "__main__":
 
     coralVel = coral.getVelocity()
     lidarVel = lidar.getVelocity()
+    lidarVel[:,:2] = np.nan
+
+
 
     lidarInt = lidar.getIntensity()
     coralRef = coral.getReflectivity()
-
 
 
     # ================================
@@ -241,4 +287,4 @@ if __name__ == "__main__":
     # Plotting:
     # =================================
 
-    plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRef,threshold)
+    plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRef,threshold,start.strftime("%Y%m%d"))
