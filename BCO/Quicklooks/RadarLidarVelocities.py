@@ -21,6 +21,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import matplotlib.patches as mpatches
 import matplotlib.dates as mdates
+from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 from scipy import ndimage
 from scipy.ndimage.morphology import binary_erosion
@@ -130,6 +131,14 @@ def plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRe
     Function for actually creating the plot.
 
     """
+    # Set up custom Colormap:
+
+    colorlist = ["#ffffff","#D3D3D3"]
+    cm_name = "anyName"
+
+    cm = LinearSegmentedColormap.from_list(cm_name,colorlist,2)
+
+
     font_size = 16
     colors = "bwr"
 
@@ -140,7 +149,7 @@ def plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRe
     time_fmts = [mdates.DateFormatter("%H:00") for i in range(4)]
 
 
-    rain_patch = mpatches.Patch(color='lime', label='Precipitation')
+    rain_patch = mpatches.Patch(facecolor=colorlist[-1],alpha=0.5, hatch="///", label='Precipitation')
     noData_patch = mpatches.Patch(color='dimgrey', label='Out of Lidar Range')
 
     label_im,nb_labels = countClouds(coralVel.copy())
@@ -155,12 +164,12 @@ def plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRe
     ax1.legend(handles=[rain_patch, noData_patch], bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.,fontsize=font_size)
     for ax,step,hourlocator,time_fmt in zip(axes,timetups,hourlocators,time_fmts):
         # print(step)
-        ax.set_ylim(0,2000)
+        ax.set_ylim(0,1500)
         ax.set_xlim(step[0],step[1])
         ax.contourf(lidarTime, lidarRange, lidarVel.transpose(), cmap=colors) # Lidar Data
         ax.contourf(lidarTime,lidarRange,noData.transpose(),cmap="Accent") # Above Lidar Range
         im = ax.contourf(coralTime, coralRange, coralVel.transpose(), cmap=colors) # Rada Data
-        ax.contourf(coralTime,coralRange,rainmask.transpose(),cmap="brg") # Mask for Rain
+        ax.contourf(coralTime,coralRange,rainmask.transpose(),colors='none',hatches=["///"]) # Mask for Rain
         ax.contourf(coralTime, coralRange, label_im.transpose(), cmap="binary") # Mask for cloud contours
 
         ax.xaxis.set_major_locator(hourlocator)
