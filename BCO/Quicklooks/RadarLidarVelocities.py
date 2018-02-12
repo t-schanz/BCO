@@ -169,6 +169,7 @@ def plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRe
         ax.contourf(lidarTime, lidarRange, lidarVel.transpose(), cmap=colors) # Lidar Data
         ax.contourf(lidarTime,lidarRange,noData.transpose(),cmap="Accent") # Above Lidar Range
         im = ax.contourf(coralTime, coralRange, coralVel.transpose(), cmap=colors) # Rada Data
+        ax.fill_between(coralTime,0,1500,where=np.nansum(rainmask, axis=0) > 0 , facecolor="grey", alpha=0.7)
         ax.contourf(coralTime,coralRange,rainmask.transpose(),colors='none',hatches=["///"]) # Mask for Rain
         ax.contourf(coralTime, coralRange, label_im.transpose(), cmap="binary") # Mask for cloud contours
 
