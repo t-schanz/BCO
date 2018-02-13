@@ -1,4 +1,4 @@
-Documentation of the MPPy Project
+Documentation of the BCO Project
 =================================
 
 This package provides some tools for working with the data from the Barbados Cloud Observatory.

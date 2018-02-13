@@ -1,9 +1,9 @@
 Tools
 =====
 
-.. automodule:: MPPy.tools.tools
+.. automodule:: BCO.tools.tools
 
-.. currentmodule:: MPPy.tools.tools
+.. currentmodule:: BCO.tools.tools
 
 .. autosummary::
    :toctree: generated

@@ -61,6 +61,9 @@ napoleon_use_param = True
 napoleon_use_rtype = True
 
 
+highlight_language = 'python3'
+
+autosummary_generate = True
 
 # Add any paths that contain templates here, relative to this directory.
 #templates_path = ['_templates']
@@ -146,8 +149,8 @@ html_sidebars = {
 
 # -- Options for HTMLHelp output ------------------------------------------
 
-# Output file base name for HTML help builder.
-htmlhelp_basename = 'MPPydoc'
+# Output file autosummary name for HTML help builder.
+htmlhelp_basename = 'BCOdoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -184,7 +187,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'mppy', 'BCO Documentation',
+    (master_doc, 'BCO', 'BCO Documentation',
      [author], 1)
 ]
 
