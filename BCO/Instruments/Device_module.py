@@ -119,6 +119,7 @@ class __Device(object):
 
 
 
+
 def getValueFromSettings(device: str):
     """
     This function gets a value from the settings.ini and returns it:

@@ -41,7 +41,7 @@ class Windlidar(__Device):
         self.start = self.checkInputTime(start) + timedelta(hours=0)
         self.end = self.checkInputTime(end) + timedelta(hours=0)
         self.path = self.__getPath()
-        print(self.path)
+        # print(self.path)
 
         # Attributes:
         self.title = None
@@ -124,28 +124,48 @@ class Windlidar(__Device):
 
         return None
 
-    def getIntensity(self):
+    def getIntensity(self, version="alpha"):
         """
         Loads the volume attenuated backwards scattering from the "volume attenuated backwarts scattering function in
         air".
+
+        Args:
+            version: can be either "alpha" or "beta"
 
         Returns:
             A numpy array with the backscatter Intensity
         """
 
 
-        intensity = self.__getArrayFromNc("intensity")
+        if version == "alpha":
+            intensity = self.__getArrayFromNc("intensity")
+        elif version == "beta":
+            intensity = self.__getArrayFromNc("beta")
+        else:
+            print("Not a valid version: %s"%version)
+            return None
+
         return intensity
 
-    def getVelocity(self):
+    def getVelocity(self,version="corrected"):
         """
         The radial velocity of of scatterers away from the instrument.
+
+        Args:
+            version: can be either corrected or uncorrected
 
         Returns:
             A numpy array with the velocity.
 
         """
-        vel = self.__getArrayFromNc("dv")
+        if version == "uncorrected":
+            vel = self.__getArrayFromNc("dv")
+        elif version == "corrected":
+            vel = self.__getArrayFromNc("dv_corr")
+        else:
+            print("Not a valid version: %s" % version)
+            return None
+
         return vel
 
     def __getArrayFromNc(self, value):
