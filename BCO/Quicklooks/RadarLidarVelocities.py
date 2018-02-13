@@ -299,7 +299,6 @@ if __name__ == "__main__":
     # lidarVel[np.less(abs(lidarVel),0.2)] = 0 # set all values around 0 to 0 for harsher contours
 
 
-
     # =================================
     # Plotting:
     # =================================

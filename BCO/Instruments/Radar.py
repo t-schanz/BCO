@@ -508,7 +508,7 @@ class Radar(__Device):
         """
         __versionStr = "Version_%i" % self.data_version
         PATH = "%s%s/" % (getValueFromSettings("RADAR_PATH"), __versionStr)
-        print(PATH)
+        # print(PATH)
         return PATH
 
     # @staticmethod
