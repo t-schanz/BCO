@@ -25,6 +25,8 @@ from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 from scipy import ndimage
 from scipy.ndimage.morphology import binary_erosion
+import warnings
+
 
 
 
@@ -127,7 +129,7 @@ def get_xlims(time):
     return dates
 
 
-def plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRef,threshold,datestr):
+def plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRef,threshold,datestr,save_path=""):
     """
     Function for actually creating the plot.
 
@@ -195,7 +197,7 @@ def plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRe
     cb.ax.tick_params(labelsize=font_size)
     cb.set_label("Vertical Velocity [m$\,$s$^{-1}$]",fontsize=font_size)
 
-    plt.savefig("Velocities_%s.png"%datestr)
+    plt.savefig(save_path + "Velocities_%s.png"%datestr)
 
 def roundLidarVel(lidarTime,lidarVel,lidarInt):
     """
@@ -238,6 +240,9 @@ def filterWindLidar(lidarVel,lidarInt,windFilter=-18.3):
 
 
 if __name__ == "__main__":
+    warnings.filterwarnings("ignore") # for debugging comment this line!!!
+
+    save_path = "" # path where image will be saved.
 
     # ================================
     # Get Parameters:
@@ -296,11 +301,11 @@ if __name__ == "__main__":
     lidarVel[np.less(lidarVel,-threshold)] = -threshold
     coralVel[np.less(coralVel,-threshold)] = -threshold
 
-    # lidarVel[np.less(abs(lidarVel),0.2)] = 0 # set all values around 0 to 0 for harsher contours
+
 
 
     # =================================
     # Plotting:
     # =================================
 
-    plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRef,threshold,start)
+    plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRef,threshold,start,save_path)
