@@ -9,6 +9,7 @@ from BCO.Instruments.Device_module import __Device, getValueFromSettings
 import BCO.tools.tools as tools
 import glob
 import numpy as np
+from pytz import timezone, utc
 
 try:
     from netCDF4 import Dataset
@@ -211,6 +212,8 @@ class Radar(__Device):
         time = self.__getArrayFromNc('time')
 
         time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
+        time = self.local2UTC(time)
+
         return time
 
     def getMeltHeight(self):

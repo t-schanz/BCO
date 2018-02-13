@@ -9,17 +9,18 @@ from netCDF4 import Dataset
 
 
 def testRadar():
-    coral  = Radar(start="20140813092350",end="20140913000050", device="KATRIN")
-    # coral = Radar(start="2017040215",end="201704021530", device="CORAL")
+    # coral  = Radar(start="20140813092350",end="20140913000050", device="KATRIN")
+    coral = Radar(start="20180212",end="20180212", device="CORAL")
     ref = coral.getReflectivity(postprocessing="Ze")
     vel = coral.getVelocity()
     time = coral.getTime()
     range = coral.getRange()
-    coral.quickplot2D(vel,ylim=(100,2000))
+    coral.quickplot2D(ref,ylim=(100,2000))
 
 if __name__ == "__main__":
-    # testRadar()
-    lidar = Windlidar(start="20180101",end="20180102")
+    testRadar()
+    # coral = Radar(start="20180212", end="201802122359", device="CORAL")
+    lidar = Windlidar(start="20180101",end="20180101")
 
 
 

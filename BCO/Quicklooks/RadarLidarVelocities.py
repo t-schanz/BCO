@@ -14,7 +14,7 @@ import sys
 sys.path.insert(0,"/home/mpim/m300517/MPI/working/BCO")
 
 from BCO.Instruments import Radar,Windlidar
-from BCO.tools.tools import time2num,num2time,local2UTC
+from BCO.tools.tools import time2num,num2time
 from datetime import datetime as dt
 from datetime import timedelta
 import matplotlib.pyplot as plt
@@ -42,8 +42,9 @@ def getStartEnd(datestr):
 
     else:
         date = dt.today() - timedelta(days=1)
-    start = dt(date.year,date.month,date.day,0,0,0)
-    end = dt(date.year,date.month,date.day,23,59,59)
+
+    start = dt(date.year,date.month,date.day,0,0,0).strftime("%Y%m%d")
+    end = dt(date.year,date.month,date.day,23,59,59).strftime("%Y%m%d")
 
     return start,end
 
@@ -149,7 +150,7 @@ def plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRe
     time_fmts = [mdates.DateFormatter("%H:00") for i in range(4)]
 
 
-    rain_patch = mpatches.Patch(facecolor=colorlist[-1],alpha=0.5, hatch="///", label='Precipitation')
+    rain_patch = mpatches.Patch(facecolor="lightgrey",alpha=0.91, label='Precipitation')
     noData_patch = mpatches.Patch(color='dimgrey', label='Out of Lidar Range')
 
     label_im,nb_labels = countClouds(coralVel.copy())
@@ -169,9 +170,11 @@ def plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRe
         ax.contourf(lidarTime, lidarRange, lidarVel.transpose(), cmap=colors) # Lidar Data
         ax.contourf(lidarTime,lidarRange,noData.transpose(),cmap="Accent") # Above Lidar Range
         im = ax.contourf(coralTime, coralRange, coralVel.transpose(), cmap=colors) # Rada Data
-        ax.fill_between(coralTime,0,1500,where=np.nansum(rainmask, axis=0) > 0 , facecolor="grey", alpha=0.7)
-        ax.contourf(coralTime,coralRange,rainmask.transpose(),colors='none',hatches=["///"]) # Mask for Rain
+
+        # ax.contourf(coralTime,coralRange,rainmask.transpose(),colors='none',hatches=["///"]) # Mask for Rain
         ax.contourf(coralTime, coralRange, label_im.transpose(), cmap="binary") # Mask for cloud contours
+
+        ax.fill_between(coralTime,0,1500,where=np.nansum(rainmask[:,:44], axis=1) > 0 , facecolor="lightgrey", alpha=0.91)
 
         ax.xaxis.set_major_locator(hourlocator)
         ax.xaxis.set_major_formatter(time_fmt)
@@ -249,12 +252,16 @@ if __name__ == "__main__":
     # Load Data:
     # ================================
 
+
     start,end = getStartEnd(datestr)
+
+
     coral = Radar(start,end,version=2)
     lidar = Windlidar(start,end)
 
-    coralTime = local2UTC(coral.getTime())
-    lidarTime = local2UTC(lidar.getTime())
+
+    coralTime = coral.getTime()
+    lidarTime = lidar.getTime()
 
     coralRange = coral.getRange()
     lidarRange = lidar.getRange()
@@ -297,4 +304,4 @@ if __name__ == "__main__":
     # Plotting:
     # =================================
 
-    plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRef,threshold,start.strftime("%Y%m%d"))
+    plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRef,threshold,start)

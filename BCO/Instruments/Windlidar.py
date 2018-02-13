@@ -78,8 +78,7 @@ class Windlidar(__Device):
         time = self.__getArrayFromNc('time')
 
         time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
-        # noOffset = np.vectorize(self.__removeTimeOffset)
-        # time = noOffset(time)
+        time = self.local2UTC(time)
 
 
         return time

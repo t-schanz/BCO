@@ -5,6 +5,7 @@ from datetime import timedelta
 import numpy as np
 import bz2
 import os
+from pytz import timezone,utc
 
 from BCO.tools import tools
 
@@ -21,6 +22,10 @@ class __Device(object):
     calass.
 
     """
+
+    de_tz = timezone("Europe/Berlin")
+    utc_tz = timezone("UTC")
+
     def checkInputTime(self, input):
         """
         Checking input for the right dataformat. This can either be a string, then it will be converted to a
@@ -106,6 +111,12 @@ class __Device(object):
         for element in skipped:
             print(element)
         self.skipped = skipped
+
+    def local2UTC(self,time):
+        f1 = lambda x : x.astimezone(self.de_tz).astimezone(utc)
+        return np.asarray(list(map(f1, time)))
+
+
 
 
 def getValueFromSettings(device: str):
