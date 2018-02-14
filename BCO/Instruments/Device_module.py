@@ -26,7 +26,7 @@ class __Device(object):
     de_tz = timezone("Europe/Berlin")
     utc_tz = timezone("UTC")
 
-    def checkInputTime(self, input):
+    def _checkInputTime(self, input):
         """
         Checking input for the right dataformat. This can either be a string, then it will be converted to a
         datetime-object, or it already is a datetime-obj, then it will just be passed.
@@ -80,7 +80,7 @@ class __Device(object):
 
         return _timeObj
 
-    def getStartEnd(self, _date, nc):
+    def _getStartEnd(self, _date, nc):
         """
         Find the index of the start-date and end-date argument in the netCDF-file. If the time-stamp is not in the
         actual netCDF-file then return the beginning and end of that file.
@@ -106,13 +106,13 @@ class __Device(object):
 
         return _start, _end
 
-    def FileNotAvail(self, skipped):
+    def _FileNotAvail(self, skipped):
         print("For the following days of the chosen timewindow no files exists:")
         for element in skipped:
             print(element)
         self.skipped = skipped
 
-    def local2UTC(self,time):
+    def _local2UTC(self, time):
         f1 = lambda x : x.astimezone(self.de_tz).astimezone(utc)
         return np.asarray(list(map(f1, time)))
 

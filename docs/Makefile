@@ -44,6 +44,7 @@ latexpdf:
 
 clean:
 	rm generated/*
+	rm _build/html/generated/*
 
 
 # Put it first so that "make" without argument is like "make help".

@@ -38,8 +38,8 @@ class Windlidar(__Device):
 
     def __init__(self, start, end):
 
-        self.start = self.checkInputTime(start) + timedelta(hours=0)
-        self.end = self.checkInputTime(end) + timedelta(hours=0)
+        self.start = self._checkInputTime(start) + timedelta(hours=0)
+        self.end = self._checkInputTime(end) + timedelta(hours=0)
         self.path = self.__getPath()
         # print(self.path)
 
@@ -78,7 +78,7 @@ class Windlidar(__Device):
         time = self.__getArrayFromNc('time')
 
         time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
-        time = self.local2UTC(time)
+        time = self._local2UTC(time)
 
 
         return time
@@ -200,7 +200,7 @@ class Windlidar(__Device):
                     nc = Dataset(_file)
 
                 # print(_date)
-                _start, _end = self.getStartEnd(_date, nc)
+                _start, _end = self._getStartEnd(_date, nc)
                 # print(_start,_end)
                 if _end != 0:
                     varFromDate = nc.variables[value][_start:_end].copy()
@@ -218,7 +218,7 @@ class Windlidar(__Device):
                 _var = np.concatenate((_var, item))
 
         if skippedDates:
-            self.FileNotAvail(skippedDates)
+            self._FileNotAvail(skippedDates)
 
         return _var
 

@@ -82,8 +82,8 @@ class Radar(__Device):
 
         self.device = device
         self.pathFlag = self.__getFlag()
-        self.start = self.checkInputTime(start)
-        self.end = self.checkInputTime(end)
+        self.start = self._checkInputTime(start)
+        self.end = self._checkInputTime(end)
         self.data_version = version
         self.path = self.__getPath()
         self.__checkInput()
@@ -212,7 +212,7 @@ class Radar(__Device):
         time = self.__getArrayFromNc('time')
 
         time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
-        time = self.local2UTC(time)
+        time = self._local2UTC(time)
 
         return time
 
@@ -444,7 +444,7 @@ class Radar(__Device):
             try:
                 nc = Dataset(_file, mode="r")
                 # print(_date)
-                _start, _end = self.getStartEnd(_date, nc)
+                _start, _end = self._getStartEnd(_date, nc)
                 if _end != 0:
                     varFromDate = nc.variables[value][_start:_end].copy()
                 else:
@@ -461,7 +461,7 @@ class Radar(__Device):
                 _var = np.concatenate((_var, item))
 
         if skippedDates:
-            self.FileNotAvail(skippedDates)
+            self._FileNotAvail(skippedDates)
 
         return _var
 

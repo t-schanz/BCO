@@ -58,18 +58,19 @@ for file in glob.glob(generated_directory + "/*.rst"):
                         # print(line)
                         make_docs(file,line)
 
-    with open(file, "w") as f:
+    with open(file+ "_temp", "w") as f:
         ind = content.index(".. autosummary::")
         content0 = content[:ind+len("  .. autosummary::")]
         content2 = content[ind+len("  .. autosummary::"):]
         content1 = "     :toctree:\n\n"
 
-        content3 = []
+        ind = content0.index("__init__")
+        content0 = content0.replace(".. automethod:: __init__", "")
 
-        for line in content2.split("\n"):
-            l = "  " + line
-            content3.append(l)
-
-        content3 = "\n".join(content3)
 
         f.write(content0 + content1 + content2)
+
+    with open(file+ "_temp","r") as f, open(file,"w") as g:
+        for line in f:
+            if not "__" in line:
+                g.write(line)
