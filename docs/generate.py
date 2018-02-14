@@ -45,32 +45,45 @@ for file in glob.glob(generated_directory + "/*.rst"):
         # print(content)
         if "autoclass" in content:
             class_file = True
-        else:
-            continue
 
-        lines = content.split("\n")
-        for line in lines:
-            if class_file:
-
+        if class_file:
+            lines = content.split("\n")
+            for line in lines:
                 if "~" in line:
                     line = "  " + line
                     if not "__" in line:
                         # print(line)
                         make_docs(file,line)
 
-    with open(file+ "_temp", "w") as f:
-        ind = content.index(".. autosummary::")
-        content0 = content[:ind+len("  .. autosummary::")]
-        content2 = content[ind+len("  .. autosummary::"):]
-        content1 = "     :toctree:\n\n"
 
-        ind = content0.index("__init__")
-        content0 = content0.replace(".. automethod:: __init__", "")
+    # ----------------------------------------------------
+    # Make class methods clickable by adding ":toctree:"
+    # to each class-rst:
+    # ----------------------------------------------------
+
+    if class_file:
+        with open(file+ "_temp", "w") as f:
+            ind = content.index(".. autosummary::")
+            content0 = content[:ind+len("  .. autosummary::")]
+            content2 = content[ind+len("  .. autosummary::"):]
+            content1 = "     :toctree:\n\n"
+
+            f.write(content0 + content1 + content2)
+
+    else:
+        with open(file + "_temp", "w") as f:
+            f.write(content)
 
 
-        f.write(content0 + content1 + content2)
+    # ----------------------------------------------------
+    # Filter all secret functions and change name:
+    # ----------------------------------------------------
+    with open(file + "_temp", "r") as f, open(file, "w") as g:
+        line1 = f.readline() # skip first line
+        g.write(line1.split(".")[-1]) # write only class name in first line
 
-    with open(file+ "_temp","r") as f, open(file,"w") as g:
         for line in f:
             if not "__" in line:
                 g.write(line)
+
+    os.remove(file + "_temp")
