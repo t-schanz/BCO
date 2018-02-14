@@ -23,4 +23,3 @@ if __name__ == "__main__":
     lidar = Windlidar(start="20180101",end="20180101")
 
 
-

@@ -34,6 +34,28 @@ class Windlidar(__Device):
         focusRange: The focus range.
         temporalResolution: String of the temporal resolution.
         location: Location of the instrument.
+
+    Example:
+        The following example initiates a Windlidar class with data from the whole day of 21.06.2017:
+
+        >>> lidar = Windlidar(start="20170621", end="20170621")
+
+        Another timespan could be from the 21.06.2017 15:30 UTC to 23.06.2017 18:41 UTC:
+
+        >>> lidar = Windlidar(start="201706211530", end="20170623061841")
+
+
+        With the initiated class you can then load data, for example the vertical velocity:
+
+        >>> lidar = Windlidar(start="20170621", end="20170621")
+        >>> velocity = lidar.getVelocity()
+
+        It is possible to directly get the variable by chaining the initialisation and the function.
+        The following example produces the exact same result as the one before:
+
+        >>> velocity = Windlidar(start="20170621", end="20170621").getVelocity()
+
+
     """
 
     def __init__(self, start, end):
@@ -82,10 +104,6 @@ class Windlidar(__Device):
 
 
         return time
-
-    @staticmethod
-    def __removeTimeOffset(time):
-        return time - timedelta(hours=1)
 
     def getRange(self):
         """
