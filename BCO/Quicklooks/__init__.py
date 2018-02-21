@@ -1,1 +1,1 @@
-from .RadarLidarVelocities import plot_RadarLidarVelcities
+from BCO.Quicklooks.RadarLidarVelocities import plot_RadarLidarVelcities
