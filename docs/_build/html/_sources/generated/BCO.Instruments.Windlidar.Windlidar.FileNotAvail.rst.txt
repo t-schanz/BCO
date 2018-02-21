@@ -1,0 +1,6 @@
+_FileNotAvail
+============
+
+.. currentmodule:: BCO.Instruments.Windlidar
+
+.. automethod:: Windlidar._FileNotAvail

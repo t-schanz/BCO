@@ -1,0 +1,6 @@
+_FileNotAvail
+============
+
+.. currentmodule:: BCO.Instruments.Radar
+
+.. automethod:: Radar._FileNotAvail

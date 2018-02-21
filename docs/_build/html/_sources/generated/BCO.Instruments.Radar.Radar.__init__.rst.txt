@@ -1,0 +1,6 @@
+BCO\.Instruments\.Radar\.Radar\.\_\_init\_\_
+============================================
+
+.. currentmodule:: BCO.Instruments.Radar
+
+.. automethod:: Radar.__init__

@@ -1,0 +1,377 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>BCO.Instruments.Device_module &mdash; BCO 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+  
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="BCO 0.0.1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BCO
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">First Steps</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Instruments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html#tools">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../help.html">HELP</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BCO</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>BCO.Instruments.Device_module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for BCO.Instruments.Device_module</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span> <span class="k">as</span> <span class="n">dt</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">timedelta</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">bz2</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pytz</span> <span class="k">import</span> <span class="n">timezone</span><span class="p">,</span><span class="n">utc</span>
+
+<span class="kn">from</span> <span class="nn">BCO.tools</span> <span class="k">import</span> <span class="n">tools</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">netCDF4</span> <span class="k">import</span> <span class="n">Dataset</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The module netCDF4 needs to be installed for the BCO-package to work.&quot;</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">__Device</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class provide some general functions to work with. Many of the instrument classes will inherit from this</span>
+<span class="sd">    calass.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">de_tz</span> <span class="o">=</span> <span class="n">timezone</span><span class="p">(</span><span class="s2">&quot;Europe/Berlin&quot;</span><span class="p">)</span>
+    <span class="n">utc_tz</span> <span class="o">=</span> <span class="n">timezone</span><span class="p">(</span><span class="s2">&quot;UTC&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">checkInputTime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checking input for the right dataformat. This can either be a string, then it will be converted to a</span>
+<span class="sd">        datetime-object, or it already is a datetime-obj, then it will just be passed.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            input: str, or datetime.datetime</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            datetime.datetime object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">_raiseError</span><span class="p">(</span><span class="n">_in</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            This is some kind of error to be raised. If any input is wrong this will tell what is wrond.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                _in: The wrong input by the user.</span>
+
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Input for start and end can either be a datetime-object or a string.</span><span class="se">\n</span><span class="s2">&quot;</span> 
+                  <span class="s2">&quot;If it is a string the it needs to have the format YYYYMMDDhhmmss, where</span><span class="se">\n</span><span class="s2">&quot;</span> 
+                  <span class="s2">&quot;Y:Year, M:Month, D:Day, h:Hour, m:Minute, s:Second.</span><span class="se">\n</span><span class="s2">&quot;</span> 
+                  <span class="s2">&quot;Missing steps will be appended automatically with the lowest possible value. Example:</span><span class="se">\n</span><span class="s2">&quot;</span> 
+                  <span class="s2">&quot;input=&#39;2017&#39; -&gt; &#39;20170101000000&#39;.&quot;</span><span class="p">)</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> is not a valid format for start or end input.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_in</span><span class="p">))</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">_input</span> <span class="o">=</span> <span class="nb">input</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">_input</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+
+            <span class="k">def</span> <span class="nf">__repeat_to_length</span><span class="p">(</span><span class="n">string_to_expand</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
+                <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">string_to_expand</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">:</span>
+                    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">string_to_expand</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">:</span>
+                        <span class="n">string_to_expand</span> <span class="o">+=</span> <span class="s2">&quot;01&quot;</span>
+                    <span class="n">string_to_expand</span> <span class="o">+=</span> <span class="s2">&quot;0&quot;</span>
+                <span class="k">return</span> <span class="n">string_to_expand</span>
+
+            <span class="n">_input</span> <span class="o">=</span> <span class="n">__repeat_to_length</span><span class="p">(</span><span class="n">_input</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">_timeObj</span> <span class="o">=</span> <span class="n">dt</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">_input</span><span class="p">[:</span><span class="mi">4</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">_input</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">_input</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">8</span><span class="p">]),</span>
+                              <span class="nb">int</span><span class="p">(</span><span class="n">_input</span><span class="p">[</span><span class="mi">8</span><span class="p">:</span><span class="mi">10</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">_input</span><span class="p">[</span><span class="mi">10</span><span class="p">:</span><span class="mi">12</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">_input</span><span class="p">[</span><span class="mi">12</span><span class="p">:</span><span class="mi">14</span><span class="p">]))</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">_raiseError</span><span class="p">(</span><span class="n">_input</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">_input</span><span class="p">)</span> <span class="o">==</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">:</span>
+            <span class="n">_timeObj</span> <span class="o">=</span> <span class="n">_input</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_raiseError</span><span class="p">(</span><span class="n">_input</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">_timeObj</span>
+
+    <span class="k">def</span> <span class="nf">getStartEnd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_date</span><span class="p">,</span> <span class="n">nc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find the index of the start-date and end-date argument in the netCDF-file. If the time-stamp is not in the</span>
+<span class="sd">        actual netCDF-file then return the beginning and end of that file.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            _date: datetime.datetime-object to compare self.start and self.end with.</span>
+<span class="sd">            nc: the netCDF-Dataset</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            _start: index of the _date in the actual netCDF-file. If not index in the netCDF-file then return 0</span>
+<span class="sd">                    (beginning of the file)</span>
+<span class="sd">            _end: index of the _date in the actual netCDF-file. If not index in the netCDF-file then return -1</span>
+<span class="sd">                    (end of the file)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">_start</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">_end</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">_date</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="n">date</span><span class="p">():</span>
+            <span class="n">_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">][:],</span> <span class="n">tools</span><span class="o">.</span><span class="n">time2num</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">))))</span>
+            <span class="c1"># print(&quot;start&quot;, _start)</span>
+        <span class="k">if</span> <span class="n">_date</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="o">.</span><span class="n">date</span><span class="p">():</span>
+            <span class="n">_end</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">][:],</span> <span class="n">tools</span><span class="o">.</span><span class="n">time2num</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="p">))))</span>
+            <span class="c1"># print(&quot;end &quot;, _end)</span>
+
+        <span class="k">return</span> <span class="n">_start</span><span class="p">,</span> <span class="n">_end</span>
+
+    <span class="k">def</span> <span class="nf">FileNotAvail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skipped</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;For the following days of the chosen timewindow no files exists:&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">skipped</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skipped</span> <span class="o">=</span> <span class="n">skipped</span>
+
+    <span class="k">def</span> <span class="nf">local2UTC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">time</span><span class="p">):</span>
+        <span class="n">f1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">astimezone</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">de_tz</span><span class="p">)</span><span class="o">.</span><span class="n">astimezone</span><span class="p">(</span><span class="n">utc</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">time</span><span class="p">)))</span>
+
+
+
+
+
+<span class="k">def</span> <span class="nf">getValueFromSettings</span><span class="p">(</span><span class="n">device</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function gets a value from the settings.ini and returns it:</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        device: Straing of the Device of which you want to get the data-path to the netCDF-file from.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        String of the value which is written in the file settings.ini behind the &#39;:&#39;. Only the string having the &#39;device&#39;</span>
+<span class="sd">        somewhere in the line will be returned.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">package_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+    <span class="n">ini_file</span> <span class="o">=</span> <span class="n">package_directory</span> <span class="o">+</span> <span class="s2">&quot;/settings.ini&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ini_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">device</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">break</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Tobias Machnitzki.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.0.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,558 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>BCO.Instruments.Windlidar &mdash; BCO 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+  
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="BCO 0.0.1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BCO
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">First Steps</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Instruments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html#tools">Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../help.html">HELP</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BCO</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>BCO.Instruments.Windlidar</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for BCO.Instruments.Windlidar</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This Module contains the Windlidar class. This class is for easy working with the BCO Windlidar data.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">bz2</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">timedelta</span>
+
+<span class="kn">import</span> <span class="nn">BCO.tools.tools</span> <span class="k">as</span> <span class="nn">tools</span>
+<span class="kn">from</span> <span class="nn">BCO.Instruments.Device_module</span> <span class="k">import</span> <span class="n">__Device</span><span class="p">,</span><span class="n">getValueFromSettings</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">netCDF4</span> <span class="k">import</span> <span class="n">Dataset</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The module netCDF4 needs to be installed for the BCO-package to work.&quot;</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Windlidar"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Windlidar.Windlidar.html#BCO.Instruments.Windlidar.Windlidar">[docs]</a><span class="k">class</span> <span class="nc">Windlidar</span><span class="p">(</span><span class="n">__Device</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class for working with the Windlidar Data from the BCO.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        start: Either String or datetime.datetime-object indicating the start of the timefwindow</span>
+<span class="sd">        end: Either String or datetime.datetime-object indicating the end of the timefwindow</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        title: Title of the netCDF file.</span>
+<span class="sd">        device: Name of the instrument.</span>
+<span class="sd">        systemID: ID of the instrument.</span>
+<span class="sd">        scanType: For example &quot;stare&quot;.</span>
+<span class="sd">        focusRange: The focus range.</span>
+<span class="sd">        temporalResolution: String of the temporal resolution.</span>
+<span class="sd">        location: Location of the instrument.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        The following example initiates a Windlidar class with data from the whole day of 21.06.2017:</span>
+
+<span class="sd">        &gt;&gt;&gt; lidar = Windlidar(start=&quot;20170621&quot;, end=&quot;20170621&quot;)</span>
+
+<span class="sd">        Another timespan could be from the 21.06.2017 15:30 UTC to 23.06.2017 18:41 UTC:</span>
+
+<span class="sd">        &gt;&gt;&gt; lidar = Windlidar(start=&quot;201706211530&quot;, end=&quot;20170623061841&quot;)</span>
+
+
+<span class="sd">        With the initiated class you can then load data, for example the vertical velocity:</span>
+
+<span class="sd">        &gt;&gt;&gt; lidar = Windlidar(start=&quot;20170621&quot;, end=&quot;20170621&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; velocity = lidar.getVelocity()</span>
+
+<span class="sd">        It is possible to directly get the variable by chaining the initialisation and the function.</span>
+<span class="sd">        The following example produces the exact same result as the one before:</span>
+
+<span class="sd">        &gt;&gt;&gt; velocity = Windlidar(start=&quot;20170621&quot;, end=&quot;20170621&quot;).getVelocity()</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Windlidar.__init__"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Windlidar.Windlidar.html#BCO.Instruments.Windlidar.Windlidar.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_checkInputTime</span><span class="p">(</span><span class="n">start</span><span class="p">)</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_checkInputTime</span><span class="p">(</span><span class="n">end</span><span class="p">)</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getPath</span><span class="p">()</span>
+        <span class="c1"># print(self.path)</span>
+
+        <span class="c1"># Attributes:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">systemID</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scanType</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">focusRange</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temporalResolution</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lat</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ele</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">azi</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">roll</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pitch</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__getAttributes</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="Windlidar.getTime"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Windlidar.Windlidar.getTime.html#BCO.Instruments.Windlidar.Windlidar.getTime">[docs]</a>    <span class="k">def</span> <span class="nf">getTime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads the time steps over the desired timeframe from all netCDF-files and returns them as one array.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A numpy array containing datetime.datetime objects</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            Getting the time-stamps from an an already initiated Windlidar object &#39;lidar&#39;:</span>
+
+<span class="sd">            &gt;&gt;&gt; lidar.getTime()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getArrayFromNc</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+
+        <span class="n">time</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">num2time</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>  <span class="c1"># converting seconds since 1970 to datetime objects</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_local2UTC</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+
+
+        <span class="k">return</span> <span class="n">time</span></div>
+
+<div class="viewcode-block" id="Windlidar.getRange"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Windlidar.Windlidar.getRange.html#BCO.Instruments.Windlidar.Windlidar.getRange">[docs]</a>    <span class="k">def</span> <span class="nf">getRange</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads the range-gates from the netCDF-file which contains the last entries of the desired timeframe.</span>
+<span class="sd">        Note: just containing the range-gates from the first valid file of all used netCDF-files. If the range-gating</span>
+<span class="sd">        changes over the input-timewindow, then you might run into issues.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A numpy array with height in meters</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            Getting the range-gates of an already initiated Windlidar object called &#39;lidar&#39;:</span>
+
+<span class="sd">            &gt;&gt;&gt; lidar.getRange()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nb">range</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">_date</span> <span class="ow">in</span> <span class="n">tools</span><span class="o">.</span><span class="n">daterange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">range</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">_datestr</span> <span class="o">=</span> <span class="n">_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m&quot;</span><span class="p">)</span>
+                    <span class="n">_nameStr</span> <span class="o">=</span> <span class="s2">&quot;WindLidar__Deebles_Point__VerticalVelocity__STARE__1s__</span><span class="si">%s</span><span class="s2">.nc*&quot;</span> <span class="o">%</span> <span class="n">_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span>
+                        <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="c1"># _file = glob.glob(self.path + _datestr + &quot;/&quot; + _nameStr)[0]</span>
+                    <span class="n">_file</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="n">_nameStr</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+                    <span class="k">if</span> <span class="s2">&quot;bz2&quot;</span> <span class="ow">in</span> <span class="n">_file</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]:</span>
+                        <span class="n">nc</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">bz2Dataset</span><span class="p">(</span><span class="n">_file</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">nc</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">_file</span><span class="p">)</span>
+
+                    <span class="nb">range</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;range&quot;</span><span class="p">][:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    <span class="k">return</span> <span class="nb">range</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Windlidar.getIntensity"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Windlidar.Windlidar.getIntensity.html#BCO.Instruments.Windlidar.Windlidar.getIntensity">[docs]</a>    <span class="k">def</span> <span class="nf">getIntensity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;alpha&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads the volume attenuated backwards scattering from the &quot;volume attenuated backwarts scattering function in</span>
+<span class="sd">        air&quot;.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            version: can be either &quot;alpha&quot; or &quot;beta&quot;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A numpy array with the backscatter Intensity</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+
+        <span class="k">if</span> <span class="n">version</span> <span class="o">==</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span>
+            <span class="n">intensity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getArrayFromNc</span><span class="p">(</span><span class="s2">&quot;intensity&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">version</span> <span class="o">==</span> <span class="s2">&quot;beta&quot;</span><span class="p">:</span>
+            <span class="n">intensity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getArrayFromNc</span><span class="p">(</span><span class="s2">&quot;beta&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Not a valid version: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">version</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">intensity</span></div>
+
+<div class="viewcode-block" id="Windlidar.getVelocity"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Windlidar.Windlidar.getVelocity.html#BCO.Instruments.Windlidar.Windlidar.getVelocity">[docs]</a>    <span class="k">def</span> <span class="nf">getVelocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;corrected&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The radial velocity of of scatterers away from the instrument.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            version: can be either corrected or uncorrected</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A numpy array with the velocity.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">version</span> <span class="o">==</span> <span class="s2">&quot;uncorrected&quot;</span><span class="p">:</span>
+            <span class="n">vel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getArrayFromNc</span><span class="p">(</span><span class="s2">&quot;dv&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">version</span> <span class="o">==</span> <span class="s2">&quot;corrected&quot;</span><span class="p">:</span>
+            <span class="n">vel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getArrayFromNc</span><span class="p">(</span><span class="s2">&quot;dv_corr&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Not a valid version: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">version</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">vel</span></div>
+
+    <span class="k">def</span> <span class="nf">__getArrayFromNc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieving the &#39;value&#39; from the netCDF-Dataset reading just the desired timeframe.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value: String which is a valid key for the Dataset.variables[key].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Numpy array with the values of the desired key and the inititated time-window.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            What behind the scenes happens for an example-key &#39;VEL&#39; is something like:</span>
+
+<span class="sd">            &gt;&gt;&gt; nc = Dataset(input_file)</span>
+<span class="sd">            &gt;&gt;&gt; _var = nc.variables[&quot;VEL&quot;][self.start:self.end].copy()</span>
+
+<span class="sd">            Just that in this function we are looping over all files and in the end concatinating them.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">var_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">skippedDates</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_date</span> <span class="ow">in</span> <span class="n">tools</span><span class="o">.</span><span class="n">daterange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="n">date</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="o">.</span><span class="n">date</span><span class="p">()):</span>
+            <span class="n">_datestr</span> <span class="o">=</span> <span class="n">_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m&quot;</span><span class="p">)</span>
+            <span class="n">_nameStr</span> <span class="o">=</span> <span class="s2">&quot;WindLidar__Deebles_Point__VerticalVelocity__STARE__1s__</span><span class="si">%s</span><span class="s2">.nc*&quot;</span> <span class="o">%</span> <span class="n">_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1"># _file = glob.glob(self.path + _datestr + &quot;/&quot; + _nameStr)[0]</span>
+            <span class="n">_file</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="n">_nameStr</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;bz2&quot;</span> <span class="ow">in</span> <span class="n">_file</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]:</span>
+                    <span class="n">nc</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">bz2Dataset</span><span class="p">(</span><span class="n">_file</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">nc</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">_file</span><span class="p">)</span>
+
+                <span class="c1"># print(_date)</span>
+                <span class="n">_start</span><span class="p">,</span> <span class="n">_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getStartEnd</span><span class="p">(</span><span class="n">_date</span><span class="p">,</span> <span class="n">nc</span><span class="p">)</span>
+                <span class="c1"># print(_start,_end)</span>
+                <span class="k">if</span> <span class="n">_end</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">varFromDate</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">value</span><span class="p">][</span><span class="n">_start</span><span class="p">:</span><span class="n">_end</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">varFromDate</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">value</span><span class="p">][</span><span class="n">_start</span><span class="p">:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="n">var_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">varFromDate</span><span class="p">)</span>
+                <span class="n">nc</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">skippedDates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_date</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+        <span class="n">_var</span> <span class="o">=</span> <span class="n">var_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">var_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">var_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                <span class="n">_var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">_var</span><span class="p">,</span> <span class="n">item</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">skippedDates</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_FileNotAvail</span><span class="p">(</span><span class="n">skippedDates</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">_var</span>
+
+    <span class="k">def</span> <span class="nf">__getPath</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reads the Path from the settings.ini file by calling the right function from Device_module.</span>
+
+<span class="sd">        Returns: Path of the Windlidar data.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">getValueFromSettings</span><span class="p">(</span><span class="s2">&quot;WINDLIDAR_PATH&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Windlidar.get_nc"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Windlidar.Windlidar.get_nc.html#BCO.Instruments.Windlidar.Windlidar.get_nc">[docs]</a>    <span class="k">def</span> <span class="nf">get_nc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">_date</span> <span class="ow">in</span> <span class="n">tools</span><span class="o">.</span><span class="n">daterange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="n">date</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="o">.</span><span class="n">date</span><span class="p">()):</span>
+            <span class="n">_datestr</span> <span class="o">=</span> <span class="n">_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m&quot;</span><span class="p">)</span>
+            <span class="n">_nameStr</span> <span class="o">=</span> <span class="s2">&quot;WindLidar__Deebles_Point__VerticalVelocity__STARE__1s__</span><span class="si">%s</span><span class="s2">.nc*&quot;</span> <span class="o">%</span> <span class="n">_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1"># _file = glob.glob(self.path + _datestr + &quot;/&quot; + _nameStr)[0]</span>
+            <span class="n">_file</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="n">_nameStr</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">&quot;bz2&quot;</span> <span class="ow">in</span> <span class="n">_file</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]:</span>
+                <span class="n">nc</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">bz2Dataset</span><span class="p">(</span><span class="n">_file</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">nc</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">_file</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">nc</span></div>
+
+    <span class="k">def</span> <span class="nf">__getAttributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to load the static attributes from the netCDF file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+        <span class="n">_datestr</span> <span class="o">=</span> <span class="n">_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m&quot;</span><span class="p">)</span>
+        <span class="n">_nameStr</span> <span class="o">=</span> <span class="s2">&quot;WindLidar__Deebles_Point__VerticalVelocity__STARE__1s__</span><span class="si">%s</span><span class="s2">.nc*&quot;</span> <span class="o">%</span> <span class="n">_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># _file = glob.glob(self.path + _datestr + &quot;/&quot; +  _nameStr)[0]</span>
+        <span class="n">_file</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="n">_nameStr</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s2">&quot;bz2&quot;</span> <span class="ow">in</span> <span class="n">_file</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]:</span>
+            <span class="n">nc</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">bz2Dataset</span><span class="p">(</span><span class="n">_file</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">nc</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">_file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">title</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">devices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">systemID</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">systemID</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scanType</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">scanType</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">focusRange</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">focusRange</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temporalResolution</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">resolution</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">location</span>
+        <span class="n">nc</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getValueFromNc</span><span class="p">(</span><span class="s2">&quot;lat&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getValueFromNc</span><span class="p">(</span><span class="s2">&quot;lon&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pitch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getValueFromNc</span><span class="p">(</span><span class="s2">&quot;pitch&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">azi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getValueFromNc</span><span class="p">(</span><span class="s2">&quot;azi&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ele</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getValueFromNc</span><span class="p">(</span><span class="s2">&quot;ele&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">roll</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getValueFromNc</span><span class="p">(</span><span class="s2">&quot;roll&quot;</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">__getValueFromNc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function gets values from the netCDF-Dataset, which stay constant over the whole timeframe. So its very</span>
+<span class="sd">        similar to __getArrayFromNc(), but without the looping.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value: A string for accessing the netCDF-file.</span>
+<span class="sd">                    For example: &#39;Zf&#39;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Numpy array</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+        <span class="n">_datestr</span> <span class="o">=</span> <span class="n">_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m&quot;</span><span class="p">)</span>
+        <span class="n">_nameStr</span> <span class="o">=</span> <span class="s2">&quot;WindLidar__Deebles_Point__VerticalVelocity__STARE__1s__</span><span class="si">%s</span><span class="s2">.nc*&quot;</span> <span class="o">%</span> <span class="n">_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># _file = glob.glob(self.path + _datestr + &quot;/&quot; +  _nameStr)[0]</span>
+        <span class="n">_file</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="n">_nameStr</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s2">&quot;bz2&quot;</span> <span class="ow">in</span> <span class="n">_file</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]:</span>
+            <span class="n">nc</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">bz2Dataset</span><span class="p">(</span><span class="n">_file</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">nc</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">_file</span><span class="p">)</span>
+
+        <span class="n">_var</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">value</span><span class="p">][:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">nc</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">_var</span></div>
+
+
+
+
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Tobias Machnitzki.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.0.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

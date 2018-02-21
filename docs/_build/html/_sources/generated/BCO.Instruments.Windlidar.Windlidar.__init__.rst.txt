@@ -1,0 +1,6 @@
+BCO\.Instruments\.Windlidar\.Windlidar\.\_\_init\_\_
+====================================================
+
+.. currentmodule:: BCO.Instruments.Windlidar
+
+.. automethod:: Windlidar.__init__

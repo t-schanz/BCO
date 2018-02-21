@@ -1,0 +1,6 @@
+_local2UTC
+=========
+
+.. currentmodule:: BCO.Instruments.Radar
+
+.. automethod:: Radar._local2UTC

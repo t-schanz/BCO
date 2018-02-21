@@ -1,0 +1,6 @@
+_getStartEnd
+===========
+
+.. currentmodule:: BCO.Instruments.Radar
+
+.. automethod:: Radar._getStartEnd

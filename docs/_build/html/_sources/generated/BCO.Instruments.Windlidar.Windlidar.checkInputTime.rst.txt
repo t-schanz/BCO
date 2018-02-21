@@ -1,0 +1,6 @@
+_checkInputTime
+==============
+
+.. currentmodule:: BCO.Instruments.Windlidar
+
+.. automethod:: Windlidar._checkInputTime
