@@ -1,7 +1,15 @@
 from setuptools import setup, find_packages
+from codecs import open
+from os import path
+
+here = path.abspath(path.dirname(__file__))
+
+# Get the long description from the README file
+with open(path.join(here, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
 
 setup(name='BCO',
-      version='0.0.1',
+      version='0.0.2',
       description='Python Interface to the Max-Planck-Institut Barbados Cloud Observatory data.',
       author='Tobias Machnitzki',
       author_email='tobias.machnitzki@mpimet.mpg.de',
@@ -25,7 +33,7 @@ setup(name='BCO',
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    packages=find_packages(exclude=['docs']),
+    packages=find_packages(exclude=['contrib', 'docs', 'tests']),
 
     # List run-time dependencies here.  These will be installed by pip when
     # your project is installed. For an analysis of "install_requires" vs pip's
@@ -36,6 +44,8 @@ setup(name='BCO',
         'netCDF4>=1.1.1',
         'numpy>=1.6',
       ],
+
+    python_requires='>=3',
 
 
      )
