@@ -29,7 +29,7 @@ To create the documentation:
 2. cd into "docs"
 3. run:
 ```
-   make html
+  >>> make html
 ```
 4. if it worked there should be a folder "generated" with some ".rst" files in it now.
 5. cd into "\_build/html" 
