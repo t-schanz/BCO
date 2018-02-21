@@ -65,6 +65,18 @@ Radar
 
      :toctree:
 
+     :toctree:
+
+     :toctree:
+
+     :toctree:
+
+     :toctree:
+
+     :toctree:
+
+     :toctree:
+
   
       ~Radar.getLDR
       ~Radar.getMeltHeight

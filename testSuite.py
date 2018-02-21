@@ -1,6 +1,7 @@
 from BCO.Instruments import Radar
 from BCO.Instruments import Windlidar
 from BCO.tools import tools
+from BCO.Quicklooks import plot_RadarLidarVelcities
 
 import numpy as np
 from datetime import datetime as dt
@@ -32,3 +33,5 @@ if __name__ == "__main__":
     # plt.savefig("coral_tutorial1.png")
 
     # coral.quickplot2D(coral.getReflectivity(),save_name="coral_tutorial2.png")
+
+    # plot_RadarLidarVelcities("20170723")

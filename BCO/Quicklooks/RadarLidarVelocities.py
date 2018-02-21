@@ -251,6 +251,17 @@ def plot_RadarLidarVelcities(datestr=None, output_path=""):
 
     Returns:
         Saves an image in the defined output_path.
+
+    Example:
+
+        >>> from BCO.Quicklooks import plot_RadarLidarVelcities
+        >>> plot_RadarLidarVelcities("20170723")
+
+    .. image:: ../_images/Velocities_20170723.png
+        :width: 400px
+        :align: center
+        :height: 200px
+        :alt: alternate text
     """
     warnings.filterwarnings("ignore") # for debugging comment this line!!!
 
