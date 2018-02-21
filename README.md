@@ -32,6 +32,8 @@ To create the documentation:
 ```
   >>> make html
 ```
+   Please ignore all the warnings which occur under "checking consistency".
 4. if it worked there should be a folder "generated" with some ".rst" files in it now.
+    If not, you can remove the the files in generated again with running "make clean".
 5. cd into "\_build/html" 
 6. open "index.html" with any browser
