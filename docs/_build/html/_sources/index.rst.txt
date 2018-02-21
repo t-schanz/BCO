@@ -10,7 +10,7 @@ This package provides some tools for working with the data from the Barbados Clo
    intro
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    modules
 

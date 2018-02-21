@@ -18,8 +18,17 @@ def testRadar():
     coral.quickplot2D(ref,ylim=(100,2000))
 
 if __name__ == "__main__":
-    testRadar()
+    # testRadar()
     # coral = Radar(start="20180212", end="201802122359", device="CORAL")
-    lidar = Windlidar(start="20180101",end="20180101")
+    # lidar = Windlidar(start="20180101",end="20180101")
 
+    coral = Radar("20180101","2018010315")
+    coral_time = coral.getTime()
+    coral_range = coral.getRange()
+    coral_ref = coral.getReflectivity(postprocessing="Zu")
 
+    # fig = plt.figure()
+    # plt.contourf(coral_time,coral_range, coral_ref.transpose())
+    # plt.savefig("coral_tutorial1.png")
+
+    # coral.quickplot2D(coral.getReflectivity(),save_name="coral_tutorial2.png")
