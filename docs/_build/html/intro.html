@@ -180,9 +180,12 @@
 <li>In a terminal navigate to the folder “BCO”</li>
 <li>Run:</li>
 </ol>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span>&gt;&gt;&gt; python setup.py bdist_wheel
+&gt;&gt;&gt; pip install dist/BCO-?.?.?-py3-none-any.whl
 </pre></div>
 </div>
+<blockquote>
+<div>The ?`s needs to be replaced by the version number.</div></blockquote>
 <ol class="arabic simple" start="4">
 <li>Check with “pip list” or “conda list” if it worked.</li>
 </ol>

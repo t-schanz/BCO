@@ -10,7 +10,10 @@ Installation
 2. In a terminal navigate to the folder "BCO"
 3. Run:
 
->>> python setup.py install
+>>> python setup.py bdist_wheel
+>>> pip install dist/BCO-?.?.?-py3-none-any.whl
+
+   The ?`s needs to be replaced by the version number.
 
 
 4. Check with "pip list" or "conda list" if it worked.
