@@ -1,4 +1,8 @@
 include README.md
 
+
 recursive-include BCO *.nc
 recursive-include BCO *.ini
+
+recursive-include BCO/Instruments *.ini
+recursive-include BCO/tools *.nc
