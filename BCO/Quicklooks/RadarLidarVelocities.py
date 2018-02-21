@@ -239,19 +239,23 @@ def filterWindLidar(lidarVel,lidarInt,windFilter=-18.3):
     return lidarVelFiltered
 
 
-if __name__ == "__main__":
+def plot_RadarLidarVelcities(datestr=None, output_path=""):
+    """
+    Creates an image with the combined vertical velocities from Radar and Windlidar.
+    The image is created for the day defined by the datestr-argument.
+    If no datestr is provided the plot will be created for yesterdays data.
+
+
+    Args:
+        datestr: Format: YYYYMMDD
+
+    Returns:
+        Saves an image in the defined output_path.
+    """
     warnings.filterwarnings("ignore") # for debugging comment this line!!!
 
-    save_path = "" # path where image will be saved.
+    save_path = output_path # path where image will be saved.
 
-    # ================================
-    # Get Parameters:
-    # ================================
-
-    try:
-        datestr = sys.argv[1]
-    except:
-        datestr = None
 
     # ================================
     # Load Data:
@@ -309,3 +313,21 @@ if __name__ == "__main__":
     # =================================
 
     plotData(lidarTime,lidarRange,lidarVel,coralTime,coralRange,coralVel,coralRef,threshold,start,save_path)
+
+
+if __name__ == "__main__":
+    # ================================
+    # Get Parameters:
+    # ================================
+
+    try:
+        datestr = sys.argv[1]
+    except:
+        datestr = None
+
+    save_path = ""
+
+    # ================================
+    # Start program:
+    # ================================
+    plot_RadarLidarVelcities(datestr,save_path)

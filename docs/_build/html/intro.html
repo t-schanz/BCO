@@ -94,8 +94,8 @@
             
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">First Steps</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#instruments">Instruments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#tools">Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a></li>
 </ul>
 </li>
 </ul>
@@ -173,11 +173,49 @@
   <div class="section" id="first-steps">
 <h1>First Steps<a class="headerlink" href="#first-steps" title="Permalink to this headline">¶</a></h1>
 <p>In this section I will try to cover some basics to work with this module.</p>
-<div class="section" id="instruments">
-<h2>Instruments<a class="headerlink" href="#instruments" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Download or clone this directory (green button upper right corner on github)</li>
+<li>In a terminal navigate to the folder “BCO”</li>
+<li>Run:</li>
+</ol>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+</pre></div>
 </div>
-<div class="section" id="tools">
-<h2>Tools<a class="headerlink" href="#tools" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple" start="4">
+<li>Check with “pip list” or “conda list” if it worked.</li>
+</ol>
+</div>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+<p>The documentation is at the moment only available on linux machines.</p>
+<p>To create the documentation:</p>
+<ol class="arabic simple">
+<li>In a terminal navigate to your downloaded folder “BCO”</li>
+<li>cd into “docs”</li>
+<li>Run:</li>
+</ol>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">make</span> <span class="n">html</span>
+</pre></div>
+</div>
+<blockquote>
+<div>Please ignore all the warnings which occur under “checking consistency”.</div></blockquote>
+<ol class="arabic" start="4">
+<li><dl class="first docutils">
+<dt>If it worked there should be a folder “generated” with some “.rst” files in it now.</dt>
+<dd><p class="first">If not, you can remove the the files in generated again with running</p>
+<div class="last highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">make</span> <span class="n">clean</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><p class="first">cd into “_build/html”</p>
+</li>
+<li><p class="first">Open “index.html” with any browser</p>
+</li>
+</ol>
 </div>
 </div>
 
