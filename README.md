@@ -1,6 +1,7 @@
 # BCO
 
 This package is still in alpha phase, therefore please use with caution.
+Furthermore it will only work with Python 3!
 
 
 ## News
