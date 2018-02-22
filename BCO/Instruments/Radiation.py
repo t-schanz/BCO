@@ -114,6 +114,20 @@ class Radiation(__Device):
         return time
 
     def getRadiation(self,scope,scattering=None):
+        """
+        Returns the timeseries for the radiation for the specified scope and scattering type.
+
+        Mind that when scope=="LW", then scattering does not need to be provided, because longwave radiation is always
+        measured diffuse. If scattering is provided anyway it will fall back to "diffuse".
+
+
+        Args:
+            scope: One of: "LW","SW". (LW = long wave,, SW = short wave)
+            scattering: One of: "direct","diffuse","global"
+
+        Returns:
+            1-D numpy array of the radiation.
+        """
 
         scopes = ["LW","SW"]
         scatterings = ["direct","diffuse","global"]
@@ -150,6 +164,20 @@ class Radiation(__Device):
 
 
     def getVoltage(self,scope,scattering=None):
+        """
+        Returns the sensitivity timeseries for the specified scopte and scattering type.
+
+        Mind that when scope=="LW", then scattering does not need to be provided, because longwave radiation is always
+        measured diffuse. If scattering is provided anyway it will fall back to "diffuse".
+
+
+        Args:
+            scope: One of: "LW","SW". (LW = long wave,, SW = short wave)
+            scattering: One of: "direct","diffuse","global"
+
+        Returns:
+            1-D numpy array of the voltage.
+        """
         scopes = ["LW","SW"]
         scatterings = ["direct","diffuse","global"]
 
@@ -187,6 +215,16 @@ class Radiation(__Device):
         return _volt
 
     def getSensitivity(self,instrument):
+        """
+        Returns the sensitivity timeseries for the specified instrument.
+
+        Args:
+            instrument: One of: "GeoSh", "AnoSh", "AnoGlob", "Hel"
+
+        Returns:
+            1-D numpy array of the sensitivity.
+
+        """
 
         instruments = ["GeoSh", "AnoSh", "AnoGlob","Hel"]
 
@@ -200,6 +238,16 @@ class Radiation(__Device):
             return None
 
     def getTemperature(self, instrument):
+        """
+        Returns the temperature timeseries for the specified instrument.
+
+        Args:
+            instrument: One of: "GeoSh", "AnoSh", "AnoGlob", "Hel"
+
+        Returns:
+            1-D numpy array of the temperature.
+
+        """
 
         instruments = ["GeoSh", "AnoSh", "AnoGlob", "Hel"]
 

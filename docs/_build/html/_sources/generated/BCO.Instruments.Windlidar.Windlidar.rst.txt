@@ -77,6 +77,8 @@ Windlidar
 
      :toctree:
 
+     :toctree:
+
   
       ~Windlidar.getIntensity
       ~Windlidar.getRange

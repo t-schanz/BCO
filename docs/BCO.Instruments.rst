@@ -22,6 +22,18 @@ Windlidar
 
    Windlidar
 
+Radiation
+=========
+
+.. automodule:: BCO.Instruments.Radiation
+
+.. currentmodule:: BCO.Instruments.Radiation
+
+.. autosummary::
+   :toctree: generated
+
+   Radiation
+
 
 
 

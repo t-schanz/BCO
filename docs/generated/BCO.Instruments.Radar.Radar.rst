@@ -77,6 +77,8 @@ Radar
 
      :toctree:
 
+     :toctree:
+
   
       ~Radar.getLDR
       ~Radar.getMeltHeight
