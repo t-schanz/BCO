@@ -113,13 +113,104 @@ class Radiation(__Device):
 
         return time
 
-    def getRadiation(self,scope,direction,scattering):
+    def getRadiation(self,scope,scattering=None):
 
-        directions = ["down"]
         scopes = ["LW","SW"]
         scatterings = ["direct","diffuse","global"]
 
+        def keys():
+            """
+            Get the keys for the parameters
+            Returns:
+                Parameter Keys
+            """
+            return "scopes: %s \nscatterings: %s"%(" ".join([s for s in scopes])," ".join([s for s in scopes]))
 
+
+
+        if not scope in scopes:
+            print("Scope needs to be either 'SW' (shortwave) or 'LW' (longwave)")
+            return None
+
+        if not scattering in scatterings:
+            print("Scattering needs to be one of: %s"%" ,".join([s for s in scatterings]))
+
+
+        if scope == "LW":
+            if not scattering == "diffuse":
+                print("Longwaveradiation at the surface is only measured as diffuse radiation. Setting scattering to diffuse!")
+
+            _rad = self.__getArrayFromNc("LWdown_diffuse")
+
+        elif scope == "SW":
+
+            _rad = self.__getArrayFromNc("SWdown_%s"%scattering)
+
+        return _rad
+
+
+    def getVoltage(self,scope,scattering=None):
+        scopes = ["LW","SW"]
+        scatterings = ["direct","diffuse","global"]
+
+        def keys():
+            """
+            Get the keys for the parameters
+            Returns:
+                Parameter Keys
+            """
+            return "scopes: %s \nscatterings: %s"%(", ".join([s for s in scopes]),", ".join([s for s in scatterings]))
+
+        if not scope:
+            print("Following parameter configurations are allowed:")
+            print(keys())
+            return None
+
+        if not scope in scopes:
+            print("Scope needs to be either 'SW' (shortwave) or 'LW' (longwave)")
+            return None
+
+        if not scattering in scatterings:
+            print("Scattering needs to be one of: %s"%" ,".join([s for s in scatterings]))
+
+
+        if scope == "LW":
+            if not scattering == "diffuse":
+                print("Longwaveradiation at the surface is only measured as diffuse radiation. Setting scattering to diffuse!")
+
+            _volt = self.__getArrayFromNc("LWdown_diffuse_voltage")
+
+        elif scope == "SW":
+
+            _volt = self.__getArrayFromNc("SWdown_%s_voltage"%scattering)
+
+        return _volt
+
+    def getSensitivity(self,instrument):
+
+        instruments = ["GeoSh", "AnoSh", "AnoGlob","Hel"]
+
+        if instrument in instruments:
+            _sens = self.__getArrayFromNc("%s_Sensitivity"%instrument)
+
+            return _sens
+
+        else:
+            print("Instruments must be one of: %s"%", ".join(instruments))
+            return None
+
+    def getTemperature(self, instrument):
+
+        instruments = ["GeoSh", "AnoSh", "AnoGlob", "Hel"]
+
+        if instrument in instruments:
+            _temp = self.__getArrayFromNc("%s_temp" % instrument)
+
+            return _temp
+
+        else:
+            print("Instruments must be one of: %s" % ", ".join(instruments))
+            return None
 
 
     def __getArrayFromNc(self, value):

@@ -39,3 +39,4 @@ if __name__ == "__main__":
     # plot_RadarLidarVelcities("20170723")
 
     rad = Radiation(start="20180220",end="20180220")
+    nc = rad.get_nc()
