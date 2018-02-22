@@ -249,17 +249,7 @@ class Windlidar(__Device):
         """
         return getValueFromSettings("WINDLIDAR_PATH")
 
-    def get_nc(self):
-        for _date in tools.daterange(self.start.date(), self.end.date()):
-            _datestr = _date.strftime("%Y%m")
-            _nameStr = "WindLidar__Deebles_Point__VerticalVelocity__STARE__1s__%s.nc*" % _date.strftime("%Y%m%d")
-            # _file = glob.glob(self.path + _datestr + "/" + _nameStr)[0]
-            _file = glob.glob(self.path + _nameStr)[0]
-            if "bz2" in _file[-5:]:
-                nc = tools.bz2Dataset(_file)
-            else:
-                nc = Dataset(_file)
-        return nc
+
 
     def __getAttributes(self):
         """
