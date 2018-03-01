@@ -10,6 +10,7 @@ import BCO.tools.tools as tools
 import glob
 import numpy as np
 from pytz import timezone, utc
+import BCO
 
 try:
     from netCDF4 import Dataset
@@ -80,12 +81,22 @@ class Radar(__Device):
             version: The version of the dataset to use. Currently supported: 1,2,3  [note: 3 is in beta-phase]
         """
 
+
+
+
         self.device = device
         self.pathFlag = self.__getFlag()
         self.start = self._checkInputTime(start)
         self.end = self._checkInputTime(end)
         self.data_version = version
-        self.path = self.__getPath()
+
+        if BCO.USE_FTP_ACCESS:
+            ftp_path =
+            self.__downloadFromFTP(ftp_path,file)
+            self.path = ""
+        else:
+            self.path = self.__getPath()
+
         self.__checkInput()
 
         self.lat = self.__getValueFromNc("lat")

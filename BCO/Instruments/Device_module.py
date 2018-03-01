@@ -6,8 +6,10 @@ import numpy as np
 import bz2
 import os
 from pytz import timezone,utc
-
+from ftplib import FTP
 from BCO.tools import tools
+import BCO
+import glob
 
 try:
     from netCDF4 import Dataset
@@ -25,6 +27,7 @@ class __Device(object):
 
     de_tz = timezone("Europe/Berlin")
     utc_tz = timezone("UTC")
+    __ftp_files = []
 
     def _checkInputTime(self, input):
         """
@@ -116,6 +119,68 @@ class __Device(object):
         f1 = lambda x : x.astimezone(self.de_tz).astimezone(utc)
         return np.asarray(list(map(f1, time)))
 
+    def __downloadFromFTP(self,ftp_path,file):
+        ftp = FTP(BCO.FTP_SERVER)
+        ftp.login(user=BCO.FTP_USER, passwd=BCO.FTP_PASSWD)
+        ftp.dir()
+        ftp.retrbinary('RETR ' + ftp_path + file, open(file, 'wb').write)
+        self.__ftp_files.append(file)
+        return file
+
+    def __getArrayFromNc(self, file_path,file_name, value):
+        """
+        Retrieving the 'value' from the netCDF-Dataset reading just the desired timeframe.
+
+        Args:
+            value: String which is a valid key for the Dataset.variables[key].
+
+        Returns:
+            Numpy array with the values of the desired key and the inititated time-window.
+
+        Example:
+            What behind the scenes happens for an example-key 'VEL' is something like:
+
+            >>> nc = Dataset(input_file)
+            >>> _var = nc.variables["VEL"][self.start:self.end].copy()
+
+            Just that in this function we are looping over all files and in the end concatinating them.
+        """
+
+        var_list = []
+        skippedDates = []
+        for _date in tools.daterange(self.start.date(), self.end.date()):
+            _nameStr = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, tools.datestr(_date))
+            _file = glob.glob(self.path + _nameStr)[0]
+            try:
+                nc = Dataset(_file, mode="r")
+                # print(_date)
+                _start, _end = self._getStartEnd(_date, nc)
+                if _end != 0:
+                    varFromDate = nc.variables[value][_start:_end].copy()
+                else:
+                    varFromDate = nc.variables[value][_start:].copy()
+                var_list.append(varFromDate)
+                nc.close()
+            except:
+                skippedDates.append(_date)
+                continue
+
+        _var = var_list[0]
+        if len(var_list) > 1:
+            for item in var_list[1:]:
+                _var = np.concatenate((_var, item))
+
+        if skippedDates:
+            self._FileNotAvail(skippedDates)
+
+        return _var
+
+
+    def close(self):
+        for file in self.__ftp_files:
+            os.remove(file)
+
+        self.__ftp_files = []
 
 
 
@@ -133,7 +198,9 @@ def getValueFromSettings(device: str):
 
     """
     package_directory = os.path.dirname(os.path.abspath(__file__))
+
     ini_file = package_directory + "/settings.ini"
+
     with open(ini_file, "r") as f:
         while True:
             try:
