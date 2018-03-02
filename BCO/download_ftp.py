@@ -1,5 +1,6 @@
 from ftplib import FTP
 import BCO
+import tempfile
 
 if __name__ == "__main__":
     ftp_path = '/B_Reflectivity/Version_2/'
@@ -9,6 +10,10 @@ if __name__ == "__main__":
 
     ftp = FTP(BCO.FTP_SERVER)
     ftp.login(user=BCO.FTP_USER,passwd=BCO.FTP_PASSWD)
-    ftp.dir()
-    ftp.retrbinary('RETR '+ftp_path+file, open(file, 'wb').write)
+
+    ftp_dir = []
+    ftp.dir(ftp_dir.append())
+
+    tmp_dir = tempfile.gettempdir()
+    # ftp.retrbinary('RETR '+ftp_path+file, open(tmp_dir+file,"wb").write)
 

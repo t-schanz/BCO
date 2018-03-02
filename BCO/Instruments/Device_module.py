@@ -3,13 +3,14 @@ import datetime
 from datetime import datetime as dt
 from datetime import timedelta
 import numpy as np
-import bz2
 import os
 from pytz import timezone,utc
 from ftplib import FTP
 from BCO.tools import tools
 import BCO
 import glob
+import tempfile
+import re
 
 try:
     from netCDF4 import Dataset
@@ -28,6 +29,11 @@ class __Device(object):
     de_tz = timezone("Europe/Berlin")
     utc_tz = timezone("UTC")
     __ftp_files = []
+
+    def __init__(self):
+        self.__instrument = None
+        self.__name_str = None
+        self.__dateformat_str = None
 
     def _checkInputTime(self, input):
         """
@@ -119,15 +125,16 @@ class __Device(object):
         f1 = lambda x : x.astimezone(self.de_tz).astimezone(utc)
         return np.asarray(list(map(f1, time)))
 
-    def __downloadFromFTP(self,ftp_path,file):
+    def _downloadFromFTP(self,ftp_path,file):
+        tmpdir = tempfile.gettempdir()
+
         ftp = FTP(BCO.FTP_SERVER)
         ftp.login(user=BCO.FTP_USER, passwd=BCO.FTP_PASSWD)
-        ftp.dir()
-        ftp.retrbinary('RETR ' + ftp_path + file, open(file, 'wb').write)
-        self.__ftp_files.append(file)
-        return file
+        ftp.retrbinary('RETR ' + ftp_path + file, open(tmpdir + file, 'wb').write)
+        self.__ftp_files.append(tmpdir + file)
+        return tmpdir
 
-    def __getArrayFromNc(self, file_path,file_name, value):
+    def _getArrayFromNc(self, value, dateformat_str):
         """
         Retrieving the 'value' from the netCDF-Dataset reading just the desired timeframe.
 
@@ -145,16 +152,21 @@ class __Device(object):
 
             Just that in this function we are looping over all files and in the end concatinating them.
         """
-
         var_list = []
         skippedDates = []
         for _date in tools.daterange(self.start.date(), self.end.date()):
-            _nameStr = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, tools.datestr(_date))
+            _datestr = _date.strftime(dateformat_str)
+            _nameStr = self.__instrument.replace("#",_datestr)
             _file = glob.glob(self.path + _nameStr)[0]
             try:
-                nc = Dataset(_file, mode="r")
+                if "bz2" in _file[-5:]:
+                    nc = tools.bz2Dataset(_file)
+                else:
+                    nc = Dataset(_file)
+
                 # print(_date)
                 _start, _end = self._getStartEnd(_date, nc)
+                # print(_start,_end)
                 if _end != 0:
                     varFromDate = nc.variables[value][_start:_end].copy()
                 else:
@@ -177,20 +189,29 @@ class __Device(object):
 
 
     def close(self):
-        for file in self.__ftp_files:
-            os.remove(file)
+        """
+        Deletes all temporary stored files from the instance.
+        This method can just be used when using this package with ftp-access.
 
-        self.__ftp_files = []
+        """
+        if BCO.USE_FTP_ACCESS:
+            for file in self.__ftp_files:
+                os.remove(file)
+
+            self.__ftp_files = []
+            print("Successfully deleted all temporary files")
+        else:
+            print("This method is just for use with ftp-access  of the BCO Data")
 
 
 
 
-def getValueFromSettings(device: str):
+def getValueFromSettings(value: str):
     """
     This function gets a value from the settings.ini and returns it:
 
     Args:
-        device: Straing of the Device of which you want to get the data-path to the netCDF-file from.
+        value: String of the value of which you want to get the data-path to the netCDF-file from.
 
     Returns:
         String of the value which is written in the file settings.ini behind the ':'. Only the string having the 'device'
@@ -199,13 +220,16 @@ def getValueFromSettings(device: str):
     """
     package_directory = os.path.dirname(os.path.abspath(__file__))
 
-    ini_file = package_directory + "/settings.ini"
+    if BCO.USE_FTP_ACCESS:
+        ini_file = package_directory + "../ftp_settings.ini"
+    else:
+        ini_file = package_directory + "../settings.ini"
 
     with open(ini_file, "r") as f:
         while True:
             try:
                 line = f.readline().rstrip()
-                if device + ":" in line:
+                if value + ":" in line:
                     return line.split(":")[1]
             except:
                 break

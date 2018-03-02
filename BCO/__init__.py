@@ -1,5 +1,6 @@
 USE_FTP_ACCESS = True
 import socket
+import os
 # -----------------------------------------------------------
 
 # Trying to make a guess for using ftp-acces:
@@ -18,7 +19,9 @@ FTP_USER = None
 FTP_PASSWD = None
 FTP_SERVER = None
 
-with open("ftp_settings.ini") as f:
+package_directory = os.path.dirname(os.path.abspath(__file__))
+
+with open(package_directory + "/ftp_settings.ini") as f:
     lines = f.readlines()
 
     for line in lines:

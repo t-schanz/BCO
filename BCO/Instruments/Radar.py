@@ -11,6 +11,7 @@ import glob
 import numpy as np
 from pytz import timezone, utc
 import BCO
+import re
 
 try:
     from netCDF4 import Dataset
@@ -89,11 +90,16 @@ class Radar(__Device):
         self.start = self._checkInputTime(start)
         self.end = self._checkInputTime(end)
         self.data_version = version
+        self.__instrument = "RADAR" # String used for retrieving the filepath from settings.ini
+        self.__name_str = "MMCR__%s__Spectral_Moments*%s.nc"%(self.pathFlag,"#") # general name-structure of file. # indicates where date will be replaced
+        self.__dateformat_str = "%y%m%d"
 
         if BCO.USE_FTP_ACCESS:
-            ftp_path =
-            self.__downloadFromFTP(ftp_path,file)
-            self.path = ""
+            for _date in tools.daterange(self.start.date(), self.end.date()):
+                _datestr = _date.strftime(self.__dateformat_str)
+                _nameStr = self.__instrument.replace("#", _datestr)
+                self.path = self._downloadFromFTP(ftp_path=getValueFromSettings("RADAR_PATH"))
+
         else:
             self.path = self.__getPath()
 
