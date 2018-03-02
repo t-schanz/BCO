@@ -10,6 +10,7 @@ from datetime import timedelta
 
 import BCO.tools.tools as tools
 from BCO.Instruments.Device_module import __Device,getValueFromSettings
+import BCO
 
 try:
     from netCDF4 import Dataset
@@ -17,7 +18,8 @@ except:
     print("The module netCDF4 needs to be installed for the BCO-package to work.")
     sys.exit(1)
 
-
+# TODO: DAS WINDLIDAR IST MOMENTAN NOCH NICHT VIA FTP ERREICHBAR.
+# TODO: SOBALD DAS GEÄNDERT IST MUSS HIER NOCH EINIGES ANGEPASST WERDEN WAHRSCHEINLICH!
 class Windlidar(__Device):
     """
     Class for working with the Windlidar Data from the BCO.
@@ -62,7 +64,24 @@ class Windlidar(__Device):
 
         self.start = self._checkInputTime(start) + timedelta(hours=0)
         self.end = self._checkInputTime(end) + timedelta(hours=0)
-        self.path = self.__getPath()
+
+        self.skipped = None  # needed to store skipped dates.
+
+        self._instrument = "WINDLIDAR"  # String used for retrieving the filepath from settings.ini
+        self._name_str = "WindLidar__Deebles_Point*__%s.nc*" % ("#")  # general name-structure of file.
+                                                            # "#" indicates where date will be replaced
+        self._dateformat_str = "%Y%m%d"  # the datetime format this instrument uses
+        self._ftp_files = []
+
+        if BCO.USE_FTP_ACCESS:
+            for _date in tools.daterange(self.start.date(), self.end.date()):
+                _datestr = _date.strftime(self._dateformat_str)
+                _nameStr = self._name_str.replace("#", _datestr)
+                print(_nameStr)
+                self.path = self._downloadFromFTP(ftp_path=getValueFromSettings("RADAR_PATH"), file=_nameStr)
+
+        else:
+            self.path = self.__getPath()
         # print(self.path)
 
         # Attributes:
@@ -97,7 +116,7 @@ class Windlidar(__Device):
             >>> lidar.getTime()
         """
 
-        time = self.__getArrayFromNc('time')
+        time = self._getArrayFromNc('time')
 
         time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
         time = self._local2UTC(time)
@@ -120,27 +139,13 @@ class Windlidar(__Device):
             >>> lidar.getRange()
         """
 
-        range = None
-        for _date in tools.daterange(self.start, self.end):
-            if not range:
-                try:
-                    _datestr = _date.strftime("%Y%m")
-                    _nameStr = "WindLidar__Deebles_Point__VerticalVelocity__STARE__1s__%s.nc*" % _date.strftime(
-                        "%Y%m%d")
-                    # _file = glob.glob(self.path + _datestr + "/" + _nameStr)[0]
-                    _file = glob.glob(self.path + _nameStr)[0]
+        range = self._getArrayFromNc("range")
 
-                    if "bz2" in _file[-5:]:
-                        nc = tools.bz2Dataset(_file)
-                    else:
-                        nc = Dataset(_file)
+        # in case of many days being loaded and their range might be concatenated they will be split here:
+        range = range[:np.nanargmax(range)+1]
 
-                    range = nc.variables["range"][:].copy()
-                    return range
-                except:
-                    continue
 
-        return None
+        return range
 
     def getIntensity(self, version="alpha"):
         """
@@ -156,9 +161,9 @@ class Windlidar(__Device):
 
 
         if version == "alpha":
-            intensity = self.__getArrayFromNc("intensity")
+            intensity = self._getArrayFromNc("intensity")
         elif version == "beta":
-            intensity = self.__getArrayFromNc("beta")
+            intensity = self._getArrayFromNc("beta")
         else:
             print("Not a valid version: %s"%version)
             return None
@@ -177,69 +182,16 @@ class Windlidar(__Device):
 
         """
         if version == "uncorrected":
-            vel = self.__getArrayFromNc("dv")
+            vel = self._getArrayFromNc("dv")
         elif version == "corrected":
-            vel = self.__getArrayFromNc("dv_corr")
+            vel = self._getArrayFromNc("dv_corr")
         else:
             print("Not a valid version: %s" % version)
             return None
 
         return vel
 
-    def __getArrayFromNc(self, value):
-        """
-        Retrieving the 'value' from the netCDF-Dataset reading just the desired timeframe.
-
-        Args:
-            value: String which is a valid key for the Dataset.variables[key].
-
-        Returns:
-            Numpy array with the values of the desired key and the inititated time-window.
-
-        Example:
-            What behind the scenes happens for an example-key 'VEL' is something like:
-
-            >>> nc = Dataset(input_file)
-            >>> _var = nc.variables["VEL"][self.start:self.end].copy()
-
-            Just that in this function we are looping over all files and in the end concatinating them.
-        """
-        var_list = []
-        skippedDates = []
-        for _date in tools.daterange(self.start.date(), self.end.date()):
-            _datestr = _date.strftime("%Y%m")
-            _nameStr = "WindLidar__Deebles_Point__VerticalVelocity__STARE__1s__%s.nc*" % _date.strftime("%Y%m%d")
-            # _file = glob.glob(self.path + _datestr + "/" + _nameStr)[0]
-            _file = glob.glob(self.path + _nameStr)[0]
-            try:
-                if "bz2" in _file[-5:]:
-                    nc = tools.bz2Dataset(_file)
-                else:
-                    nc = Dataset(_file)
-
-                # print(_date)
-                _start, _end = self._getStartEnd(_date, nc)
-                # print(_start,_end)
-                if _end != 0:
-                    varFromDate = nc.variables[value][_start:_end].copy()
-                else:
-                    varFromDate = nc.variables[value][_start:].copy()
-                var_list.append(varFromDate)
-                nc.close()
-            except:
-                skippedDates.append(_date)
-                continue
-
-        _var = var_list[0]
-        if len(var_list) > 1:
-            for item in var_list[1:]:
-                _var = np.concatenate((_var, item))
-
-        if skippedDates:
-            self._FileNotAvail(skippedDates)
-
-        return _var
-
+ 
     def __getPath(self):
         """
         Reads the Path from the settings.ini file by calling the right function from Device_module.
@@ -259,7 +211,11 @@ class Windlidar(__Device):
         _datestr = _date.strftime("%Y%m")
         _nameStr = "WindLidar__Deebles_Point__VerticalVelocity__STARE__1s__%s.nc*" % _date.strftime("%Y%m%d")
         # _file = glob.glob(self.path + _datestr + "/" +  _nameStr)[0]
-        _file = glob.glob(self.path + _nameStr)[0]
+
+        if BCO.USE_FTP_ACCESS:
+            _file = self._ftp_files[0]
+        else:
+            _file = glob.glob(self.path + _nameStr)[0]
 
         if "bz2" in _file[-5:]:
             nc = tools.bz2Dataset(_file)
@@ -274,41 +230,14 @@ class Windlidar(__Device):
         self.location = nc.location
         nc.close()
 
-        self.lat = self.__getValueFromNc("lat")
-        self.lon = self.__getValueFromNc("lon")
-        self.pitch = self.__getValueFromNc("pitch")
-        self.azi = self.__getValueFromNc("azi")
-        self.ele = self.__getValueFromNc("ele")
-        self.roll = self.__getValueFromNc("roll")
+        self.lat = self._getValueFromNC("lat")
+        self.lon = self._getValueFromNC("lon")
+        self.pitch = self._getValueFromNC("pitch")
+        self.azi = self._getValueFromNC("azi")
+        self.ele = self._getValueFromNC("ele")
+        self.roll = self._getValueFromNC("roll")
 
 
-    def __getValueFromNc(self, value: str):
-        """
-        This function gets values from the netCDF-Dataset, which stay constant over the whole timeframe. So its very
-        similar to __getArrayFromNc(), but without the looping.
-
-        Args:
-            value: A string for accessing the netCDF-file.
-                    For example: 'Zf'
-
-        Returns:
-            Numpy array
-        """
-        _date = self.start.date()
-        _datestr = _date.strftime("%Y%m")
-        _nameStr = "WindLidar__Deebles_Point__VerticalVelocity__STARE__1s__%s.nc*" % _date.strftime("%Y%m%d")
-        # _file = glob.glob(self.path + _datestr + "/" +  _nameStr)[0]
-        _file = glob.glob(self.path + _nameStr)[0]
-
-        if "bz2" in _file[-5:]:
-            nc = tools.bz2Dataset(_file)
-        else:
-            nc = Dataset(_file)
-
-        _var = nc.variables[value][:].copy()
-        nc.close()
-
-        return _var
 
 
 

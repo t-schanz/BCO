@@ -3,8 +3,8 @@ import BCO
 import tempfile
 
 if __name__ == "__main__":
-    ftp_path = '/B_Reflectivity/Version_2/'
-    file = 'MMCR__MBR__Spectral_Moments*180101.nc'
+    ftp_path = '/WindLidar/'
+    file = '"WindLidar__Deebles_Point*__180101.nc*"'
 
     BCO.settings.path_to_ftp_file("ftp_access.txt")
 
@@ -17,5 +17,5 @@ if __name__ == "__main__":
 
     tmp_dir = tempfile.gettempdir()
     ftp.nlst()
-    ftp.retrbinary('RETR ' +file_to_retrieve, open(tmp_dir+file_to_retrieve.split("/")[-1],"wb").write)
+    # ftp.retrbinary('RETR ' +file_to_retrieve, open(tmp_dir+file_to_retrieve.split("/")[-1],"wb").write)
 

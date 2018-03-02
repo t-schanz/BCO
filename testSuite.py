@@ -26,24 +26,7 @@ if __name__ == "__main__":
     BCO.settings.set_ftp(True)
     BCO.settings.path_to_ftp_file("BCO/ftp_access.txt")
     print(BCO.USE_FTP_ACCESS)
-    coral = Radar("20180101", "20180101")
 
-    # testRadar()
-    # coral = Radar(start="20180212", end="201802122359", device="CORAL")
-    # lidar = Windlidar(start="20180101",end="20180101")
+    lidar = Windlidar("20180101","20180101")
 
-    # coral = Radar("20180101","2018010315")
-    # coral_time = coral.getTime()
-    # coral_range = coral.getRange()
-    # coral_ref = coral.getReflectivity(postprocessing="Zu")
 
-    # fig = plt.figure()
-    # plt.contourf(coral_time,coral_range, coral_ref.transpose())
-    # plt.savefig("coral_tutorial1.png")
-
-    # coral.quickplot2D(coral.getReflectivity(),save_name="coral_tutorial2.png")
-
-    # plot_RadarLidarVelcities("20170723")
-
-    # rad = Radiation(start="20180220",end="20180220")
-    # nc = rad.get_nc()
