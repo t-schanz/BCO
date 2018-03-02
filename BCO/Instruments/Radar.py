@@ -19,7 +19,8 @@ except:
     print("The module netCDF4 needs to be installed for the BCO-package to work.")
     sys.exit(1)
 
-__all__ =['Radar']
+__all__ = ['Radar']
+
 
 class Radar(__Device):
     """
@@ -72,6 +73,7 @@ class Radar(__Device):
         azimuth: Azimuth angle of where the instrument is pointing to.
         elevation: Elevation angle of where the instrument is pointing to.
         north: Degrees of where from the instrument seen is north.
+        skipped: if loading longer timeseries, where days might be missing, you can find those missing timesteps here.
     """
     def __init__(self, start, end, device="CORAL", version=2):
         """
@@ -84,32 +86,34 @@ class Radar(__Device):
 
 
 
-
         self.device = device
         self.pathFlag = self.__getFlag()
         self.start = self._checkInputTime(start)
         self.end = self._checkInputTime(end)
         self.data_version = version
-        self.__instrument = "RADAR" # String used for retrieving the filepath from settings.ini
-        self.__name_str = "MMCR__%s__Spectral_Moments*%s.nc"%(self.pathFlag,"#") # general name-structure of file. # indicates where date will be replaced
-        self.__dateformat_str = "%y%m%d"
+        self._instrument = "RADAR"  # String used for retrieving the filepath from settings.ini
+        self._name_str = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, "#")  # general name-structure of file.
+                                                                                    # "#" indicates where date will be replaced
+        self._dateformat_str = "%y%m%d"
+        self._ftp_files = []
 
         if BCO.USE_FTP_ACCESS:
             for _date in tools.daterange(self.start.date(), self.end.date()):
-                _datestr = _date.strftime(self.__dateformat_str)
-                _nameStr = self.__instrument.replace("#", _datestr)
-                self.path = self._downloadFromFTP(ftp_path=getValueFromSettings("RADAR_PATH"))
+                _datestr = _date.strftime(self._dateformat_str)
+                _nameStr = self._name_str.replace("#", _datestr)
+                print(_nameStr)
+                self.path = self._downloadFromFTP(ftp_path=getValueFromSettings("RADAR_PATH"), file=_nameStr)
 
         else:
             self.path = self.__getPath()
 
         self.__checkInput()
 
-        self.lat = self.__getValueFromNc("lat")
-        self.lon = self.__getValueFromNc("lon")
-        self.azimuth = self.__getValueFromNc("azi")
-        self.elevation = self.__getValueFromNc("elv")
-        self.north = self.__getValueFromNc("north")
+        self.lat = self._getValueFromNc("lat")
+        self.lon = self._getValueFromNc("lon")
+        self.azimuth = self._getValueFromNc("azi")
+        self.elevation = self._getValueFromNc("elv")
+        self.north = self._getValueFromNc("north")
         self.skipped = None
 
     def __str__(self):
@@ -157,7 +161,6 @@ class Radar(__Device):
         elif self.device == "KATRIN":
             return "KATRIN"
 
-
     def getReflectivity(self, postprocessing="Zf"):
         """
         Loads the reflecitivity over the desired timeframe from multiple netCDF-files and returns them as one array.
@@ -176,7 +179,7 @@ class Radar(__Device):
         """
 
         if postprocessing in self.__getPostProcessingForVersion():
-            dbz = self.__getArrayFromNc(value=postprocessing)
+            dbz = self._getArrayFromNc(value=postprocessing)
             return dbz
         else:
             print("ERROR: %s is not a valid postprocessing operator for data version %i." %
@@ -209,7 +212,7 @@ class Radar(__Device):
             print("%s is not a valid target. Please use on of %s" % (target, ", ".join(targets.keys())))
             return None
 
-        velocity = self.__getArrayFromNc(targets[target])
+        velocity = self._getArrayFromNc(targets[target])
 
         return velocity
 
@@ -226,7 +229,7 @@ class Radar(__Device):
             >>> coral.getTime()
         """
 
-        time = self.__getArrayFromNc('time')
+        time = self._getArrayFromNc('time')
 
         time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
         time = self._local2UTC(time)
@@ -241,9 +244,8 @@ class Radar(__Device):
             A numpy array containing the melting layer height in meters.
 
         """
-        meltHeight = self.__getArrayFromNc('MeltHei')
+        meltHeight = self._getArrayFromNc('MeltHei')
         return meltHeight
-
 
     def getRadarConstant(self):
         """
@@ -254,10 +256,10 @@ class Radar(__Device):
 
         """
 
-        radarConstant = self.__getArrayFromNc('RadarConst')
+        radarConstant = self._getArrayFromNc('RadarConst')
         return radarConstant
 
-    def getNoisePower(self,channel):
+    def getNoisePower(self, channel):
         """
         Loads the HSdiv Noise Power in DSP of the desired channel from all netCDF-Files returns them as one array.
 
@@ -268,17 +270,17 @@ class Radar(__Device):
             2D-numpy array containing the HSdiv Noise Power in DSP for all heigts and timesteps.
         """
 
-        channels = {"Co":"HSDco",
-                    "Cross":"HSDcx"}
+        channels = {"Co": "HSDco",
+                    "Cross": "HSDcx"}
         if not channel in channels:
-            print("%s is not a valid channel. Please use on of %s"%(channel,", ".join(channels.keys())))
+            print("%s is not a valid channel. Please use on of %s" % (channel, ", ".join(channels.keys())))
             return None
 
-        noise = self.__getArrayFromNc(channels[channel])
+        noise = self._getArrayFromNc(channels[channel])
 
         return noise
 
-    def getLDR(self,target="hydrometeors"):
+    def getLDR(self, target="hydrometeors"):
         """
         Loads the linear depolarization ratio (LDR) in dbZ of the desired target from all netCDF-Files returns them as one
          array. Allowed targets are: "hydrometeors" or "all". The default is "hydrometeors".
@@ -291,18 +293,18 @@ class Radar(__Device):
 
         """
 
-        targets = {"hydrometeors":"LDR",
-                    "all":"LDRg"}
+        targets = {"hydrometeors": "LDR",
+                   "all": "LDRg"}
 
         if not target in targets:
-            print("%s is not a valid target. Please use on of %s"%(target,", ".join(targets.keys())))
+            print("%s is not a valid target. Please use on of %s" % (target, ", ".join(targets.keys())))
             return None
 
-        ldr = self.__getArrayFromNc(targets[target])
+        ldr = self._getArrayFromNc(targets[target])
 
         return ldr
 
-    def getRMS(self,target="hydrometeors"):
+    def getRMS(self, target="hydrometeors"):
         """
         Loads the Peak Width RMS in m/s of the desired target from all netCDF-Files returns them as one
          array. Allowed targets are: "hydrometeors" or "all". The default is "hydrometeors".
@@ -315,18 +317,18 @@ class Radar(__Device):
 
         """
 
-        targets = {"hydrometeors":"RMS",
-                    "all":"RMSg"}
+        targets = {"hydrometeors": "RMS",
+                   "all": "RMSg"}
 
         if not target in targets:
-            print("%s is not a valid target. Please use on of %s"%(target,", ".join(targets.keys())))
+            print("%s is not a valid target. Please use on of %s" % (target, ", ".join(targets.keys())))
             return None
 
-        rms = self.__getArrayFromNc(targets[target])
+        rms = self._getArrayFromNc(targets[target])
 
         return rms
 
-    def getSNR(self,target="hydrometeors"):
+    def getSNR(self, target="hydrometeors"):
         """
         Loads the reflectivity SNR in dbZ of the desired target from all netCDF-Files and returns them as one
          array. Allowed targets are: "hydrometeors", "all" or "plank". The default is "hydrometeors".
@@ -339,15 +341,15 @@ class Radar(__Device):
 
         """
 
-        targets = {"hydrometeors":"SNRg",
-                    "all":"SNR",
-                    "plank":"SNRplank"}
+        targets = {"hydrometeors": "SNRg",
+                   "all": "SNR",
+                   "plank": "SNRplank"}
 
         if not target in targets:
-            print("%s is not a valid target. Please use on of %s"%(target,", ".join(targets.keys())))
+            print("%s is not a valid target. Please use on of %s" % (target, ", ".join(targets.keys())))
             return None
 
-        snr = self.__getArrayFromNc(targets[target])
+        snr = self._getArrayFromNc(targets[target])
 
         return snr
 
@@ -389,13 +391,11 @@ class Radar(__Device):
             2D-numpy array containing average transmit power for all heigts and timesteps in W.
         """
 
-
-        tpow = self.__getArrayFromNc("tpow")
+        tpow = self._getArrayFromNc("tpow")
 
         return tpow
 
-
-    def quickplot2D(self,value,save_name=None,save_path=None,ylim=None):
+    def quickplot2D(self, value, save_name=None, save_path=None, ylim=None):
         """
         Creates a fast Quickplot from the input value. Start and end date are the initialization-dates. To save the
         picture you can provide a name for the picture (save_name). If no savepath is provided, the picture will be
@@ -416,12 +416,11 @@ class Radar(__Device):
         """
         import matplotlib.pyplot as plt
 
-
-        _time =self.getTime()
+        _time = self.getTime()
         _range = self.getRange()
 
-        fig,ax1 = plt.subplots(nrows=1,ncols=1,figsize =(9,6))
-        con = ax1.contourf(_time,_range,value.transpose(),cmap="jet")
+        fig, ax1 = plt.subplots(nrows=1, ncols=1, figsize=(9, 6))
+        con = ax1.contourf(_time, _range, value.transpose(), cmap="jet")
         if ylim:
             ax1.set_ylim(ylim)
         ax1.grid()
@@ -432,75 +431,6 @@ class Radar(__Device):
             if not save_path:
                 save_path = ""
             plt.savefig(save_path + save_name)
-
-
-    def __getArrayFromNc(self, value):
-        """
-        Retrieving the 'value' from the netCDF-Dataset reading just the desired timeframe.
-
-        Args:
-            value: String which is a valid key for the Dataset.variables[key].
-
-        Returns:
-            Numpy array with the values of the desired key and the inititated time-window.
-
-        Example:
-            What behind the scenes happens for an example-key 'VEL' is something like:
-
-            >>> nc = Dataset(input_file)
-            >>> _var = nc.variables["VEL"][self.start:self.end].copy()
-
-            Just that in this function we are looping over all files and in the end concatinating them.
-        """
-
-        var_list = []
-        skippedDates = []
-        for _date in tools.daterange(self.start.date(), self.end.date()):
-            _nameStr = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, tools.datestr(_date))
-            _file = glob.glob(self.path + _nameStr)[0]
-            try:
-                nc = Dataset(_file, mode="r")
-                # print(_date)
-                _start, _end = self._getStartEnd(_date, nc)
-                if _end != 0:
-                    varFromDate = nc.variables[value][_start:_end].copy()
-                else:
-                    varFromDate = nc.variables[value][_start:].copy()
-                var_list.append(varFromDate)
-                nc.close()
-            except:
-                skippedDates.append(_date)
-                continue
-
-        _var = var_list[0]
-        if len(var_list) > 1:
-            for item in var_list[1:]:
-                _var = np.concatenate((_var, item))
-
-        if skippedDates:
-            self._FileNotAvail(skippedDates)
-
-        return _var
-
-    def __getValueFromNc(self, value:str):
-        """
-        This function gets values from the netCDF-Dataset, which stay constant over the whole timeframe. So its very
-        similar to __getArrayFromNc(), but without the looping.
-
-        Args:
-            value: A string for accessing the netCDF-file.
-                    For example: 'Zf'
-
-        Returns:
-            Numpy array
-        """
-        _date = self.start.date()
-        _nameStr = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, tools.datestr(_date))
-        _file = glob.glob(self.path + _nameStr)[0]
-        nc = Dataset(_file, mode="r")
-        _var = nc.variables[value][:].copy()
-        nc.close()
-        return _var
 
     def __getPostProcessingForVersion(self):
         """
@@ -562,6 +492,7 @@ class Radar(__Device):
         print("Please have a look at the documentation. It contains examples for many usecases.\n"
               "www.hereWillBeTheDocumentationAtSomePoint.de \n"
               "at the moment: docs/_build/html/index.html")
+
 
 if __name__ == "main":
     pass

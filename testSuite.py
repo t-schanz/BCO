@@ -24,7 +24,9 @@ def testRadar():
 if __name__ == "__main__":
     print(BCO.USE_FTP_ACCESS)
     BCO.settings.set_ftp(True)
+    BCO.settings.path_to_ftp_file("BCO/ftp_access.txt")
     print(BCO.USE_FTP_ACCESS)
+    coral = Radar("20180101", "20180101")
 
     # testRadar()
     # coral = Radar(start="20180212", end="201802122359", device="CORAL")

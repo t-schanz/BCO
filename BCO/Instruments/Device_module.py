@@ -28,12 +28,7 @@ class __Device(object):
 
     de_tz = timezone("Europe/Berlin")
     utc_tz = timezone("UTC")
-    __ftp_files = []
 
-    def __init__(self):
-        self.__instrument = None
-        self.__name_str = None
-        self.__dateformat_str = None
 
     def _checkInputTime(self, input):
         """
@@ -126,15 +121,23 @@ class __Device(object):
         return np.asarray(list(map(f1, time)))
 
     def _downloadFromFTP(self,ftp_path,file):
-        tmpdir = tempfile.gettempdir()
+        tmpdir = tempfile.gettempdir() + "/"
 
         ftp = FTP(BCO.FTP_SERVER)
         ftp.login(user=BCO.FTP_USER, passwd=BCO.FTP_PASSWD)
-        ftp.retrbinary('RETR ' + ftp_path + file, open(tmpdir + file, 'wb').write)
-        self.__ftp_files.append(tmpdir + file)
+        print(ftp_path + file)
+        file_to_retrieve = ftp.nlst(ftp_path + file)[0]
+        try:
+            __save_file = file_to_retrieve.split("/")[-1]
+        except:
+            __save_file = file_to_retrieve
+
+        if not os.path.isfile(tmpdir + __save_file): # check if the file is already there:
+            ftp.retrbinary('RETR ' + file_to_retrieve, open(tmpdir + __save_file, 'wb').write)
+        self._ftp_files.append(tmpdir + __save_file)
         return tmpdir
 
-    def _getArrayFromNc(self, value, dateformat_str):
+    def _getArrayFromNc(self, value):
         """
         Retrieving the 'value' from the netCDF-Dataset reading just the desired timeframe.
 
@@ -155,9 +158,14 @@ class __Device(object):
         var_list = []
         skippedDates = []
         for _date in tools.daterange(self.start.date(), self.end.date()):
-            _datestr = _date.strftime(dateformat_str)
-            _nameStr = self.__instrument.replace("#",_datestr)
-            _file = glob.glob(self.path + _nameStr)[0]
+            _datestr = _date.strftime(self._dateformat_str)
+            _nameStr = self._instrument.replace("#",_datestr)
+
+            if BCO.USE_FTP_ACCESS:
+                _file = self._ftp_files[0]
+            else:
+                _file = glob.glob(self.path + _nameStr)[0]
+
             try:
                 if "bz2" in _file[-5:]:
                     nc = tools.bz2Dataset(_file)
@@ -187,6 +195,38 @@ class __Device(object):
 
         return _var
 
+    def _getValueFromNc(self, value: str):
+        """
+        This function gets values from the netCDF-Dataset, which stay constant over the whole timeframe. So its very
+        similar to __getArrayFromNc(), but without the looping.
+
+        Args:
+            value: A string for accessing the netCDF-file.
+                    For example: 'Zf'
+
+        Returns:
+            Numpy array
+        """
+        _date = self.start.date()
+        _datestr = _date.strftime(self._dateformat_str)
+        _nameStr = self._instrument.replace("#", _datestr)
+
+
+        if BCO.USE_FTP_ACCESS:
+            _file = self._ftp_files[0]
+        else:
+            _file = glob.glob(self.path + _nameStr)[0]
+
+        if "bz2" in _file[-5:]:
+            nc = tools.bz2Dataset(_file)
+        else:
+            nc = Dataset(_file)
+
+        _var = nc.variables[value][:].copy()
+        nc.close()
+
+        return _var
+
 
     def close(self):
         """
@@ -195,13 +235,14 @@ class __Device(object):
 
         """
         if BCO.USE_FTP_ACCESS:
-            for file in self.__ftp_files:
+            for file in self._ftp_files:
                 os.remove(file)
 
-            self.__ftp_files = []
+            self._ftp_files = []
             print("Successfully deleted all temporary files")
         else:
             print("This method is just for use with ftp-access  of the BCO Data")
+
 
 
 
@@ -221,9 +262,9 @@ def getValueFromSettings(value: str):
     package_directory = os.path.dirname(os.path.abspath(__file__))
 
     if BCO.USE_FTP_ACCESS:
-        ini_file = package_directory + "../ftp_settings.ini"
+        ini_file = package_directory + "/../ftp_settings.ini"
     else:
-        ini_file = package_directory + "../settings.ini"
+        ini_file = package_directory + "/../settings.ini"
 
     with open(ini_file, "r") as f:
         while True:
