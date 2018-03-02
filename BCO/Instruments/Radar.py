@@ -232,7 +232,7 @@ class Radar(__Device):
         time = self._getArrayFromNc('time')
 
         time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
-        time = self._local2UTC(time)
+        # time = self._local2UTC(time)
 
         return time
 
@@ -368,19 +368,13 @@ class Radar(__Device):
             >>> coral.getRange()
         """
 
-        range = None
-        for _date in tools.daterange(self.start, self.end):
-            if not range:
-                try:
-                    _nameStr = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, tools.datestr(_date))
-                    _file = glob.glob(self.path + _nameStr)[0]
-                    nc = Dataset(_file, mode="r")
-                    range = nc.variables["range"][:].copy()
-                    return range
-                except:
-                    continue
+        range = self._getArrayFromNc("range")
 
-        return None
+        # in case of many days being loaded and their range might be concatenated they will be split here:
+        range = range[:np.nanargmax(range)+1]
+
+
+        return range
 
     def getTransmitPower(self):
         """
