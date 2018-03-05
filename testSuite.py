@@ -22,7 +22,7 @@ def testRadar():
     coral.quickplot2D(ref,ylim=(100,2000))
 
 if __name__ == "__main__":
-    print(BCO.USE_FTP_ACCESS)
+    # print(BCO.USE_FTP_ACCESS)
     BCO.settings.set_ftp(True)
     BCO.settings.path_to_ftp_file("BCO/ftp_access.txt")
     print(BCO.USE_FTP_ACCESS)
