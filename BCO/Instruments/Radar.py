@@ -91,21 +91,24 @@ class Radar(__Device):
         self.start = self._checkInputTime(start)
         self.end = self._checkInputTime(end)
         self.data_version = version
-        self._instrument = "RADAR"  # String used for retrieving the filepath from settings.ini
+        self._instrument = "RADAR" # String used for retrieving the filepath from settings.ini
+        print(self._instrument)
         self._name_str = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, "#")  # general name-structure of file.
                                                                                     # "#" indicates where date will be replaced
         self._dateformat_str = "%y%m%d"
         self._ftp_files = []
 
-        if BCO.USE_FTP_ACCESS:
-            for _date in tools.daterange(self.start.date(), self.end.date()):
-                _datestr = _date.strftime(self._dateformat_str)
-                _nameStr = self._name_str.replace("#", _datestr)
-                print(_nameStr)
-                self.path = self._downloadFromFTP(ftp_path=getValueFromSettings("RADAR_PATH"), file=_nameStr)
+        self.path = self._getPath()
 
-        else:
-            self.path = self.__getPath()
+        # if BCO.USE_FTP_ACCESS:
+        #     for _date in tools.daterange(self.start.date(), self.end.date()):
+        #         _datestr = _date.strftime(self._dateformat_str)
+        #         _nameStr = self._name_str.replace("#", _datestr)
+        #         print(_nameStr)
+        #         self.path = self._downloadFromFTP(ftp_path=getValueFromSettings("%s_PATH"%self._instrument), file=_nameStr)
+        #
+        # else:
+        #     self.path = self._getPath()
 
         self.__checkInput()
 
@@ -438,19 +441,19 @@ class Radar(__Device):
         _vars = getValueFromSettings("RADAR_VERSION_%i_REFLECTIVITY_VARIABLES" % self.data_version).split(",")
         return _vars
 
-    def __getPath(self):
-        """
-        This function calls the getValueFromSettings-function from the __Device class with the right arguments. It then
-        concatenates it with the right version of the dataset.
-        To change the Filepath you need to edit the settings.ini file
-
-        Returns:
-            Filepath as string.
-        """
-        __versionStr = "Version_%i" % self.data_version
-        PATH = "%s%s/" % (getValueFromSettings("RADAR_PATH"), __versionStr)
-        # print(PATH)
-        return PATH
+    # def _getPath(self):
+    #     """
+    #     This function calls the getValueFromSettings-function from the __Device class with the right arguments. It then
+    #     concatenates it with the right version of the dataset.
+    #     To change the Filepath you need to edit the settings.ini file
+    #
+    #     Returns:
+    #         Filepath as string.
+    #     """
+    #     __versionStr = "Version_%i" % self.data_version
+    #     PATH = "%s%s/" % (getValueFromSettings("RADAR_PATH"), __versionStr)
+    #     # print(PATH)
+    #     return PATH
 
     # @staticmethod
     # def keys():

@@ -10,6 +10,7 @@ from datetime import timedelta
 
 from BCO.tools import tools
 from BCO.Instruments.Device_module import __Device,getValueFromSettings
+import BCO
 
 try:
     from netCDF4 import Dataset
@@ -27,7 +28,12 @@ class Radiation(__Device):
 
         self.start = self._checkInputTime(start) + timedelta(hours=0)
         self.end = self._checkInputTime(end) + timedelta(hours=0)
-        self.path = self.__getPath()
+
+        self._instrument = "RADIATION"
+        self._name_str = "MMCR__%s__Spectral_Moments*%s.nc" #TODO:Add right name_str
+        self._dateformat_str = "%y%m%d" #TODO:Add right dateformat
+
+        self.path = self._getPath()
         print(self.path)
 
         # Attributes:

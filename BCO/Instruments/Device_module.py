@@ -84,6 +84,7 @@ class __Device(object):
 
         return _timeObj
 
+
     def _getStartEnd(self, _date, nc):
         """
         Find the index of the start-date and end-date argument in the netCDF-file. If the time-stamp is not in the
@@ -110,17 +111,21 @@ class __Device(object):
 
         return _start, _end
 
+
     def _FileNotAvail(self, skipped):
         print("For the following days of the chosen timewindow no files exists:")
         for element in skipped:
             print(element)
         self.skipped = skipped
 
+
     def _local2UTC(self, time):
         f1 = lambda x : x.astimezone(self.de_tz).astimezone(utc)
         return np.asarray(list(map(f1, time)))
 
+
     def _downloadFromFTP(self,ftp_path,file):
+        print("Downloading...")
         tmpdir = tempfile.gettempdir() + "/"
 
         ftp = FTP(BCO.FTP_SERVER)
@@ -136,6 +141,7 @@ class __Device(object):
             ftp.retrbinary('RETR ' + file_to_retrieve, open(tmpdir + __save_file, 'wb').write)
         self._ftp_files.append(tmpdir + __save_file)
         return tmpdir
+
 
     def _getArrayFromNc(self, value):
         """
@@ -244,6 +250,24 @@ class __Device(object):
             print("This method is just for use with ftp-access  of the BCO Data")
 
 
+    def _getPath(self):
+        """
+        Reads the Path from the settings.ini file by calling the right function from Device_module.
+
+        Returns: Path of the data.
+
+        """
+        if BCO.USE_FTP_ACCESS:
+            for _date in tools.daterange(self.start.date(), self.end.date()):
+                _datestr = _date.strftime(self._dateformat_str)
+                tmp_nameStr = self._name_str.replace("#", _datestr)
+                tmp_path = getValueFromSettings("%s_PATH"%self._instrument)
+                __path = self._downloadFromFTP(ftp_path=tmp_path, file=tmp_nameStr)
+            return __path
+
+        else:
+            return getValueFromSettings("RADIATION_PATH")
+
 
 
 
@@ -269,11 +293,18 @@ def getValueFromSettings(value: str):
     else:
         ini_file = package_directory + "/../settings.ini"
 
+    print(value)
+
+    __counter = 0
     with open(ini_file, "r") as f:
-        while True:
+        while __counter < 1e5:
             try:
                 line = f.readline().rstrip()
                 if value + ":" in line:
                     return line.split(":")[1]
+                __counter += 1
             except:
                 break
+
+        print("Function getValueFromSettings could not find %s"%value)
+        return None
