@@ -24,9 +24,12 @@ def testRadar():
 if __name__ == "__main__":
     # print(BCO.USE_FTP_ACCESS)
     BCO.settings.set_ftp(True)
-    BCO.settings.path_to_ftp_file("BCO/ftp_access.txt")
+    # BCO.settings.path_to_ftp_file("BCO/ftp_access.txt")
+    BCO.settings.path_to_ftp_file("/home/tobias/Documents/ftp_access.txt")
     print(BCO.USE_FTP_ACCESS)
 
-    lidar = Windlidar("20180101","20180101")
+    # lidar = Windlidar("20180101","20180101")
+    Rad = Radiation("20180101","20180101")
+    # coral = Radar("20180101","20180101")
 
 

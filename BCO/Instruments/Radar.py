@@ -119,7 +119,7 @@ class Radar(__Device):
     def __str__(self):
         returnStr = "%s Radar.\nUsed data version %i.\nLoad data from %s to %s." % \
                     (self.device, self.data_version, self.start, self.end)
-        return returnStr
+        return str(returnStr)
 
     def __checkInput(self):
         """
