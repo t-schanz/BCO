@@ -9,6 +9,9 @@ Furthermore it will only work with Python 3!
 The package is now installable via PIP.
 See section "Installation" for more info.
 
+Access to the data is now available via ftp.
+Have a look at the documentation for more info.
+
 
 ## Installation
 
