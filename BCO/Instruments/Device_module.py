@@ -262,11 +262,16 @@ class __Device(object):
                 _datestr = _date.strftime(self._dateformat_str)
                 tmp_nameStr = self._name_str.replace("#", _datestr)
                 tmp_path = getValueFromSettings("%s_PATH"%self._instrument)
+                if self.path_addition:
+                    if "%" in self.path_addition:
+                        tmp_path += _date.strftime(self.path_addition)
+                    else:
+                        tmp_path += self.path_addition
                 __path = self._downloadFromFTP(ftp_path=tmp_path, file=tmp_nameStr)
             return __path
 
         else:
-            return getValueFromSettings("RADIATION_PATH")
+            return getValueFromSettings("%s_PATH"%self._instrument)
 
 
 

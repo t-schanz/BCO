@@ -30,8 +30,10 @@ class Radiation(__Device):
         self.end = self._checkInputTime(end) + timedelta(hours=0)
 
         self._instrument = "RADIATION"
-        self._name_str = "MMCR__%s__Spectral_Moments*%s.nc" #TODO:Add right name_str
-        self._dateformat_str = "%y%m%d" #TODO:Add right dateformat
+        self._name_str = "Radiation__Deebles_Point__DownwellingRadiation__*#.nc*"
+        self.path_addition = "%Y%m/"
+        self._dateformat_str = "%Y%m%d"
+        self._ftp_files = []
 
         self.path = self._getPath()
         print(self.path)
@@ -45,57 +47,57 @@ class Radiation(__Device):
         self.lat = None
         self.lon = None
 
-        self.__getAttributes()
+        # self.__getAttributes()
 
-    def __getAttributes(self):
-        """
-        Function to load the static attributes from the netCDF file.
-        """
-        _date = self.start.date()
-        _datestr = _date.strftime("%Y%m%d")
-        _nameStr = "%s/Radiation__Deebles_Point__DownwellingRadiation__1s__%s.nc.bz2" % (_datestr[:-2], _datestr)
-        # _file = glob.glob(self.path + _datestr + "/" +  _nameStr)[0]
-        _file = glob.glob(self.path + _nameStr)[0]
+    # def __getAttributes(self):
+    #     """
+    #     Function to load the static attributes from the netCDF file.
+    #     """
+    #     _date = self.start.date()
+    #     _datestr = _date.strftime("%Y%m%d")
+    #     _nameStr = "%s/Radiation__Deebles_Point__DownwellingRadiation__1s__%s.nc.bz2" % (_datestr[:-2], _datestr)
+    #     # _file = glob.glob(self.path + _datestr + "/" +  _nameStr)[0]
+    #     _file = glob.glob(self.path + self._name_str.replace)[0]
+    #
+    #     if "bz2" in _file[-5:]:
+    #         nc = tools.bz2Dataset(_file)
+    #     else:
+    #         nc = Dataset(_file)
+    #     self.title = nc.title
+    #     self.devices = nc.devices
+    #     self.temporalResolution = nc.resolution.split(";")[0]
+    #     self.location = nc.location
+    #     nc.close()
+    #
+    #     self.lat = self._getValueFromNc("lat")
+    #     self.lon = self._getValueFromNc("lon")
 
-        if "bz2" in _file[-5:]:
-            nc = tools.bz2Dataset(_file)
-        else:
-            nc = Dataset(_file)
-        self.title = nc.title
-        self.devices = nc.devices
-        self.temporalResolution = nc.resolution.split(";")[0]
-        self.location = nc.location
-        nc.close()
-
-        self.lat = self.__getValueFromNc("lat")
-        self.lon = self.__getValueFromNc("lon")
-
-    def __getValueFromNc(self, value: str):
-        """
-        This function gets values from the netCDF-Dataset, which stay constant over the whole timeframe. So its very
-        similar to __getArrayFromNc(), but without the looping.
-
-        Args:
-            value: A string for accessing the netCDF-file.
-                    For example: 'LWdown_diffuse'
-
-        Returns:
-            Numpy array
-        """
-        _date = self.start.date()
-        _datestr = _date.strftime("%Y%m%d")
-        _nameStr = "%s/Radiation__Deebles_Point__DownwellingRadiation__1s__%s.nc.bz2" % (_datestr[:-2], _datestr)
-        _file = glob.glob(self.path + _nameStr)[0]
-
-        if "bz2" in _file[-5:]:
-            nc = tools.bz2Dataset(_file)
-        else:
-            nc = Dataset(_file)
-
-        _var = nc.variables[value][:].copy()
-        nc.close()
-
-        return _var
+    # def __getValueFromNc(self, value: str):
+    #     """
+    #     This function gets values from the netCDF-Dataset, which stay constant over the whole timeframe. So its very
+    #     similar to _getArrayFromNc(), but without the looping.
+    #
+    #     Args:
+    #         value: A string for accessing the netCDF-file.
+    #                 For example: 'LWdown_diffuse'
+    #
+    #     Returns:
+    #         Numpy array
+    #     """
+    #     _date = self.start.date()
+    #     _datestr = _date.strftime("%Y%m%d")
+    #     _nameStr = "%s/Radiation__Deebles_Point__DownwellingRadiation__1s__%s.nc.bz2" % (_datestr[:-2], _datestr)
+    #     _file = glob.glob(self.path + _nameStr)[0]
+    #
+    #     if "bz2" in _file[-5:]:
+    #         nc = tools.bz2Dataset(_file)
+    #     else:
+    #         nc = Dataset(_file)
+    #
+    #     _var = nc.variables[value][:].copy()
+    #     nc.close()
+    #
+    #     return _var
 
 
     def getTime(self):
@@ -111,7 +113,7 @@ class Radiation(__Device):
             >>> rad.getTime()
         """
 
-        time = self.__getArrayFromNc('time')
+        time = self._getArrayFromNc('time')
 
         time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
         time = self._local2UTC(time)
@@ -160,11 +162,11 @@ class Radiation(__Device):
             if not scattering == "diffuse":
                 print("Longwaveradiation at the surface is only measured as diffuse radiation. Setting scattering to diffuse!")
 
-            _rad = self.__getArrayFromNc("LWdown_diffuse")
+            _rad = self._getArrayFromNc("LWdown_diffuse")
 
         elif scope == "SW":
 
-            _rad = self.__getArrayFromNc("SWdown_%s"%scattering)
+            _rad = self._getArrayFromNc("SWdown_%s"%scattering)
 
         return _rad
 
@@ -212,11 +214,11 @@ class Radiation(__Device):
             if not scattering == "diffuse":
                 print("Longwaveradiation at the surface is only measured as diffuse radiation. Setting scattering to diffuse!")
 
-            _volt = self.__getArrayFromNc("LWdown_diffuse_voltage")
+            _volt = self._getArrayFromNc("LWdown_diffuse_voltage")
 
         elif scope == "SW":
 
-            _volt = self.__getArrayFromNc("SWdown_%s_voltage"%scattering)
+            _volt = self._getArrayFromNc("SWdown_%s_voltage"%scattering)
 
         return _volt
 
@@ -235,7 +237,7 @@ class Radiation(__Device):
         instruments = ["GeoSh", "AnoSh", "AnoGlob","Hel"]
 
         if instrument in instruments:
-            _sens = self.__getArrayFromNc("%s_Sensitivity"%instrument)
+            _sens = self._getArrayFromNc("%s_Sensitivity"%instrument)
 
             return _sens
 
@@ -258,7 +260,7 @@ class Radiation(__Device):
         instruments = ["GeoSh", "AnoSh", "AnoGlob", "Hel"]
 
         if instrument in instruments:
-            _temp = self.__getArrayFromNc("%s_temp" % instrument)
+            _temp = self._getArrayFromNc("%s_temp" % instrument)
 
             return _temp
 
@@ -267,59 +269,59 @@ class Radiation(__Device):
             return None
 
 
-    def __getArrayFromNc(self, value):
-        """
-        Retrieving the 'value' from the netCDF-Dataset reading just the desired timeframe.
-
-        Args:
-            value: String which is a valid key for the Dataset.variables[key].
-
-        Returns:
-            Numpy array with the values of the desired key and the inititated time-window.
-
-        Example:
-            What behind the scenes happens for an example-key 'VEL' is something like:
-
-            >>> nc = Dataset(input_file)
-            >>> _var = nc.variables["VEL"][self.start:self.end].copy()
-
-            Just that in this function we are looping over all files and in the end concatinating them.
-        """
-        var_list = []
-        skippedDates = []
-        for _date in tools.daterange(self.start.date(), self.end.date()):
-            _datestr = _date.strftime("%Y%m%d")
-            _nameStr = "%s/Radiation__Deebles_Point__DownwellingRadiation__1s__%s.nc.bz2"%(_datestr[:-2],_datestr)
-            # _file = glob.glob(self.path + _datestr + "/" + _nameStr)[0]
-            _file = glob.glob(self.path + _nameStr)[0]
-            try:
-                if "bz2" in _file[-5:]:
-                    nc = tools.bz2Dataset(_file)
-                else:
-                    nc = Dataset(_file)
-
-                # print(_date)
-                _start, _end = self._getStartEnd(_date, nc)
-                # print(_start,_end)
-                if _end != 0:
-                    varFromDate = nc.variables[value][_start:_end].copy()
-                else:
-                    varFromDate = nc.variables[value][_start:].copy()
-                var_list.append(varFromDate)
-                nc.close()
-            except:
-                skippedDates.append(_date)
-                continue
-
-        _var = var_list[0]
-        if len(var_list) > 1:
-            for item in var_list[1:]:
-                _var = np.concatenate((_var, item))
-
-        if skippedDates:
-            self._FileNotAvail(skippedDates)
-
-        return _var
+    # def __getArrayFromNc(self, value):
+    #     """
+    #     Retrieving the 'value' from the netCDF-Dataset reading just the desired timeframe.
+    #
+    #     Args:
+    #         value: String which is a valid key for the Dataset.variables[key].
+    #
+    #     Returns:
+    #         Numpy array with the values of the desired key and the inititated time-window.
+    #
+    #     Example:
+    #         What behind the scenes happens for an example-key 'VEL' is something like:
+    #
+    #         >>> nc = Dataset(input_file)
+    #         >>> _var = nc.variables["VEL"][self.start:self.end].copy()
+    #
+    #         Just that in this function we are looping over all files and in the end concatinating them.
+    #     """
+    #     var_list = []
+    #     skippedDates = []
+    #     for _date in tools.daterange(self.start.date(), self.end.date()):
+    #         _datestr = _date.strftime("%Y%m%d")
+    #         _nameStr = "%s/Radiation__Deebles_Point__DownwellingRadiation__1s__%s.nc.bz2"%(_datestr[:-2],_datestr)
+    #         # _file = glob.glob(self.path + _datestr + "/" + _nameStr)[0]
+    #         _file = glob.glob(self.path + _nameStr)[0]
+    #         try:
+    #             if "bz2" in _file[-5:]:
+    #                 nc = tools.bz2Dataset(_file)
+    #             else:
+    #                 nc = Dataset(_file)
+    #
+    #             # print(_date)
+    #             _start, _end = self._getStartEnd(_date, nc)
+    #             # print(_start,_end)
+    #             if _end != 0:
+    #                 varFromDate = nc.variables[value][_start:_end].copy()
+    #             else:
+    #                 varFromDate = nc.variables[value][_start:].copy()
+    #             var_list.append(varFromDate)
+    #             nc.close()
+    #         except:
+    #             skippedDates.append(_date)
+    #             continue
+    #
+    #     _var = var_list[0]
+    #     if len(var_list) > 1:
+    #         for item in var_list[1:]:
+    #             _var = np.concatenate((_var, item))
+    #
+    #     if skippedDates:
+    #         self._FileNotAvail(skippedDates)
+    #
+    #     return _var
 
 
     def get_nc(self):
@@ -335,12 +337,3 @@ class Radiation(__Device):
                 nc = Dataset(_file)
         return nc
 
-
-    def __getPath(self):
-        """
-        Reads the Path from the settings.ini file by calling the right function from Device_module.
-
-        Returns: Path of the Radiation data.
-
-        """
-        return getValueFromSettings("RADIATION_PATH")
