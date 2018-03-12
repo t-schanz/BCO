@@ -110,6 +110,9 @@
 <li class="toctree-l1"><a class="reference internal" href="modules.html#quicklooks">Quicklooks</a></li>
 </ul>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="help.html">HELP</a></li>
 </ul>
 
@@ -176,7 +179,41 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="first-steps">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="first-steps">
 <h1>First Steps<a class="headerlink" href="#first-steps" title="Permalink to this headline">¶</a></h1>
 <p>In this section we will try to cover some basics to work with this module.</p>
 <div class="section" id="installation">
@@ -281,6 +318,7 @@ directory for temporal files (in unix usually /tmp/).</p>
 </div>
 <p>The netcdf file for the radar data from the 1st of january 2018 would then be dowloaded to you local machine.
 Afterwards you can use the methods and attributes as described in the <a class="reference internal" href="#basics-demonstrated-on-the-radar">Basics demonstrated on the Radar</a>.</p>
+<p>You can also have a look at the jupyter notebook “FTP-example.ipynb” in the folder “examples” of the package.</p>
 </div>
 </div>
 </div>

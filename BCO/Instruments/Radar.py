@@ -64,16 +64,16 @@ class Radar(__Device):
 
 
     Attributes:
-        device: String of the device being used. ('CORAL' or 'KATRIN')
-        start: datetime.datetime object indicating the beginning of the chosen timewindow.
-        end: datetime.datetime object indicating the end of the chosen timewindow.
-        data_version: An Integer conatining the used version of the data (1,2,3[beta]) .
-        lat: Latitude of the instrument.
-        lon: Longitude of the instrument.
-        azimuth: Azimuth angle of where the instrument is pointing to.
-        elevation: Elevation angle of where the instrument is pointing to.
-        north: Degrees of where from the instrument seen is north.
-        skipped: if loading longer timeseries, where days might be missing, you can find those missing timesteps here.
+            device: String of the device being used. ('CORAL' or 'KATRIN')
+            start: datetime.datetime object indicating the beginning of the chosen timewindow.
+            end: datetime.datetime object indicating the end of the chosen timewindow.
+            data_version: An Integer conatining the used version of the data (1,2,3[beta]) .
+            lat: Latitude of the instrument.
+            lon: Longitude of the instrument.
+            azimuth: Azimuth angle of where the instrument is pointing to.
+            elevation: Elevation angle of where the instrument is pointing to.
+            north: Degrees of where from the instrument seen is north.
+            skipped: if loading longer timeseries, where days might be missing, you can find those missing timesteps here.
     """
     def __init__(self, start, end, device="CORAL", version=2):
         """
@@ -383,8 +383,7 @@ class Radar(__Device):
 
     def getTransmitPower(self):
         """
-         Loads the average transmit power in Watt of the desired target from all netCDF-Files returns them as one
-         array.
+         Loads the average transmit power in Watt of the desired target from all netCDF-Files returns them as one array.
 
         Returns:
             2D-numpy array containing average transmit power for all heigts and timesteps in W.

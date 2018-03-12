@@ -100,6 +100,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../modules.html#quicklooks">Quicklooks</a></li>
 </ul>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Examples</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../help.html">HELP</a></li>
 </ul>
 
@@ -188,7 +191,40 @@
 
 <div class="viewcode-block" id="Radiation"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radiation.Radiation.html#BCO.Instruments.Radiation.Radiation">[docs]</a><span class="k">class</span> <span class="nc">Radiation</span><span class="p">(</span><span class="n">__Device</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class for working with the Radiation Data from the BCO.</span>
 
+<span class="sd">    Args:</span>
+<span class="sd">        start: start of the timeframe.</span>
+<span class="sd">        end: end of the timeframe.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        start: start time of the instance.</span>
+<span class="sd">        end: end time of the instance.</span>
+<span class="sd">        path: path to the netcdf files.</span>
+<span class="sd">        title: title as in the netcdf file.</span>
+<span class="sd">        devices: Name of the devices.</span>
+<span class="sd">        temporalResolution:</span>
+<span class="sd">        location: exact location.</span>
+<span class="sd">        lat: Latitude of the location.</span>
+<span class="sd">        lon: Longitude of the location.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        Example for loading some data from the 1st January 2018:</span>
+
+<span class="sd">        &gt;&gt;&gt; from BCO.Instruments import Radiation</span>
+<span class="sd">        &gt;&gt;&gt; rad = Radiation(start=&quot;20180101&quot;,end=&quot;20180101&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; rad.getTime()</span>
+<span class="sd">        array([datetime.datetime(2018, 1, 1, 0, 0, tzinfo=&lt;UTC&gt;),</span>
+<span class="sd">               datetime.datetime(2018, 1, 1, 0, 0, 1, tzinfo=&lt;UTC&gt;),</span>
+<span class="sd">               datetime.datetime(2018, 1, 1, 0, 0, 2, tzinfo=&lt;UTC&gt;), ...,</span>
+<span class="sd">               datetime.datetime(2018, 1, 1, 23, 59, 57, tzinfo=&lt;UTC&gt;),</span>
+<span class="sd">               datetime.datetime(2018, 1, 1, 23, 59, 58, tzinfo=&lt;UTC&gt;),</span>
+<span class="sd">               datetime.datetime(2018, 1, 1, 23, 59, 59, tzinfo=&lt;UTC&gt;)], dtype=object)</span>
+
+
+<span class="sd">        &gt;&gt;&gt; radiation = rad.getRadiation(&quot;LW&quot;,&quot;diffuse&quot;)</span>
+<span class="sd">        array([ 420.35998535,  420.35998535,  420.35998535, ...,  410.29000854,</span>
+<span class="sd">        410.29000854,  410.61999512], dtype=float32)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Radiation.__init__"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radiation.Radiation.html#BCO.Instruments.Radiation.Radiation.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>

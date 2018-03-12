@@ -35,7 +35,8 @@ import sys
 import os
 module_path = os.path.abspath("../.")
 sys.path.insert(0,module_path)
-extensions = [  'sphinx.ext.autodoc',
+extensions = [  'nbsphinx',
+                'sphinx.ext.autodoc',
                 'sphinx.ext.autosummary',
                 'sphinx.ext.doctest',
                 'sphinx.ext.intersphinx',
@@ -43,7 +44,7 @@ extensions = [  'sphinx.ext.autodoc',
                 'sphinx.ext.coverage',
                 'sphinx.ext.mathjax',
                 'sphinx.ext.viewcode',
-                'sphinx.ext.napoleon',
+                'sphinx.ext.napoleon'
               ]
 
 

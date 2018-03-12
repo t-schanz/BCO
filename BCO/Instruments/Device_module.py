@@ -27,8 +27,8 @@ class __Device(object):
 
     """
 
-    de_tz = timezone("Europe/Berlin")
-    utc_tz = timezone("UTC")
+    __de_tz = timezone("Europe/Berlin")
+    __utc_tz = timezone("UTC")
 
 
 
@@ -122,7 +122,7 @@ class __Device(object):
 
 
     def _local2UTC(self, time):
-        f1 = lambda x : x.astimezone(self.de_tz).astimezone(utc)
+        f1 = lambda x : x.astimezone(self.__de_tz).astimezone(utc)
         return np.asarray(list(map(f1, time)))
 
 
@@ -293,7 +293,11 @@ class __Device(object):
     def close(self):
         """
         Deletes all temporary stored files from the instance.
-        This method can just be used when using this package with ftp-access.
+
+        Warnings:
+            This method is only available when loading the data from the ftp server.
+            It will not be available when working with the data directly inside the mpi / zmaw network (as it
+            is not necessary there).
 
         """
         if BCO.USE_FTP_ACCESS:
@@ -303,7 +307,7 @@ class __Device(object):
             self._ftp_files = []
             print("Successfully deleted all temporary files")
         else:
-            print("This method is just for use with ftp-access  of the BCO Data")
+            print("This method is just for use with ftp-access of the BCO Data")
 
 
     def _getPath(self):

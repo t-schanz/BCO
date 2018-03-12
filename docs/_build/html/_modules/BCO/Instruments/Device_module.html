@@ -100,6 +100,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../modules.html#quicklooks">Quicklooks</a></li>
 </ul>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Examples</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../help.html">HELP</a></li>
 </ul>
 
@@ -178,6 +181,7 @@
 <span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">fnmatch</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">netCDF4</span> <span class="k">import</span> <span class="n">Dataset</span>
@@ -193,8 +197,8 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">de_tz</span> <span class="o">=</span> <span class="n">timezone</span><span class="p">(</span><span class="s2">&quot;Europe/Berlin&quot;</span><span class="p">)</span>
-    <span class="n">utc_tz</span> <span class="o">=</span> <span class="n">timezone</span><span class="p">(</span><span class="s2">&quot;UTC&quot;</span><span class="p">)</span>
+    <span class="n">__de_tz</span> <span class="o">=</span> <span class="n">timezone</span><span class="p">(</span><span class="s2">&quot;Europe/Berlin&quot;</span><span class="p">)</span>
+    <span class="n">__utc_tz</span> <span class="o">=</span> <span class="n">timezone</span><span class="p">(</span><span class="s2">&quot;UTC&quot;</span><span class="p">)</span>
 
 
 
@@ -288,7 +292,7 @@
 
 
     <span class="k">def</span> <span class="nf">_local2UTC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
-        <span class="n">f1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">astimezone</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">de_tz</span><span class="p">)</span><span class="o">.</span><span class="n">astimezone</span><span class="p">(</span><span class="n">utc</span><span class="p">)</span>
+        <span class="n">f1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">astimezone</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__de_tz</span><span class="p">)</span><span class="o">.</span><span class="n">astimezone</span><span class="p">(</span><span class="n">utc</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">time</span><span class="p">)))</span>
 
 
@@ -308,7 +312,7 @@
 
         <span class="n">ftp</span> <span class="o">=</span> <span class="n">FTP</span><span class="p">(</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_SERVER</span><span class="p">)</span>
         <span class="n">ftp</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_USER</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_PASSWD</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">ftp_path</span> <span class="o">+</span> <span class="n">file</span><span class="p">)</span>
+        <span class="c1"># print(ftp_path + file)</span>
         <span class="n">file_to_retrieve</span> <span class="o">=</span> <span class="n">ftp</span><span class="o">.</span><span class="n">nlst</span><span class="p">(</span><span class="n">ftp_path</span> <span class="o">+</span> <span class="n">file</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">__save_file</span> <span class="o">=</span> <span class="n">file_to_retrieve</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -316,7 +320,7 @@
             <span class="n">__save_file</span> <span class="o">=</span> <span class="n">file_to_retrieve</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">tmpdir</span> <span class="o">+</span> <span class="n">__save_file</span><span class="p">):</span> <span class="c1"># check if the file is already there:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Downloading...&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Downloading </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">__save_file</span><span class="p">)</span>
             <span class="n">ftp</span><span class="o">.</span><span class="n">retrbinary</span><span class="p">(</span><span class="s1">&#39;RETR &#39;</span> <span class="o">+</span> <span class="n">file_to_retrieve</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">tmpdir</span> <span class="o">+</span> <span class="n">__save_file</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Found file in temporary folder. No need to download it again.&quot;</span><span class="p">)</span>
@@ -346,12 +350,16 @@
         <span class="n">skippedDates</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">_date</span> <span class="ow">in</span> <span class="n">tools</span><span class="o">.</span><span class="n">daterange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="n">date</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="o">.</span><span class="n">date</span><span class="p">()):</span>
             <span class="n">_datestr</span> <span class="o">=</span> <span class="n">_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dateformat_str</span><span class="p">)</span>
-            <span class="n">_nameStr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instrument</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span><span class="n">_datestr</span><span class="p">)</span>
+            <span class="n">_nameStr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name_str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span><span class="n">_datestr</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">BCO</span><span class="o">.</span><span class="n">USE_FTP_ACCESS</span><span class="p">:</span>
-                <span class="n">_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ftp_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">_f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ftp_files</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">fnmatch</span><span class="p">(</span><span class="n">_f</span><span class="p">,</span><span class="s2">&quot;*&quot;</span><span class="o">+</span><span class="n">_nameStr</span><span class="p">):</span>
+                        <span class="n">_file</span> <span class="o">=</span> <span class="n">_f</span>
+                        <span class="k">break</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">_file</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="n">_nameStr</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
 
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">if</span> <span class="s2">&quot;bz2&quot;</span> <span class="ow">in</span> <span class="n">_file</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]:</span>
@@ -396,11 +404,13 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
         <span class="n">_datestr</span> <span class="o">=</span> <span class="n">_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dateformat_str</span><span class="p">)</span>
-        <span class="n">_nameStr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instrument</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="n">_datestr</span><span class="p">)</span>
-
+        <span class="n">_nameStr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name_str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="n">_datestr</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">BCO</span><span class="o">.</span><span class="n">USE_FTP_ACCESS</span><span class="p">:</span>
-            <span class="n">_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ftp_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">_f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ftp_files</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">fnmatch</span><span class="p">(</span><span class="n">_f</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span> <span class="o">+</span> <span class="n">_nameStr</span><span class="p">):</span>
+                    <span class="n">_file</span> <span class="o">=</span> <span class="n">_f</span>
+                    <span class="k">break</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">_file</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="n">_nameStr</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
@@ -429,11 +439,14 @@
 
         <span class="n">_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
         <span class="n">_datestr</span> <span class="o">=</span> <span class="n">_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dateformat_str</span><span class="p">)</span>
-        <span class="n">_nameStr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instrument</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="n">_datestr</span><span class="p">)</span>
-
+        <span class="n">_nameStr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name_str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="n">_datestr</span><span class="p">)</span>
+        <span class="c1"># print(_nameStr)</span>
 
         <span class="k">if</span> <span class="n">BCO</span><span class="o">.</span><span class="n">USE_FTP_ACCESS</span><span class="p">:</span>
-            <span class="n">_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ftp_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">_f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ftp_files</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">fnmatch</span><span class="p">(</span><span class="n">_f</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span> <span class="o">+</span> <span class="n">_nameStr</span><span class="p">):</span>
+                    <span class="n">_file</span> <span class="o">=</span> <span class="n">_f</span>
+                    <span class="k">break</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">_file</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="n">_nameStr</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
@@ -450,7 +463,11 @@
     <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Deletes all temporary stored files from the instance.</span>
-<span class="sd">        This method can just be used when using this package with ftp-access.</span>
+
+<span class="sd">        Warnings:</span>
+<span class="sd">            This method is only available when loading the data from the ftp server.</span>
+<span class="sd">            It will not be available when working with the data directly inside the mpi / zmaw network (as it</span>
+<span class="sd">            is not necessary there).</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">BCO</span><span class="o">.</span><span class="n">USE_FTP_ACCESS</span><span class="p">:</span>
@@ -460,7 +477,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_ftp_files</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Successfully deleted all temporary files&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;This method is just for use with ftp-access  of the BCO Data&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;This method is just for use with ftp-access of the BCO Data&quot;</span><span class="p">)</span>
 
 
     <span class="k">def</span> <span class="nf">_getPath</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -501,7 +518,10 @@
 
 
         <span class="k">if</span> <span class="n">BCO</span><span class="o">.</span><span class="n">USE_FTP_ACCESS</span><span class="p">:</span>
-            <span class="n">_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ftp_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">_f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ftp_files</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">fnmatch</span><span class="p">(</span><span class="n">_f</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span> <span class="o">+</span> <span class="n">_nameStr</span><span class="p">):</span>
+                    <span class="n">_file</span> <span class="o">=</span> <span class="n">_f</span>
+                    <span class="k">break</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">_file</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="n">_nameStr</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 

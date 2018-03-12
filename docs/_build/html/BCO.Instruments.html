@@ -120,6 +120,9 @@
 <li class="toctree-l1"><a class="reference internal" href="modules.html#quicklooks">Quicklooks</a></li>
 </ul>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="help.html">HELP</a></li>
 </ul>
 
@@ -188,7 +191,41 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-BCO.Instruments.Radar">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="module-BCO.Instruments.Radar">
 <span id="radar"></span><h1>Radar<a class="headerlink" href="#module-BCO.Instruments.Radar" title="Permalink to this headline">¶</a></h1>
 <p>This Module contains the Radar class. This class is for easy working with the BCO radar data.</p>
 <table border="1" class="longtable docutils">
@@ -232,7 +269,7 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/BCO.Instruments.Radiation.Radiation.html#BCO.Instruments.Radiation.Radiation" title="BCO.Instruments.Radiation.Radiation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Radiation</span></code></a>(start,&nbsp;end)</td>
-<td></td>
+<td>Class for working with the Radiation Data from the BCO.</td>
 </tr>
 </tbody>
 </table>

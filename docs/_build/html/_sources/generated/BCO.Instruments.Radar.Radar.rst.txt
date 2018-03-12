@@ -31,22 +31,6 @@ Radar
 
      :toctree:
 
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
   
       ~Radar.close
       ~Radar.getLDR
@@ -66,12 +50,5 @@ Radar
    
 
    
-   
-   .. rubric:: Attributes
-
-   .. autosummary::
-   
-      ~Radar.de_tz
-      ~Radar.utc_tz
    
    

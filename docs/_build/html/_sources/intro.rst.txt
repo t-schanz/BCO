@@ -127,3 +127,5 @@ Downloading...
 
 The netcdf file for the radar data from the 1st of january 2018 would then be dowloaded to you local machine.
 Afterwards you can use the methods and attributes as described in the `Basics demonstrated on the Radar`_.
+
+You can also have a look at the jupyter notebook "FTP-example.ipynb" in the folder "examples" of the package.

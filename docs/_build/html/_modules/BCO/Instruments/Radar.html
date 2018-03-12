@@ -100,6 +100,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../modules.html#quicklooks">Quicklooks</a></li>
 </ul>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Examples</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../help.html">HELP</a></li>
 </ul>
 
@@ -231,18 +234,18 @@
 
 
 <span class="sd">    Attributes:</span>
-<span class="sd">        device: String of the device being used. (&#39;CORAL&#39; or &#39;KATRIN&#39;)</span>
-<span class="sd">        start: datetime.datetime object indicating the beginning of the chosen timewindow.</span>
-<span class="sd">        end: datetime.datetime object indicating the end of the chosen timewindow.</span>
-<span class="sd">        data_version: An Integer conatining the used version of the data (1,2,3[beta]) .</span>
-<span class="sd">        lat: Latitude of the instrument.</span>
-<span class="sd">        lon: Longitude of the instrument.</span>
-<span class="sd">        azimuth: Azimuth angle of where the instrument is pointing to.</span>
-<span class="sd">        elevation: Elevation angle of where the instrument is pointing to.</span>
-<span class="sd">        north: Degrees of where from the instrument seen is north.</span>
-<span class="sd">        skipped: if loading longer timeseries, where days might be missing, you can find those missing timesteps here.</span>
+<span class="sd">            device: String of the device being used. (&#39;CORAL&#39; or &#39;KATRIN&#39;)</span>
+<span class="sd">            start: datetime.datetime object indicating the beginning of the chosen timewindow.</span>
+<span class="sd">            end: datetime.datetime object indicating the end of the chosen timewindow.</span>
+<span class="sd">            data_version: An Integer conatining the used version of the data (1,2,3[beta]) .</span>
+<span class="sd">            lat: Latitude of the instrument.</span>
+<span class="sd">            lon: Longitude of the instrument.</span>
+<span class="sd">            azimuth: Azimuth angle of where the instrument is pointing to.</span>
+<span class="sd">            elevation: Elevation angle of where the instrument is pointing to.</span>
+<span class="sd">            north: Degrees of where from the instrument seen is north.</span>
+<span class="sd">            skipped: if loading longer timeseries, where days might be missing, you can find those missing timesteps here.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;CORAL&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<div class="viewcode-block" id="Radar.__init__"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radar.Radar.html#BCO.Instruments.Radar.Radar.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;CORAL&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Args:</span>
 <span class="sd">            start: start of the timeframe ( for more info run Radar.help() )</span>
@@ -285,7 +288,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getValueFromNc</span><span class="p">(</span><span class="s2">&quot;lon&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">azimuth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getValueFromNc</span><span class="p">(</span><span class="s2">&quot;azi&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">elevation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getValueFromNc</span><span class="p">(</span><span class="s2">&quot;elv&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">north</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getValueFromNc</span><span class="p">(</span><span class="s2">&quot;north&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">north</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getValueFromNc</span><span class="p">(</span><span class="s2">&quot;north&quot;</span><span class="p">)</span></div>
         <span class="bp">self</span><span class="o">.</span><span class="n">skipped</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -550,8 +553,7 @@
 
 <div class="viewcode-block" id="Radar.getTransmitPower"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radar.Radar.getTransmitPower.html#BCO.Instruments.Radar.Radar.getTransmitPower">[docs]</a>    <span class="k">def</span> <span class="nf">getTransmitPower</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">         Loads the average transmit power in Watt of the desired target from all netCDF-Files returns them as one</span>
-<span class="sd">         array.</span>
+<span class="sd">         Loads the average transmit power in Watt of the desired target from all netCDF-Files returns them as one array.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            2D-numpy array containing average transmit power for all heigts and timesteps in W.</span>

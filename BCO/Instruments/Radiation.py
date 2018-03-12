@@ -21,7 +21,40 @@ except:
 
 class Radiation(__Device):
     """
+    Class for working with the Radiation Data from the BCO.
 
+    Args:
+        start: start of the timeframe.
+        end: end of the timeframe.
+
+    Attributes:
+        start: start time of the instance.
+        end: end time of the instance.
+        path: path to the netcdf files.
+        title: title as in the netcdf file.
+        devices: Name of the devices.
+        temporalResolution:
+        location: exact location.
+        lat: Latitude of the location.
+        lon: Longitude of the location.
+
+    Examples:
+        Example for loading some data from the 1st January 2018:
+
+        >>> from BCO.Instruments import Radiation
+        >>> rad = Radiation(start="20180101",end="20180101")
+        >>> rad.getTime()
+        array([datetime.datetime(2018, 1, 1, 0, 0, tzinfo=<UTC>),
+               datetime.datetime(2018, 1, 1, 0, 0, 1, tzinfo=<UTC>),
+               datetime.datetime(2018, 1, 1, 0, 0, 2, tzinfo=<UTC>), ...,
+               datetime.datetime(2018, 1, 1, 23, 59, 57, tzinfo=<UTC>),
+               datetime.datetime(2018, 1, 1, 23, 59, 58, tzinfo=<UTC>),
+               datetime.datetime(2018, 1, 1, 23, 59, 59, tzinfo=<UTC>)], dtype=object)
+
+
+        >>> radiation = rad.getRadiation("LW","diffuse")
+        array([ 420.35998535,  420.35998535,  420.35998535, ...,  410.29000854,
+        410.29000854,  410.61999512], dtype=float32)
 
     """
     def __init__(self, start, end):
