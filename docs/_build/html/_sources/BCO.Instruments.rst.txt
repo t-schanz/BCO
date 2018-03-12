@@ -10,8 +10,12 @@ Radar
 
    Radar
 
+
 Windlidar
 =========
+
+.. warning::
+   Due to some structural dependencies it is not possible to use the windlidar class over ftp at the moment.
 
 .. automodule:: BCO.Instruments.Windlidar
 
@@ -21,6 +25,7 @@ Windlidar
    :toctree: generated
 
    Windlidar
+
 
 Radiation
 =========
@@ -34,6 +39,18 @@ Radiation
 
    Radiation
 
+
+Surface Weather
+===============
+
+.. automodule:: BCO.Instruments.SfcWeather
+
+.. currentmodule:: BCO.Instruments.SfcWeather
+
+.. autosummary::
+   :toctree: generated
+
+   SfcWeather
 
 
 

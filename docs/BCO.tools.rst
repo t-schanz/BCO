@@ -1,5 +1,5 @@
-Tools
-=====
+General Tools
+=============
 
 .. automodule:: BCO.tools.tools
 
@@ -15,3 +15,16 @@ Tools
    bz2Dataset
 
 
+Converters
+==========
+
+.. automodule:: BCO.tools.convert
+
+.. currentmodule:: BCO.tools.convert
+
+.. autosummary::
+   :toctree: generated
+
+
+   Celsius2Kelvin
+   Kelvin2Celsius

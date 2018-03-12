@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>BCO.tools.tools &mdash; BCO 0.0.1 documentation</title>
+  <title>BCO.tools.tools &mdash; BCO 0.1.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="BCO 0.0.1 documentation" href="../../../index.html"/>
+    <link rel="top" title="BCO 0.1.1 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.0.1
+                0.1.1
               </div>
             
           
@@ -207,8 +207,8 @@
 <span class="sd">        2017-01-03 00:00:00</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">end_date</span> <span class="o">-</span> <span class="n">start_date</span><span class="p">)</span><span class="o">.</span><span class="n">days</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-        <span class="k">yield</span> <span class="n">start_date</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">n</span><span class="p">)</span></div>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">end_date</span> <span class="o">-</span> <span class="n">start_date</span><span class="p">)</span><span class="o">.</span><span class="n">days</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span></div>
+        <span class="k">yield</span> <span class="n">start_date</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 
 
 
@@ -228,8 +228,8 @@
         <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">)</span>
         <span class="n">date</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">date</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">date</span></div>
+        <span class="n">date</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">num</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">date</span>
 
 
 <div class="viewcode-block" id="time2num"><a class="viewcode-back" href="../../../generated/BCO.tools.tools.time2num.html#BCO.tools.tools.time2num">[docs]</a><span class="k">def</span> <span class="nf">time2num</span><span class="p">(</span><span class="n">time</span><span class="p">):</span>
@@ -248,8 +248,8 @@
         <span class="n">epo</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">timestamp</span><span class="p">()</span>
         <span class="n">date</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">epo</span><span class="p">,</span> <span class="n">time</span><span class="p">)))</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">date</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">timestamp</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">date</span></div>
+        <span class="n">date</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">timestamp</span><span class="p">()</span></div>
+    <span class="k">return</span> <span class="n">date</span>
 
 
 <div class="viewcode-block" id="datestr"><a class="viewcode-back" href="../../../generated/BCO.tools.tools.datestr.html#BCO.tools.tools.datestr">[docs]</a><span class="k">def</span> <span class="nf">datestr</span><span class="p">(</span><span class="n">dt_obj</span><span class="p">):</span>
@@ -262,8 +262,8 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        String of the format YYMMDD. Y=Year, M=Month, D=Day.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">return</span> <span class="n">dt_obj</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span></div>
+</div>
+    <span class="k">return</span> <span class="n">dt_obj</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="bz2Dataset"><a class="viewcode-back" href="../../../generated/BCO.tools.tools.bz2Dataset.html#BCO.tools.tools.bz2Dataset">[docs]</a><span class="k">def</span> <span class="nf">bz2Dataset</span><span class="p">(</span><span class="n">bz2file</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
@@ -293,8 +293,8 @@
     <span class="n">dummy_nc_file</span> <span class="o">=</span> <span class="n">package_directory</span> <span class="o">+</span> <span class="s2">&quot;/dummy_nc_file.nc&quot;</span>
 
     <span class="n">bz2Obj</span> <span class="o">=</span> <span class="n">bz2</span><span class="o">.</span><span class="n">BZ2File</span><span class="p">(</span><span class="n">bz2file</span><span class="p">)</span>
-    <span class="n">nc</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">dummy_nc_file</span><span class="p">,</span><span class="n">memory</span><span class="o">=</span><span class="n">bz2Obj</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
-    <span class="k">return</span> <span class="n">nc</span></div>
+    <span class="n">nc</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">dummy_nc_file</span><span class="p">,</span><span class="n">memory</span><span class="o">=</span><span class="n">bz2Obj</span><span class="o">.</span><span class="n">read</span><span class="p">())</span></div>
+    <span class="k">return</span> <span class="n">nc</span>
 
 </pre></div>
 
@@ -332,7 +332,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.0.1',
+            VERSION:'0.1.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

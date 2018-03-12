@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Radar &mdash; BCO 0.0.1 documentation</title>
+  <title>Radar &mdash; BCO 0.1.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="BCO 0.0.1 documentation" href="index.html"/>
+    <link rel="top" title="BCO 0.1.1 documentation" href="index.html"/>
         <link rel="up" title="Instruments" href="modules.html"/>
         <link rel="next" title="Radar" href="generated/BCO.Instruments.Radar.Radar.html"/>
         <link rel="prev" title="Instruments" href="modules.html"/> 
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                0.0.1
+                0.1.1
               </div>
             
           
@@ -102,12 +102,16 @@
 <li class="toctree-l3"><a class="reference internal" href="generated/BCO.Instruments.Radar.Radar.html">Radar</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#module-BCO.Instruments.Windlidar">Windlidar</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#windlidar">Windlidar</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="generated/BCO.Instruments.Windlidar.Windlidar.html">Windlidar</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#module-BCO.Instruments.Radiation">Radiation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="generated/BCO.Instruments.Radiation.Radiation.html">Radiation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-BCO.Instruments.SfcWeather">Surface Weather</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/BCO.Instruments.SfcWeather.SfcWeather.html">SfcWeather</a></li>
 </ul>
 </li>
 </ul>
@@ -193,22 +197,26 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.Instruments.Radar.Radar.html#BCO.Instruments.Radar.Radar" title="BCO.Instruments.Radar.Radar"><code class="xref py py-obj docutils literal"><span class="pre">Radar</span></code></a>(start,&nbsp;end[,&nbsp;device,&nbsp;version])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.Instruments.Radar.Radar.html#BCO.Instruments.Radar.Radar" title="BCO.Instruments.Radar.Radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Radar</span></code></a>(start,&nbsp;end[,&nbsp;device,&nbsp;version])</td>
 <td>Class for working with radar data from Barbados.</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="section" id="module-BCO.Instruments.Windlidar">
-<span id="windlidar"></span><h1>Windlidar<a class="headerlink" href="#module-BCO.Instruments.Windlidar" title="Permalink to this headline">¶</a></h1>
-<p>This Module contains the Windlidar class. This class is for easy working with the BCO Windlidar data.</p>
+<div class="section" id="windlidar">
+<h1>Windlidar<a class="headerlink" href="#windlidar" title="Permalink to this headline">¶</a></h1>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Due to some structural dependencies it is not possible to use the windlidar class over ftp at the moment.</p>
+</div>
+<span class="target" id="module-BCO.Instruments.Windlidar"></span><p>This Module contains the Windlidar class. This class is for easy working with the BCO Windlidar data.</p>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.Instruments.Windlidar.Windlidar.html#BCO.Instruments.Windlidar.Windlidar" title="BCO.Instruments.Windlidar.Windlidar"><code class="xref py py-obj docutils literal"><span class="pre">Windlidar</span></code></a>(start,&nbsp;end)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.Instruments.Windlidar.Windlidar.html#BCO.Instruments.Windlidar.Windlidar" title="BCO.Instruments.Windlidar.Windlidar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Windlidar</span></code></a>(start,&nbsp;end)</td>
 <td>Class for working with the Windlidar Data from the BCO.</td>
 </tr>
 </tbody>
@@ -223,7 +231,23 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.Instruments.Radiation.Radiation.html#BCO.Instruments.Radiation.Radiation" title="BCO.Instruments.Radiation.Radiation"><code class="xref py py-obj docutils literal"><span class="pre">Radiation</span></code></a>(start,&nbsp;end)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.Instruments.Radiation.Radiation.html#BCO.Instruments.Radiation.Radiation" title="BCO.Instruments.Radiation.Radiation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Radiation</span></code></a>(start,&nbsp;end)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="module-BCO.Instruments.SfcWeather">
+<span id="surface-weather"></span><h1>Surface Weather<a class="headerlink" href="#module-BCO.Instruments.SfcWeather" title="Permalink to this headline">¶</a></h1>
+<p>This Module contains the SfcWeather class. This class is for easy working with data collected from the surface weather
+station (height ~ 20m) at the BCO site.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.Instruments.SfcWeather.SfcWeather.html#BCO.Instruments.SfcWeather.SfcWeather" title="BCO.Instruments.SfcWeather.SfcWeather"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SfcWeather</span></code></a>(start,&nbsp;end)</td>
 <td></td>
 </tr>
 </tbody>
@@ -274,7 +298,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.0.1',
+            VERSION:'0.1.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

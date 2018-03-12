@@ -71,6 +71,7 @@ class Windlidar(__Device):
         self._name_str = "WindLidar__Deebles_Point*__%s.nc*" % ("#")  # general name-structure of file.
                                                             # "#" indicates where date will be replaced
         self._dateformat_str = "%Y%m%d"  # the datetime format this instrument uses
+        self._path_addition = None
         self._ftp_files = []
 
         if BCO.USE_FTP_ACCESS:

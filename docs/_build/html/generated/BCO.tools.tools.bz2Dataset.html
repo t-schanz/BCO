@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>bz2Dataset &mdash; BCO 0.0.1 documentation</title>
+  <title>bz2Dataset &mdash; BCO 0.1.1 documentation</title>
   
 
   
@@ -37,9 +37,9 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="BCO 0.0.1 documentation" href="../index.html"/>
-        <link rel="up" title="Tools" href="../BCO.tools.html"/>
-        <link rel="next" title="Quicklooks" href="../BCO.Quicklooks.html"/>
+    <link rel="top" title="BCO 0.1.1 documentation" href="../index.html"/>
+        <link rel="up" title="General Tools" href="../BCO.tools.html"/>
+        <link rel="next" title="Celsius2Kelvin" href="BCO.tools.convert.Celsius2Kelvin.html"/>
         <link rel="prev" title="datestr" href="BCO.tools.tools.datestr.html"/> 
 
   
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                0.0.1
+                0.1.1
               </div>
             
           
@@ -99,7 +99,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../modules.html">Instruments</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../modules.html#tools">Tools</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../BCO.tools.html">Tools</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../BCO.tools.html">General Tools</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="BCO.tools.tools.daterange.html">daterange</a></li>
 <li class="toctree-l3"><a class="reference internal" href="BCO.tools.tools.num2time.html">num2time</a></li>
 <li class="toctree-l3"><a class="reference internal" href="BCO.tools.tools.time2num.html">time2num</a></li>
@@ -107,6 +107,7 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">bz2Dataset</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../BCO.tools.html#module-BCO.tools.convert">Converters</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../modules.html#quicklooks">Quicklooks</a></li>
@@ -161,7 +162,7 @@
         
           <li><a href="../modules.html">Instruments</a> &raquo;</li>
         
-          <li><a href="../BCO.tools.html">Tools</a> &raquo;</li>
+          <li><a href="../BCO.tools.html">General Tools</a> &raquo;</li>
         
       <li>bz2Dataset</li>
     
@@ -200,11 +201,11 @@
 </table>
 <p class="rubric">Example</p>
 <p>To open a usual Dataset as known from the netCDF4 module use</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nc</span> <span class="o">=</span> <span class="n">bz2Dataset</span><span class="p">(</span><span class="s2">&quot;radar_testfile.nc.bz2&quot;</span><span class="p">)</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nc</span> <span class="o">=</span> <span class="n">bz2Dataset</span><span class="p">(</span><span class="s2">&quot;radar_testfile.nc.bz2&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>You then can work with this dataset the same as you would with a common netCDF4.Dataset:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reflectivity</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;zf&quot;</span><span class="p">][:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reflectivity</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;zf&quot;</span><span class="p">][:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -221,7 +222,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../BCO.Quicklooks.html" class="btn btn-neutral float-right" title="Quicklooks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="BCO.tools.convert.Celsius2Kelvin.html" class="btn btn-neutral float-right" title="Celsius2Kelvin" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="BCO.tools.tools.datestr.html" class="btn btn-neutral" title="datestr" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -255,7 +256,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.0.1',
+            VERSION:'0.1.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

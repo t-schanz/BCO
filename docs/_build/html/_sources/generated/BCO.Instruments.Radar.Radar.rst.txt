@@ -1,5 +1,5 @@
 Radar
-==============================
+===========================
 
 .. currentmodule:: BCO.Instruments.Radar
 
@@ -47,39 +47,8 @@ Radar
 
      :toctree:
 
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
   
+      ~Radar.close
       ~Radar.getLDR
       ~Radar.getMeltHeight
       ~Radar.getNoisePower
@@ -97,5 +66,12 @@ Radar
    
 
    
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Radar.de_tz
+      ~Radar.utc_tz
    
    

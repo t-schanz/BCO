@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Tools &mdash; BCO 0.0.1 documentation</title>
+  <title>General Tools &mdash; BCO 0.1.1 documentation</title>
   
 
   
@@ -37,10 +37,10 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="BCO 0.0.1 documentation" href="index.html"/>
+    <link rel="top" title="BCO 0.1.1 documentation" href="index.html"/>
         <link rel="up" title="Instruments" href="modules.html"/>
         <link rel="next" title="daterange" href="generated/BCO.tools.tools.daterange.html"/>
-        <link rel="prev" title="get_nc" href="generated/BCO.Instruments.Radiation.Radiation.get_nc.html"/> 
+        <link rel="prev" title="SfcWeather" href="generated/BCO.Instruments.SfcWeather.SfcWeather.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                0.0.1
+                0.1.1
               </div>
             
           
@@ -99,12 +99,17 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Instruments</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html#tools">Tools</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Tools</a><ul>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">General Tools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="generated/BCO.tools.tools.daterange.html">daterange</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/BCO.tools.tools.num2time.html">num2time</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/BCO.tools.tools.time2num.html">time2num</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/BCO.tools.tools.datestr.html">datestr</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/BCO.tools.tools.bz2Dataset.html">bz2Dataset</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-BCO.tools.convert">Converters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/BCO.tools.convert.Celsius2Kelvin.html">Celsius2Kelvin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/BCO.tools.convert.Kelvin2Celsius.html">Kelvin2Celsius</a></li>
 </ul>
 </li>
 </ul>
@@ -161,7 +166,7 @@
         
           <li><a href="modules.html">Instruments</a> &raquo;</li>
         
-      <li>Tools</li>
+      <li>General Tools</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -181,7 +186,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="module-BCO.tools.tools">
-<span id="tools"></span><h1>Tools<a class="headerlink" href="#module-BCO.tools.tools" title="Permalink to this headline">¶</a></h1>
+<span id="general-tools"></span><h1>General Tools<a class="headerlink" href="#module-BCO.tools.tools" title="Permalink to this headline">¶</a></h1>
 <p>This toolbox contains some functions which are being used by the MPPy package but might be usefull to the
 enduser, as well.</p>
 <table border="1" class="longtable docutils">
@@ -190,20 +195,38 @@ enduser, as well.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.tools.tools.daterange.html#BCO.tools.tools.daterange" title="BCO.tools.tools.daterange"><code class="xref py py-obj docutils literal"><span class="pre">daterange</span></code></a>(start_date,&nbsp;end_date)</td>
-<td>This function is for looping over datetime.datetime objects within a timeframe from start_date to end_date.</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.tools.tools.daterange.html#BCO.tools.tools.daterange" title="BCO.tools.tools.daterange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">daterange</span></code></a>(start_date,&nbsp;end_date)</td>
+<td>This function is for looping over datetime.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/BCO.tools.tools.num2time.html#BCO.tools.tools.num2time" title="BCO.tools.tools.num2time"><code class="xref py py-obj docutils literal"><span class="pre">num2time</span></code></a>(num)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/BCO.tools.tools.num2time.html#BCO.tools.tools.num2time" title="BCO.tools.tools.num2time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num2time</span></code></a>(num)</td>
 <td>Converts seconds since 1970 to datetime objects.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.tools.tools.time2num.html#BCO.tools.tools.time2num" title="BCO.tools.tools.time2num"><code class="xref py py-obj docutils literal"><span class="pre">time2num</span></code></a>(time)</td>
-<td>Converts a datetime.datetime object to seconds since 1970 as float.</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.tools.tools.time2num.html#BCO.tools.tools.time2num" title="BCO.tools.tools.time2num"><code class="xref py py-obj docutils literal notranslate"><span class="pre">time2num</span></code></a>(time)</td>
+<td>Converts a datetime.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/BCO.tools.tools.datestr.html#BCO.tools.tools.datestr" title="BCO.tools.tools.datestr"><code class="xref py py-obj docutils literal"><span class="pre">datestr</span></code></a>(dt_obj)</td>
-<td>Converts a datetime.datetime object to a string in the commonly used shape for this module.</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/BCO.tools.tools.datestr.html#BCO.tools.tools.datestr" title="BCO.tools.tools.datestr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datestr</span></code></a>(dt_obj)</td>
+<td>Converts a datetime.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.tools.tools.bz2Dataset.html#BCO.tools.tools.bz2Dataset" title="BCO.tools.tools.bz2Dataset"><code class="xref py py-obj docutils literal"><span class="pre">bz2Dataset</span></code></a>(bz2file:&nbsp;str)</td>
-<td>Generates a netCDF Dataset from a .nc.bz2 file.</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.tools.tools.bz2Dataset.html#BCO.tools.tools.bz2Dataset" title="BCO.tools.tools.bz2Dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bz2Dataset</span></code></a>(bz2file)</td>
+<td>Generates a netCDF Dataset from a .</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="module-BCO.tools.convert">
+<span id="converters"></span><h1>Converters<a class="headerlink" href="#module-BCO.tools.convert" title="Permalink to this headline">¶</a></h1>
+<p>This module contains functions to convert units.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.tools.convert.Celsius2Kelvin.html#BCO.tools.convert.Celsius2Kelvin" title="BCO.tools.convert.Celsius2Kelvin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Celsius2Kelvin</span></code></a>(value)</td>
+<td>Converts a Temperature from °C to K.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/BCO.tools.convert.Kelvin2Celsius.html#BCO.tools.convert.Kelvin2Celsius" title="BCO.tools.convert.Kelvin2Celsius"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Kelvin2Celsius</span></code></a>(value)</td>
+<td>Converts a Temperature from K to °C.</td>
 </tr>
 </tbody>
 </table>
@@ -222,7 +245,7 @@ enduser, as well.</p>
         <a href="generated/BCO.tools.tools.daterange.html" class="btn btn-neutral float-right" title="daterange" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="generated/BCO.Instruments.Radiation.Radiation.get_nc.html" class="btn btn-neutral" title="get_nc" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="generated/BCO.Instruments.SfcWeather.SfcWeather.html" class="btn btn-neutral" title="SfcWeather" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -253,7 +276,7 @@ enduser, as well.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.0.1',
+            VERSION:'0.1.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

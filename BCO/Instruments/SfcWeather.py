@@ -88,9 +88,19 @@ class SfcWeather(__Device):
             A numpy array containing datetime.datetime objects
 
         Example:
-            Getting the time-stamps from an an already initiated Radiation object 'rad':
+            Getting the time-stamps:
 
-            >>> rad.getTime()
+            >>> from BCO.Instruments import SfcWeather
+            >>> met = SfcWeather("20180101","20180101")
+            >>> met.getTime()
+            array([datetime.datetime(2018, 1, 1, 0, 0, tzinfo=<UTC>),
+                   datetime.datetime(2018, 1, 1, 0, 0, 10, tzinfo=<UTC>),
+                   datetime.datetime(2018, 1, 1, 0, 0, 20, tzinfo=<UTC>), ...,
+                   datetime.datetime(2018, 1, 1, 23, 59, 30, tzinfo=<UTC>),
+                   datetime.datetime(2018, 1, 1, 23, 59, 40, tzinfo=<UTC>),
+                   datetime.datetime(2018, 1, 1, 23, 59, 50, tzinfo=<UTC>)], dtype=object)
+
+
         """
 
         time = self._getArrayFromNc('time')

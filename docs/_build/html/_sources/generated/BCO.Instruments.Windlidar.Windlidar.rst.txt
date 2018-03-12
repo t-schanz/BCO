@@ -1,5 +1,5 @@
 Windlidar
-======================================
+===================================
 
 .. currentmodule:: BCO.Instruments.Windlidar
 
@@ -47,47 +47,22 @@ Windlidar
 
      :toctree:
 
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
-     :toctree:
-
   
+      ~Windlidar.close
       ~Windlidar.getIntensity
       ~Windlidar.getRange
       ~Windlidar.getTime
       ~Windlidar.getVelocity
-      ~Windlidar.get_nc
    
    
 
    
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Windlidar.de_tz
+      ~Windlidar.utc_tz
    
    

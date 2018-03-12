@@ -30,6 +30,7 @@ class __Device(object):
     utc_tz = timezone("UTC")
 
 
+
     def _checkInputTime(self, input):
         """
         Checking input for the right dataformat. This can either be a string, then it will be converted to a

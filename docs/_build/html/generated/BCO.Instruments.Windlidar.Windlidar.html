@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Windlidar &mdash; BCO 0.0.1 documentation</title>
+  <title>Windlidar &mdash; BCO 0.1.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="BCO 0.0.1 documentation" href="../index.html"/>
+    <link rel="top" title="BCO 0.1.1 documentation" href="../index.html"/>
         <link rel="up" title="Radar" href="../BCO.Instruments.html"/>
         <link rel="next" title="Radiation" href="BCO.Instruments.Radiation.Radiation.html"/>
         <link rel="prev" title="Radar" href="BCO.Instruments.Radar.Radar.html"/> 
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                0.0.1
+                0.1.1
               </div>
             
           
@@ -99,11 +99,12 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Instruments</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../BCO.Instruments.html">Radar</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../BCO.Instruments.html#module-BCO.Instruments.Windlidar">Windlidar</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../BCO.Instruments.html#windlidar">Windlidar</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Windlidar</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../BCO.Instruments.html#module-BCO.Instruments.Radiation">Radiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../BCO.Instruments.html#module-BCO.Instruments.SfcWeather">Surface Weather</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../modules.html#tools">Tools</a></li>
@@ -242,21 +243,21 @@
 
 <p class="rubric">Example</p>
 <p>The following example initiates a Windlidar class with data from the whole day of 21.06.2017:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lidar</span> <span class="o">=</span> <span class="n">Windlidar</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;20170621&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;20170621&quot;</span><span class="p">)</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lidar</span> <span class="o">=</span> <span class="n">Windlidar</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;20170621&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;20170621&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Another timespan could be from the 21.06.2017 15:30 UTC to 23.06.2017 18:41 UTC:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lidar</span> <span class="o">=</span> <span class="n">Windlidar</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;201706211530&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;20170623061841&quot;</span><span class="p">)</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lidar</span> <span class="o">=</span> <span class="n">Windlidar</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;201706211530&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;20170623061841&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>With the initiated class you can then load data, for example the vertical velocity:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lidar</span> <span class="o">=</span> <span class="n">Windlidar</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;20170621&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;20170621&quot;</span><span class="p">)</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lidar</span> <span class="o">=</span> <span class="n">Windlidar</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;20170621&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;20170621&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">velocity</span> <span class="o">=</span> <span class="n">lidar</span><span class="o">.</span><span class="n">getVelocity</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>It is possible to directly get the variable by chaining the initialisation and the function.
 The following example produces the exact same result as the one before:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">velocity</span> <span class="o">=</span> <span class="n">Windlidar</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;20170621&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;20170621&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getVelocity</span><span class="p">()</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">velocity</span> <span class="o">=</span> <span class="n">Windlidar</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;20170621&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;20170621&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getVelocity</span><span class="p">()</span>
 </pre></div>
 </div>
 <p class="rubric">Methods</p>
@@ -266,19 +267,34 @@ The following example produces the exact same result as the one before:</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.Windlidar.Windlidar.getIntensity.html#BCO.Instruments.Windlidar.Windlidar.getIntensity" title="BCO.Instruments.Windlidar.Windlidar.getIntensity"><code class="xref py py-obj docutils literal"><span class="pre">getIntensity</span></code></a>([version])</td>
+<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.Windlidar.Windlidar.close.html#BCO.Instruments.Windlidar.Windlidar.close" title="BCO.Instruments.Windlidar.Windlidar.close"><code class="xref py py-obj docutils literal notranslate"><span class="pre">close</span></code></a>()</td>
+<td>Deletes all temporary stored files from the instance.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.Windlidar.Windlidar.getIntensity.html#BCO.Instruments.Windlidar.Windlidar.getIntensity" title="BCO.Instruments.Windlidar.Windlidar.getIntensity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getIntensity</span></code></a>([version])</td>
 <td>Loads the volume attenuated backwards scattering from the “volume attenuated backwarts scattering function in air”.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.Windlidar.Windlidar.getRange.html#BCO.Instruments.Windlidar.Windlidar.getRange" title="BCO.Instruments.Windlidar.Windlidar.getRange"><code class="xref py py-obj docutils literal"><span class="pre">getRange</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.Windlidar.Windlidar.getRange.html#BCO.Instruments.Windlidar.Windlidar.getRange" title="BCO.Instruments.Windlidar.Windlidar.getRange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getRange</span></code></a>()</td>
 <td>Loads the range-gates from the netCDF-file which contains the last entries of the desired timeframe.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.Windlidar.Windlidar.getTime.html#BCO.Instruments.Windlidar.Windlidar.getTime" title="BCO.Instruments.Windlidar.Windlidar.getTime"><code class="xref py py-obj docutils literal"><span class="pre">getTime</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.Windlidar.Windlidar.getTime.html#BCO.Instruments.Windlidar.Windlidar.getTime" title="BCO.Instruments.Windlidar.Windlidar.getTime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getTime</span></code></a>()</td>
 <td>Loads the time steps over the desired timeframe from all netCDF-files and returns them as one array.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.Windlidar.Windlidar.getVelocity.html#BCO.Instruments.Windlidar.Windlidar.getVelocity" title="BCO.Instruments.Windlidar.Windlidar.getVelocity"><code class="xref py py-obj docutils literal"><span class="pre">getVelocity</span></code></a>([version])</td>
+<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.Windlidar.Windlidar.getVelocity.html#BCO.Instruments.Windlidar.Windlidar.getVelocity" title="BCO.Instruments.Windlidar.Windlidar.getVelocity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getVelocity</span></code></a>([version])</td>
 <td>The radial velocity of of scatterers away from the instrument.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Windlidar.get_nc</span></code></td>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.Windlidar.Windlidar.de_tz.html#BCO.Instruments.Windlidar.Windlidar.de_tz" title="BCO.Instruments.Windlidar.Windlidar.de_tz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">de_tz</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.Windlidar.Windlidar.utc_tz.html#BCO.Instruments.Windlidar.Windlidar.utc_tz" title="BCO.Instruments.Windlidar.Windlidar.utc_tz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utc_tz</span></code></a></td>
 <td></td>
 </tr>
 </tbody>
@@ -331,7 +347,7 @@ The following example produces the exact same result as the one before:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.0.1',
+            VERSION:'0.1.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

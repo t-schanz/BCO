@@ -1,7 +1,7 @@
 First Steps
 ===========
 
-In this section I will try to cover some basics to work with this module.
+In this section we will try to cover some basics to work with this module.
 
 
 Installation
@@ -21,30 +21,13 @@ Installation
 Documentation
 -------------
 
-The documentation is at the moment only available on linux machines.
-
-To create the documentation:
-
-1. In a terminal navigate to your downloaded folder "BCO"
-2. cd into "docs"
-3. Run:
-
->>> make html
-
-   Please ignore all the warnings which occur under "checking consistency".
-
-4. If it worked there should be a folder "generated" with some ".rst" files in it now.
-    If not, you can remove the the files in generated again with running
-
-    >>> make clean
-
-5. cd into "\_build/html"
-6. Open "index.html" with any browser
+The documentation is available at http://bcoweb.mpimet.mpg.de/systems/BCO_python_doc/index.html.
 
 
-Tutorial
---------
+Tutorials
+---------
 
+.. _Basics demonstrated on the Radar:
 
 Basics demonstrated on the Radar
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -100,3 +83,47 @@ Another way to quickly have a look at the data from your instance is using the
 Methods are chainable with the instance of a class, which means that it is possible to load the data directly:
 
 >>> coral_ref = Radar("20170723","20170723").getReflectivity()
+
+
+.. _Setup the package for ftp-access:
+
+Setup the package for ftp-access
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When loading the package BCO, it will try to determine if you are inside the mpi or zmaw network and adjust the
+settings if you are not. You can manually tell the package to only retrieve data over the ftp server with:
+
+>>> import BCO
+>>> BCO.settings.set_ftp(True)
+
+To download data over the ftp server you need a username and password. You can get these from
+Marcus Klingebiel (marcus.klingebiel@mpimet.mpg.de).
+Please store the username and password in a file at a place which never will be under version control.
+
+If your username is "test_user" and your password is "my_passwd" store these in a file.
+The file should unly contain 2 lines:
+
+    ExampleFile::
+
+        user=test_user
+        passwd=my_passwd
+
+The file needs to have the keywords "user" and "passwd" in two separate lines, followed by a "=" and then the arguments.
+
+Now you need to tell the package the path to this file:
+
+>>> BCO.settings.path_to_ftp_file("/home/.../test_user/my_ftp_settings.txt")
+Successfully loaded username and password
+
+You will get a message telling you that your file has been found and that it has the right format.
+
+At this point you can use the whole package as if you were inside the mpi-network. The only difference is, that when you
+initiate an instance of an instrument, the needed data will be downloaded from the ftp server and stored at the local
+directory for temporal files (in unix usually /tmp/).
+
+>>> from BCO.Instruments import Radar
+>>> coral = Radar("20180101","20180101")
+Downloading...
+
+The netcdf file for the radar data from the 1st of january 2018 would then be dowloaded to you local machine.
+Afterwards you can use the methods and attributes as described in the `Basics demonstrated on the Radar`_.

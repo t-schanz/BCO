@@ -96,6 +96,8 @@ class Radar(__Device):
         self._name_str = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, "#")  # general name-structure of file.
                                                                                     # "#" indicates where date will be replaced
         self._dateformat_str = "%y%m%d"
+        self._path_addition = None
+
         self._ftp_files = []
 
         self.path = self._getPath()

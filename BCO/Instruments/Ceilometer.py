@@ -39,10 +39,11 @@ class Ceilometer(__Device):
         self._instrument = "CEILOMETER"
         self._name_str = "CEILO__*__#.nc"
         self._dateformat_str = "%Y%m"
+        self._path_addition = None
         self._ftp_files = []
 
         self.path = self._getPath()
-        print(self.path)
+
 
         # Attributes:
         self.title = None

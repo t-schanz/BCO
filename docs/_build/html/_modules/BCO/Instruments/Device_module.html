@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>BCO.Instruments.Device_module &mdash; BCO 0.0.1 documentation</title>
+  <title>BCO.Instruments.Device_module &mdash; BCO 0.1.1 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="BCO 0.0.1 documentation" href="../../../index.html"/>
+    <link rel="top" title="BCO 0.1.1 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                0.0.1
+                0.1.1
               </div>
             
           
@@ -170,11 +170,14 @@
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span> <span class="k">as</span> <span class="n">dt</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">timedelta</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">bz2</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">pytz</span> <span class="k">import</span> <span class="n">timezone</span><span class="p">,</span><span class="n">utc</span>
-
+<span class="kn">from</span> <span class="nn">ftplib</span> <span class="k">import</span> <span class="n">FTP</span>
 <span class="kn">from</span> <span class="nn">BCO.tools</span> <span class="k">import</span> <span class="n">tools</span>
+<span class="kn">import</span> <span class="nn">BCO</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">re</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">netCDF4</span> <span class="k">import</span> <span class="n">Dataset</span>
@@ -193,7 +196,9 @@
     <span class="n">de_tz</span> <span class="o">=</span> <span class="n">timezone</span><span class="p">(</span><span class="s2">&quot;Europe/Berlin&quot;</span><span class="p">)</span>
     <span class="n">utc_tz</span> <span class="o">=</span> <span class="n">timezone</span><span class="p">(</span><span class="s2">&quot;UTC&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">checkInputTime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+
+
+    <span class="k">def</span> <span class="nf">_checkInputTime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Checking input for the right dataformat. This can either be a string, then it will be converted to a</span>
 <span class="sd">        datetime-object, or it already is a datetime-obj, then it will just be passed.</span>
@@ -247,7 +252,8 @@
 
         <span class="k">return</span> <span class="n">_timeObj</span>
 
-    <span class="k">def</span> <span class="nf">getStartEnd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_date</span><span class="p">,</span> <span class="n">nc</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">_getStartEnd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_date</span><span class="p">,</span> <span class="n">nc</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Find the index of the start-date and end-date argument in the netCDF-file. If the time-stamp is not in the</span>
 <span class="sd">        actual netCDF-file then return the beginning and end of that file.</span>
@@ -273,26 +279,248 @@
 
         <span class="k">return</span> <span class="n">_start</span><span class="p">,</span> <span class="n">_end</span>
 
-    <span class="k">def</span> <span class="nf">FileNotAvail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skipped</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">_FileNotAvail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skipped</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;For the following days of the chosen timewindow no files exists:&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">skipped</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">skipped</span> <span class="o">=</span> <span class="n">skipped</span>
 
-    <span class="k">def</span> <span class="nf">local2UTC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">time</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">_local2UTC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
         <span class="n">f1</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">astimezone</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">de_tz</span><span class="p">)</span><span class="o">.</span><span class="n">astimezone</span><span class="p">(</span><span class="n">utc</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">time</span><span class="p">)))</span>
 
 
+    <span class="k">def</span> <span class="nf">_downloadFromFTP</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">ftp_path</span><span class="p">,</span><span class="n">file</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Downloads the file from the mpi-zmaw server and saves it on the local machine.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ftp_path: Path on the ftp-server to the file.</span>
+<span class="sd">            file: Filename as listed on the FTP-server. Allowed to contain Wildcards.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Path to the local directory of the downloaded file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">tmpdir</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">gettempdir</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+
+        <span class="n">ftp</span> <span class="o">=</span> <span class="n">FTP</span><span class="p">(</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_SERVER</span><span class="p">)</span>
+        <span class="n">ftp</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_USER</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_PASSWD</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">ftp_path</span> <span class="o">+</span> <span class="n">file</span><span class="p">)</span>
+        <span class="n">file_to_retrieve</span> <span class="o">=</span> <span class="n">ftp</span><span class="o">.</span><span class="n">nlst</span><span class="p">(</span><span class="n">ftp_path</span> <span class="o">+</span> <span class="n">file</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">__save_file</span> <span class="o">=</span> <span class="n">file_to_retrieve</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">__save_file</span> <span class="o">=</span> <span class="n">file_to_retrieve</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">tmpdir</span> <span class="o">+</span> <span class="n">__save_file</span><span class="p">):</span> <span class="c1"># check if the file is already there:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Downloading...&quot;</span><span class="p">)</span>
+            <span class="n">ftp</span><span class="o">.</span><span class="n">retrbinary</span><span class="p">(</span><span class="s1">&#39;RETR &#39;</span> <span class="o">+</span> <span class="n">file_to_retrieve</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">tmpdir</span> <span class="o">+</span> <span class="n">__save_file</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Found file in temporary folder. No need to download it again.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ftp_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmpdir</span> <span class="o">+</span> <span class="n">__save_file</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tmpdir</span>
+
+
+    <span class="k">def</span> <span class="nf">_getArrayFromNc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieving the &#39;value&#39; from the netCDF-Dataset reading just the desired timeframe.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value: String which is a valid key for the Dataset.variables[key].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Numpy array with the values of the desired key and the inititated time-window.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            What behind the scenes happens for an example-key &#39;VEL&#39; is something like:</span>
+
+<span class="sd">            &gt;&gt;&gt; nc = Dataset(input_file)</span>
+<span class="sd">            &gt;&gt;&gt; _var = nc.variables[&quot;VEL&quot;][self.start:self.end].copy()</span>
+
+<span class="sd">            Just that in this function we are looping over all files and in the end concatinating them.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">var_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">skippedDates</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_date</span> <span class="ow">in</span> <span class="n">tools</span><span class="o">.</span><span class="n">daterange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="n">date</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="o">.</span><span class="n">date</span><span class="p">()):</span>
+            <span class="n">_datestr</span> <span class="o">=</span> <span class="n">_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dateformat_str</span><span class="p">)</span>
+            <span class="n">_nameStr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instrument</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span><span class="n">_datestr</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">BCO</span><span class="o">.</span><span class="n">USE_FTP_ACCESS</span><span class="p">:</span>
+                <span class="n">_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ftp_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">_file</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="n">_nameStr</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;bz2&quot;</span> <span class="ow">in</span> <span class="n">_file</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]:</span>
+                    <span class="n">nc</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">bz2Dataset</span><span class="p">(</span><span class="n">_file</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">nc</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">_file</span><span class="p">)</span>
+
+                <span class="c1"># print(_date)</span>
+                <span class="n">_start</span><span class="p">,</span> <span class="n">_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getStartEnd</span><span class="p">(</span><span class="n">_date</span><span class="p">,</span> <span class="n">nc</span><span class="p">)</span>
+                <span class="c1"># print(_start,_end)</span>
+                <span class="k">if</span> <span class="n">_end</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">varFromDate</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">value</span><span class="p">][</span><span class="n">_start</span><span class="p">:</span><span class="n">_end</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">varFromDate</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">value</span><span class="p">][</span><span class="n">_start</span><span class="p">:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="n">var_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">varFromDate</span><span class="p">)</span>
+                <span class="n">nc</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">skippedDates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_date</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+        <span class="n">_var</span> <span class="o">=</span> <span class="n">var_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">var_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">var_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                <span class="n">_var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">_var</span><span class="p">,</span> <span class="n">item</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">skippedDates</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_FileNotAvail</span><span class="p">(</span><span class="n">skippedDates</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">_var</span>
+
+    <span class="k">def</span> <span class="nf">_getValueFromNc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function gets values from the netCDF-Dataset, which stay constant over the whole timeframe. So its very</span>
+<span class="sd">        similar to __getArrayFromNc(), but without the looping.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value: A string for accessing the netCDF-file.</span>
+<span class="sd">                    For example: &#39;Zf&#39;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Numpy array</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+        <span class="n">_datestr</span> <span class="o">=</span> <span class="n">_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dateformat_str</span><span class="p">)</span>
+        <span class="n">_nameStr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instrument</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="n">_datestr</span><span class="p">)</span>
+
+
+        <span class="k">if</span> <span class="n">BCO</span><span class="o">.</span><span class="n">USE_FTP_ACCESS</span><span class="p">:</span>
+            <span class="n">_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ftp_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_file</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="n">_nameStr</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s2">&quot;bz2&quot;</span> <span class="ow">in</span> <span class="n">_file</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]:</span>
+            <span class="n">nc</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">bz2Dataset</span><span class="p">(</span><span class="n">_file</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">nc</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">_file</span><span class="p">)</span>
+
+        <span class="n">_var</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">value</span><span class="p">][:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">nc</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">_var</span>
+
+    <span class="k">def</span> <span class="nf">_getAttrFromNC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">value</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get static attributes from the netcdf file.</span>
+<span class="sd">        These are stored as plain text in the __str__ method of the netcdf-file</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value: The attribute to retrieve.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            String of the Attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+        <span class="n">_datestr</span> <span class="o">=</span> <span class="n">_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dateformat_str</span><span class="p">)</span>
+        <span class="n">_nameStr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instrument</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="n">_datestr</span><span class="p">)</span>
+
+
+        <span class="k">if</span> <span class="n">BCO</span><span class="o">.</span><span class="n">USE_FTP_ACCESS</span><span class="p">:</span>
+            <span class="n">_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ftp_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_file</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="n">_nameStr</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s2">&quot;bz2&quot;</span> <span class="ow">in</span> <span class="n">_file</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]:</span>
+            <span class="n">nc</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">bz2Dataset</span><span class="p">(</span><span class="n">_file</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">nc</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">_file</span><span class="p">)</span>
+
+        <span class="n">nc_lines</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">nc</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">nc_lines</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;:&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:])</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Deletes all temporary stored files from the instance.</span>
+<span class="sd">        This method can just be used when using this package with ftp-access.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">BCO</span><span class="o">.</span><span class="n">USE_FTP_ACCESS</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ftp_files</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ftp_files</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Successfully deleted all temporary files&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;This method is just for use with ftp-access  of the BCO Data&quot;</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_getPath</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reads the Path from the settings.ini file by calling the right function from Device_module.</span>
+
+<span class="sd">        Returns: Path of the data.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">BCO</span><span class="o">.</span><span class="n">USE_FTP_ACCESS</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">_date</span> <span class="ow">in</span> <span class="n">tools</span><span class="o">.</span><span class="n">daterange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="n">date</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="o">.</span><span class="n">date</span><span class="p">()):</span>
+                <span class="n">_datestr</span> <span class="o">=</span> <span class="n">_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dateformat_str</span><span class="p">)</span>
+                <span class="n">tmp_nameStr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name_str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="n">_datestr</span><span class="p">)</span>
+                <span class="n">tmp_path</span> <span class="o">=</span> <span class="n">getValueFromSettings</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_PATH&quot;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">_instrument</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_path_addition</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">&quot;%&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_path_addition</span><span class="p">:</span>
+                        <span class="n">tmp_path</span> <span class="o">+=</span> <span class="n">_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path_addition</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">tmp_path</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_path_addition</span>
+                <span class="n">__path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_downloadFromFTP</span><span class="p">(</span><span class="n">ftp_path</span><span class="o">=</span><span class="n">tmp_path</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">tmp_nameStr</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">__path</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">getValueFromSettings</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_PATH&quot;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">_instrument</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_get_nc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Only for development.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Instance of open Dataset from nc-file.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_date</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+        <span class="n">_datestr</span> <span class="o">=</span> <span class="n">_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dateformat_str</span><span class="p">)</span>
+        <span class="n">_nameStr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instrument</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="n">_datestr</span><span class="p">)</span>
+
+
+        <span class="k">if</span> <span class="n">BCO</span><span class="o">.</span><span class="n">USE_FTP_ACCESS</span><span class="p">:</span>
+            <span class="n">_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ftp_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_file</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="n">_nameStr</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s2">&quot;bz2&quot;</span> <span class="ow">in</span> <span class="n">_file</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]:</span>
+            <span class="n">nc</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">bz2Dataset</span><span class="p">(</span><span class="n">_file</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">nc</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">_file</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">nc</span>
 
 
 
-<span class="k">def</span> <span class="nf">getValueFromSettings</span><span class="p">(</span><span class="n">device</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+
+<span class="k">def</span> <span class="nf">getValueFromSettings</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function gets a value from the settings.ini and returns it:</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        device: Straing of the Device of which you want to get the data-path to the netCDF-file from.</span>
+<span class="sd">        value: String of the value of which you want to get the data-path to the netCDF-file from.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        String of the value which is written in the file settings.ini behind the &#39;:&#39;. Only the string having the &#39;device&#39;</span>
@@ -300,15 +528,27 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">package_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
-    <span class="n">ini_file</span> <span class="o">=</span> <span class="n">package_directory</span> <span class="o">+</span> <span class="s2">&quot;/settings.ini&quot;</span>
+
+    <span class="k">if</span> <span class="n">BCO</span><span class="o">.</span><span class="n">USE_FTP_ACCESS</span><span class="p">:</span>
+        <span class="n">ini_file</span> <span class="o">=</span> <span class="n">package_directory</span> <span class="o">+</span> <span class="s2">&quot;/../ftp_settings.ini&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ini_file</span> <span class="o">=</span> <span class="n">package_directory</span> <span class="o">+</span> <span class="s2">&quot;/../settings.ini&quot;</span>
+
+    <span class="c1"># print(value)</span>
+
+    <span class="n">__counter</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ini_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">while</span> <span class="n">__counter</span> <span class="o">&lt;</span> <span class="mf">1e5</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
-                <span class="k">if</span> <span class="n">device</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">value</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
                     <span class="k">return</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">__counter</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="k">break</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Function getValueFromSettings could not find </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
 </pre></div>
 
            </div>
@@ -345,7 +585,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'0.0.1',
+            VERSION:'0.1.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
