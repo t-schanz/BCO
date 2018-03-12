@@ -8,7 +8,7 @@ from BCO.tools import tools
 
 import numpy as np
 from datetime import datetime as dt
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 from netCDF4 import Dataset
 
 
@@ -27,6 +27,9 @@ if __name__ == "__main__":
     # lidar = Windlidar("20180101","20180101")
     # Rad = Radiation("20180101","20180101")
     # coral = Radar("20180101","20180101")
-    met = BCO.Instruments.SfcWeather("20180101","20180101")
+    met = BCO.Instruments.SfcWeather("20180101","20180103")
+    plt.plot(met.getTime())
+    plt.show()
+
 
 

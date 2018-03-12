@@ -11,6 +11,7 @@ import BCO
 import glob
 import tempfile
 import re
+import fnmatch
 
 try:
     from netCDF4 import Dataset
@@ -179,12 +180,17 @@ class __Device(object):
         skippedDates = []
         for _date in tools.daterange(self.start.date(), self.end.date()):
             _datestr = _date.strftime(self._dateformat_str)
-            _nameStr = self._instrument.replace("#",_datestr)
+            _nameStr = self._name_str.replace("#",_datestr)
 
             if BCO.USE_FTP_ACCESS:
-                _file = self._ftp_files[0]
+                for _f in self._ftp_files:
+                    print(_f)
+                    if fnmatch.fnmatch(_f,"*"+_nameStr):
+                        _file = _f
+                        break
             else:
                 _file = glob.glob(self.path + _nameStr)[0]
+
 
             try:
                 if "bz2" in _file[-5:]:
@@ -231,9 +237,12 @@ class __Device(object):
         _datestr = _date.strftime(self._dateformat_str)
         _nameStr = self._instrument.replace("#", _datestr)
 
-
         if BCO.USE_FTP_ACCESS:
-            _file = self._ftp_files[0]
+            for _f in self._ftp_files:
+                print(_f)
+                if fnmatch.fnmatch(_f, "*" + _nameStr):
+                    _file = _f
+                    break
         else:
             _file = glob.glob(self.path + _nameStr)[0]
 
@@ -264,9 +273,12 @@ class __Device(object):
         _datestr = _date.strftime(self._dateformat_str)
         _nameStr = self._instrument.replace("#", _datestr)
 
-
         if BCO.USE_FTP_ACCESS:
-            _file = self._ftp_files[0]
+            for _f in self._ftp_files:
+                print(_f)
+                if fnmatch.fnmatch(_f, "*" + _nameStr):
+                    _file = _f
+                    break
         else:
             _file = glob.glob(self.path + _nameStr)[0]
 
