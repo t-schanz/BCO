@@ -1,5 +1,5 @@
 """
-This Module contains the Radiation class. This class is for easy working with the Radiation data.
+This Module contains the Ceilometer class. This class is for easy working with the cloud base height.
 """
 
 import sys
@@ -19,7 +19,7 @@ except:
     sys.exit(1)
 
 
-class Radiation(__Device):
+class Ceilometer(__Device):
     """
 
 
@@ -36,14 +36,13 @@ class Radiation(__Device):
         self.start = self._checkInputTime(start) + timedelta(hours=0)
         self.end = self._checkInputTime(end) + timedelta(hours=0)
 
-        self._instrument = "RADIATION"
-        self._name_str = "Radiation__Deebles_Point__DownwellingRadiation__*#.nc*"
-        self._path_addition = "%Y%m/"
-        self._dateformat_str = "%Y%m%d"
+        self._instrument = "CEILOMETER"
+        self._name_str = "CEILO__*__#.nc"
+        self._dateformat_str = "%Y%m"
         self._ftp_files = []
 
         self.path = self._getPath()
-
+        print(self.path)
 
         # Attributes:
         self.title = None
@@ -54,7 +53,7 @@ class Radiation(__Device):
         self.lat = None
         self.lon = None
 
-        self.__getAttributes()
+        # self.__getAttributes()
 
     def __getAttributes(self):
         """

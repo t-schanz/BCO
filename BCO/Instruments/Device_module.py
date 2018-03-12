@@ -125,7 +125,17 @@ class __Device(object):
 
 
     def _downloadFromFTP(self,ftp_path,file):
-        print("Downloading...")
+        """
+        Downloads the file from the mpi-zmaw server and saves it on the local machine.
+
+        Args:
+            ftp_path: Path on the ftp-server to the file.
+            file: Filename as listed on the FTP-server. Allowed to contain Wildcards.
+
+        Returns:
+            Path to the local directory of the downloaded file.
+        """
+
         tmpdir = tempfile.gettempdir() + "/"
 
         ftp = FTP(BCO.FTP_SERVER)
@@ -138,7 +148,10 @@ class __Device(object):
             __save_file = file_to_retrieve
 
         if not os.path.isfile(tmpdir + __save_file): # check if the file is already there:
+            print("Downloading...")
             ftp.retrbinary('RETR ' + file_to_retrieve, open(tmpdir + __save_file, 'wb').write)
+        else:
+            print("Found file in temporary folder. No need to download it again.")
         self._ftp_files.append(tmpdir + __save_file)
         return tmpdir
 
@@ -233,6 +246,38 @@ class __Device(object):
 
         return _var
 
+    def _getAttrFromNC(self,value):
+
+        """
+        Get static attributes from the netcdf file.
+        These are stored as plain text in the __str__ method of the netcdf-file
+
+        Args:
+            value: The attribute to retrieve.
+
+        Returns:
+            String of the Attribute.
+        """
+
+        _date = self.start.date()
+        _datestr = _date.strftime(self._dateformat_str)
+        _nameStr = self._instrument.replace("#", _datestr)
+
+
+        if BCO.USE_FTP_ACCESS:
+            _file = self._ftp_files[0]
+        else:
+            _file = glob.glob(self.path + _nameStr)[0]
+
+        if "bz2" in _file[-5:]:
+            nc = tools.bz2Dataset(_file)
+        else:
+            nc = Dataset(_file)
+
+        nc_lines = str(nc).split("\n")
+        for line in nc_lines:
+            if value in line:
+                return ":".join(line.split(":")[1:]).lstrip()
 
     def close(self):
         """
@@ -262,11 +307,11 @@ class __Device(object):
                 _datestr = _date.strftime(self._dateformat_str)
                 tmp_nameStr = self._name_str.replace("#", _datestr)
                 tmp_path = getValueFromSettings("%s_PATH"%self._instrument)
-                if self.path_addition:
-                    if "%" in self.path_addition:
-                        tmp_path += _date.strftime(self.path_addition)
+                if self._path_addition:
+                    if "%" in self._path_addition:
+                        tmp_path += _date.strftime(self._path_addition)
                     else:
-                        tmp_path += self.path_addition
+                        tmp_path += self._path_addition
                 __path = self._downloadFromFTP(ftp_path=tmp_path, file=tmp_nameStr)
             return __path
 
@@ -274,7 +319,30 @@ class __Device(object):
             return getValueFromSettings("%s_PATH"%self._instrument)
 
 
+    def _get_nc(self):
+        """
+        Only for development.
 
+        Returns:
+            Instance of open Dataset from nc-file.
+
+        """
+        _date = self.start.date()
+        _datestr = _date.strftime(self._dateformat_str)
+        _nameStr = self._instrument.replace("#", _datestr)
+
+
+        if BCO.USE_FTP_ACCESS:
+            _file = self._ftp_files[0]
+        else:
+            _file = glob.glob(self.path + _nameStr)[0]
+
+        if "bz2" in _file[-5:]:
+            nc = tools.bz2Dataset(_file)
+        else:
+            nc = Dataset(_file)
+
+        return nc
 
 
 
@@ -298,7 +366,7 @@ def getValueFromSettings(value: str):
     else:
         ini_file = package_directory + "/../settings.ini"
 
-    print(value)
+    # print(value)
 
     __counter = 0
     with open(ini_file, "r") as f:
