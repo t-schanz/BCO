@@ -235,7 +235,7 @@ class __Device(object):
         """
         _date = self.start.date()
         _datestr = _date.strftime(self._dateformat_str)
-        _nameStr = self._instrument.replace("#", _datestr)
+        _nameStr = self._name_str.replace("#", _datestr)
 
         if BCO.USE_FTP_ACCESS:
             for _f in self._ftp_files:
@@ -271,7 +271,8 @@ class __Device(object):
 
         _date = self.start.date()
         _datestr = _date.strftime(self._dateformat_str)
-        _nameStr = self._instrument.replace("#", _datestr)
+        _nameStr = self._name_str.replace("#", _datestr)
+        print(_nameStr)
 
         if BCO.USE_FTP_ACCESS:
             for _f in self._ftp_files:

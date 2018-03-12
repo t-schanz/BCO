@@ -25,10 +25,10 @@ if __name__ == "__main__":
     BCO.settings.path_to_ftp_file("/home/tobias/Documents/ftp_access.txt")
 
     # lidar = Windlidar("20180101","20180101")
-    # Rad = Radiation("20180101","20180101")
+    Rad = Radiation("20180101","20180101")
     # coral = Radar("20180101","20180101")
-    met = BCO.Instruments.SfcWeather("20180101","20180103")
-    plt.plot(met.getTime())
+    # met = BCO.Instruments.SfcWeather("20180101","20180103")
+    plt.plot(Rad.getTime())
     plt.show()
 
 
