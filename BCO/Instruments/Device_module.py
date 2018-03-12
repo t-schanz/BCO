@@ -142,7 +142,7 @@ class __Device(object):
 
         ftp = FTP(BCO.FTP_SERVER)
         ftp.login(user=BCO.FTP_USER, passwd=BCO.FTP_PASSWD)
-        print(ftp_path + file)
+        # print(ftp_path + file)
         file_to_retrieve = ftp.nlst(ftp_path + file)[0]
         try:
             __save_file = file_to_retrieve.split("/")[-1]
@@ -150,7 +150,7 @@ class __Device(object):
             __save_file = file_to_retrieve
 
         if not os.path.isfile(tmpdir + __save_file): # check if the file is already there:
-            print("Downloading...")
+            print("Downloading %s"%__save_file)
             ftp.retrbinary('RETR ' + file_to_retrieve, open(tmpdir + __save_file, 'wb').write)
         else:
             print("Found file in temporary folder. No need to download it again.")
@@ -184,7 +184,6 @@ class __Device(object):
 
             if BCO.USE_FTP_ACCESS:
                 for _f in self._ftp_files:
-                    print(_f)
                     if fnmatch.fnmatch(_f,"*"+_nameStr):
                         _file = _f
                         break
@@ -239,7 +238,6 @@ class __Device(object):
 
         if BCO.USE_FTP_ACCESS:
             for _f in self._ftp_files:
-                print(_f)
                 if fnmatch.fnmatch(_f, "*" + _nameStr):
                     _file = _f
                     break
@@ -272,11 +270,10 @@ class __Device(object):
         _date = self.start.date()
         _datestr = _date.strftime(self._dateformat_str)
         _nameStr = self._name_str.replace("#", _datestr)
-        print(_nameStr)
+        # print(_nameStr)
 
         if BCO.USE_FTP_ACCESS:
             for _f in self._ftp_files:
-                print(_f)
                 if fnmatch.fnmatch(_f, "*" + _nameStr):
                     _file = _f
                     break
@@ -347,7 +344,10 @@ class __Device(object):
 
 
         if BCO.USE_FTP_ACCESS:
-            _file = self._ftp_files[0]
+            for _f in self._ftp_files:
+                if fnmatch.fnmatch(_f, "*" + _nameStr):
+                    _file = _f
+                    break
         else:
             _file = glob.glob(self.path + _nameStr)[0]
 
