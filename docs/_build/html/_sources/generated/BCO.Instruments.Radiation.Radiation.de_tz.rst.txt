@@ -1,0 +1,6 @@
+de_tz
+=====
+
+.. currentmodule:: BCO.Instruments.Radiation
+
+.. automethod:: Radiation.de_tz

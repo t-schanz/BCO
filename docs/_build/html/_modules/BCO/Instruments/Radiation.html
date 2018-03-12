@@ -1,0 +1,481 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>BCO.Instruments.Radiation &mdash; BCO 0.1.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+  
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="BCO 0.1.1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BCO
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">First Steps</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Instruments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html#tools">Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html#quicklooks">Quicklooks</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../help.html">HELP</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BCO</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>BCO.Instruments.Radiation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for BCO.Instruments.Radiation</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This Module contains the Radiation class. This class is for easy working with the Radiation data.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">bz2</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">timedelta</span>
+
+<span class="kn">from</span> <span class="nn">BCO.tools</span> <span class="k">import</span> <span class="n">tools</span>
+<span class="kn">from</span> <span class="nn">BCO.Instruments.Device_module</span> <span class="k">import</span> <span class="n">__Device</span><span class="p">,</span><span class="n">getValueFromSettings</span>
+<span class="kn">import</span> <span class="nn">BCO</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">netCDF4</span> <span class="k">import</span> <span class="n">Dataset</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The module netCDF4 needs to be installed for the BCO-package to work.&quot;</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Radiation"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radiation.Radiation.html#BCO.Instruments.Radiation.Radiation">[docs]</a><span class="k">class</span> <span class="nc">Radiation</span><span class="p">(</span><span class="n">__Device</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Radiation.__init__"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radiation.Radiation.html#BCO.Instruments.Radiation.Radiation.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets up some variables and loads static parameters from the netcdf file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            start: start of the timeframe.</span>
+<span class="sd">            end: end of the timeframe.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_checkInputTime</span><span class="p">(</span><span class="n">start</span><span class="p">)</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_checkInputTime</span><span class="p">(</span><span class="n">end</span><span class="p">)</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_instrument</span> <span class="o">=</span> <span class="s2">&quot;RADIATION&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name_str</span> <span class="o">=</span> <span class="s2">&quot;Radiation__Deebles_Point__DownwellingRadiation__*#.nc*&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_path_addition</span> <span class="o">=</span> <span class="s2">&quot;%Y%m/&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dateformat_str</span> <span class="o">=</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ftp_files</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getPath</span><span class="p">()</span>
+
+
+        <span class="c1"># Attributes:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">devices</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temporalResolution</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lat</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="o">=</span> <span class="kc">None</span>
+</div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__getAttributes</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__getAttributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to load the static attributes from the netCDF file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAttrFromNC</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">devices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAttrFromNC</span><span class="p">(</span><span class="s2">&quot;devices&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temporalResolution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAttrFromNC</span><span class="p">(</span><span class="s2">&quot;resolution&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAttrFromNC</span><span class="p">(</span><span class="s2">&quot;location&quot;</span><span class="p">)</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getValueFromNc</span><span class="p">(</span><span class="s2">&quot;lat&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getValueFromNc</span><span class="p">(</span><span class="s2">&quot;lon&quot;</span><span class="p">)</span>
+
+
+
+
+<div class="viewcode-block" id="Radiation.getTime"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radiation.Radiation.getTime.html#BCO.Instruments.Radiation.Radiation.getTime">[docs]</a>    <span class="k">def</span> <span class="nf">getTime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads the time steps over the desired timeframe from all netCDF-files and returns them as one array.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A numpy array containing datetime.datetime objects</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            Getting the time-stamps from an an already initiated Radiation object &#39;rad&#39;:</span>
+
+<span class="sd">            &gt;&gt;&gt; rad.getTime()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+
+        <span class="n">time</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">num2time</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>  <span class="c1"># converting seconds since 1970 to datetime objects</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_local2UTC</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+
+</div>
+        <span class="k">return</span> <span class="n">time</span>
+
+<div class="viewcode-block" id="Radiation.getRadiation"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radiation.Radiation.getRadiation.html#BCO.Instruments.Radiation.Radiation.getRadiation">[docs]</a>    <span class="k">def</span> <span class="nf">getRadiation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">scope</span><span class="p">,</span><span class="n">scattering</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the timeseries for the radiation for the specified scope and scattering type.</span>
+
+<span class="sd">        Mind that when scope==&quot;LW&quot;, then scattering does not need to be provided, because longwave radiation is always</span>
+<span class="sd">        measured diffuse. If scattering is provided anyway it will fall back to &quot;diffuse&quot;.</span>
+
+
+<span class="sd">        Args:</span>
+<span class="sd">            scope: One of: &quot;LW&quot;,&quot;SW&quot;. (LW = long wave,, SW = short wave)</span>
+<span class="sd">            scattering: One of: &quot;direct&quot;,&quot;diffuse&quot;,&quot;global&quot;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            1-D numpy array of the radiation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">scopes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;LW&quot;</span><span class="p">,</span><span class="s2">&quot;SW&quot;</span><span class="p">]</span>
+        <span class="n">scatterings</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;direct&quot;</span><span class="p">,</span><span class="s2">&quot;diffuse&quot;</span><span class="p">,</span><span class="s2">&quot;global&quot;</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">keys</span><span class="p">():</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Get the keys for the parameters</span>
+<span class="sd">            Returns:</span>
+<span class="sd">                Parameter Keys</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="s2">&quot;scopes: </span><span class="si">%s</span><span class="s2"> </span><span class="se">\n</span><span class="s2">scatterings: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scopes</span><span class="p">]),</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scopes</span><span class="p">]))</span>
+
+
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">scope</span> <span class="ow">in</span> <span class="n">scopes</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Scope needs to be either &#39;SW&#39; (shortwave) or &#39;LW&#39; (longwave)&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">scattering</span> <span class="ow">in</span> <span class="n">scatterings</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Scattering needs to be one of: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="s2">&quot; ,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scatterings</span><span class="p">]))</span>
+
+
+        <span class="k">if</span> <span class="n">scope</span> <span class="o">==</span> <span class="s2">&quot;LW&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">scattering</span> <span class="o">==</span> <span class="s2">&quot;diffuse&quot;</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Longwaveradiation at the surface is only measured as diffuse radiation. Setting scattering to diffuse!&quot;</span><span class="p">)</span>
+
+            <span class="n">_rad</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="s2">&quot;LWdown_diffuse&quot;</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">scope</span> <span class="o">==</span> <span class="s2">&quot;SW&quot;</span><span class="p">:</span>
+
+            <span class="n">_rad</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="s2">&quot;SWdown_</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">scattering</span><span class="p">)</span>
+</div>
+        <span class="k">return</span> <span class="n">_rad</span>
+
+
+<div class="viewcode-block" id="Radiation.getVoltage"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radiation.Radiation.getVoltage.html#BCO.Instruments.Radiation.Radiation.getVoltage">[docs]</a>    <span class="k">def</span> <span class="nf">getVoltage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">scope</span><span class="p">,</span><span class="n">scattering</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the sensitivity timeseries for the specified scopte and scattering type.</span>
+
+<span class="sd">        Mind that when scope==&quot;LW&quot;, then scattering does not need to be provided, because longwave radiation is always</span>
+<span class="sd">        measured diffuse. If scattering is provided anyway it will fall back to &quot;diffuse&quot;.</span>
+
+
+<span class="sd">        Args:</span>
+<span class="sd">            scope: One of: &quot;LW&quot;,&quot;SW&quot;. (LW = long wave,, SW = short wave)</span>
+<span class="sd">            scattering: One of: &quot;direct&quot;,&quot;diffuse&quot;,&quot;global&quot;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            1-D numpy array of the voltage.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">scopes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;LW&quot;</span><span class="p">,</span><span class="s2">&quot;SW&quot;</span><span class="p">]</span>
+        <span class="n">scatterings</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;direct&quot;</span><span class="p">,</span><span class="s2">&quot;diffuse&quot;</span><span class="p">,</span><span class="s2">&quot;global&quot;</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">keys</span><span class="p">():</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Get the keys for the parameters</span>
+<span class="sd">            Returns:</span>
+<span class="sd">                Parameter Keys</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="s2">&quot;scopes: </span><span class="si">%s</span><span class="s2"> </span><span class="se">\n</span><span class="s2">scatterings: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scopes</span><span class="p">]),</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scatterings</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">scope</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Following parameter configurations are allowed:&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">keys</span><span class="p">())</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">scope</span> <span class="ow">in</span> <span class="n">scopes</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Scope needs to be either &#39;SW&#39; (shortwave) or &#39;LW&#39; (longwave)&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">scattering</span> <span class="ow">in</span> <span class="n">scatterings</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Scattering needs to be one of: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="s2">&quot; ,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scatterings</span><span class="p">]))</span>
+
+
+        <span class="k">if</span> <span class="n">scope</span> <span class="o">==</span> <span class="s2">&quot;LW&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">scattering</span> <span class="o">==</span> <span class="s2">&quot;diffuse&quot;</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Longwaveradiation at the surface is only measured as diffuse radiation. Setting scattering to diffuse!&quot;</span><span class="p">)</span>
+
+            <span class="n">_volt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="s2">&quot;LWdown_diffuse_voltage&quot;</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">scope</span> <span class="o">==</span> <span class="s2">&quot;SW&quot;</span><span class="p">:</span>
+
+            <span class="n">_volt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="s2">&quot;SWdown_</span><span class="si">%s</span><span class="s2">_voltage&quot;</span><span class="o">%</span><span class="n">scattering</span><span class="p">)</span>
+</div>
+        <span class="k">return</span> <span class="n">_volt</span>
+
+<div class="viewcode-block" id="Radiation.getSensitivity"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radiation.Radiation.getSensitivity.html#BCO.Instruments.Radiation.Radiation.getSensitivity">[docs]</a>    <span class="k">def</span> <span class="nf">getSensitivity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">instrument</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the sensitivity timeseries for the specified instrument.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            instrument: One of: &quot;GeoSh&quot;, &quot;AnoSh&quot;, &quot;AnoGlob&quot;, &quot;Hel&quot;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            1-D numpy array of the sensitivity.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">instruments</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;GeoSh&quot;</span><span class="p">,</span> <span class="s2">&quot;AnoSh&quot;</span><span class="p">,</span> <span class="s2">&quot;AnoGlob&quot;</span><span class="p">,</span><span class="s2">&quot;Hel&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">instrument</span> <span class="ow">in</span> <span class="n">instruments</span><span class="p">:</span>
+            <span class="n">_sens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_Sensitivity&quot;</span><span class="o">%</span><span class="n">instrument</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">_sens</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Instruments must be one of: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">instruments</span><span class="p">))</span></div>
+            <span class="k">return</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Radiation.getTemperature"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radiation.Radiation.getTemperature.html#BCO.Instruments.Radiation.Radiation.getTemperature">[docs]</a>    <span class="k">def</span> <span class="nf">getTemperature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instrument</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the temperature timeseries for the specified instrument.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            instrument: One of: &quot;GeoSh&quot;, &quot;AnoSh&quot;, &quot;AnoGlob&quot;, &quot;Hel&quot;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            1-D numpy array of the temperature.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">instruments</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;GeoSh&quot;</span><span class="p">,</span> <span class="s2">&quot;AnoSh&quot;</span><span class="p">,</span> <span class="s2">&quot;AnoGlob&quot;</span><span class="p">,</span> <span class="s2">&quot;Hel&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">instrument</span> <span class="ow">in</span> <span class="n">instruments</span><span class="p">:</span>
+            <span class="n">_temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_temp&quot;</span> <span class="o">%</span> <span class="n">instrument</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">_temp</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Instruments must be one of: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">instruments</span><span class="p">))</span></div></div>
+            <span class="k">return</span> <span class="kc">None</span>
+
+
+
+
+
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Tobias Machnitzki.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.1.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

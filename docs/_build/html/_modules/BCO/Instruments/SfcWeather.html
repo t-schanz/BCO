@@ -1,0 +1,505 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>BCO.Instruments.SfcWeather &mdash; BCO 0.1.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+  
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="BCO 0.1.1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BCO
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">First Steps</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Instruments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html#tools">Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html#quicklooks">Quicklooks</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../help.html">HELP</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BCO</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>BCO.Instruments.SfcWeather</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for BCO.Instruments.SfcWeather</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This Module contains the SfcWeather class. This class is for easy working with data collected from the surface weather</span>
+<span class="sd">station (height ~ 20m) at the BCO site.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">bz2</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">timedelta</span>
+
+<span class="kn">from</span> <span class="nn">BCO.tools</span> <span class="k">import</span> <span class="n">tools</span>
+<span class="kn">from</span> <span class="nn">BCO.tools</span> <span class="k">import</span> <span class="n">convert</span>
+<span class="kn">from</span> <span class="nn">BCO.Instruments.Device_module</span> <span class="k">import</span> <span class="n">__Device</span><span class="p">,</span><span class="n">getValueFromSettings</span>
+<span class="kn">import</span> <span class="nn">BCO</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">netCDF4</span> <span class="k">import</span> <span class="n">Dataset</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The module netCDF4 needs to be installed for the BCO-package to work.&quot;</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="SfcWeather"><a class="viewcode-back" href="../../../generated/BCO.Instruments.SfcWeather.SfcWeather.html#BCO.Instruments.SfcWeather.SfcWeather">[docs]</a><span class="k">class</span> <span class="nc">SfcWeather</span><span class="p">(</span><span class="n">__Device</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets up some variables and loads static parameters from the netcdf file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            start: start of the timeframe.</span>
+<span class="sd">            end: end of the timeframe.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_checkInputTime</span><span class="p">(</span><span class="n">start</span><span class="p">)</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_checkInputTime</span><span class="p">(</span><span class="n">end</span><span class="p">)</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_instrument</span> <span class="o">=</span> <span class="s2">&quot;WEATHER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name_str</span> <span class="o">=</span> <span class="s2">&quot;Meteorology__Deebles_Point*__#.nc&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_path_addition</span> <span class="o">=</span> <span class="s2">&quot;%Y%m/&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dateformat_str</span> <span class="o">=</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ftp_files</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getPath</span><span class="p">()</span>
+
+
+        <span class="c1"># Attributes:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temporalResolution</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lat</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__getAttributes</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__getAttributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to load the static attributes from the netCDF file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAttrFromNC</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAttrFromNC</span><span class="p">(</span><span class="s2">&quot;devices&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temporalResolution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAttrFromNC</span><span class="p">(</span><span class="s2">&quot;resolution&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAttrFromNC</span><span class="p">(</span><span class="s2">&quot;location&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAttrFromNC</span><span class="p">(</span><span class="s2">&quot;position&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAttrFromNC</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">)</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getValueFromNc</span><span class="p">(</span><span class="s2">&quot;lat&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getValueFromNc</span><span class="p">(</span><span class="s2">&quot;lon&quot;</span><span class="p">)</span>
+
+
+
+
+<div class="viewcode-block" id="SfcWeather.getTime"><a class="viewcode-back" href="../../../generated/BCO.Instruments.SfcWeather.SfcWeather.getTime.html#BCO.Instruments.SfcWeather.SfcWeather.getTime">[docs]</a>    <span class="k">def</span> <span class="nf">getTime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads the time steps over the desired timeframe from all netCDF-files and returns them as one array.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A numpy array containing datetime.datetime objects</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            Getting the time-stamps:</span>
+
+<span class="sd">            &gt;&gt;&gt; from BCO.Instruments import SfcWeather</span>
+<span class="sd">            &gt;&gt;&gt; met = SfcWeather(&quot;20180101&quot;,&quot;20180101&quot;)</span>
+<span class="sd">            &gt;&gt;&gt; met.getTime()</span>
+<span class="sd">            array([datetime.datetime(2018, 1, 1, 0, 0, tzinfo=&lt;UTC&gt;),</span>
+<span class="sd">                   datetime.datetime(2018, 1, 1, 0, 0, 10, tzinfo=&lt;UTC&gt;),</span>
+<span class="sd">                   datetime.datetime(2018, 1, 1, 0, 0, 20, tzinfo=&lt;UTC&gt;), ...,</span>
+<span class="sd">                   datetime.datetime(2018, 1, 1, 23, 59, 30, tzinfo=&lt;UTC&gt;),</span>
+<span class="sd">                   datetime.datetime(2018, 1, 1, 23, 59, 40, tzinfo=&lt;UTC&gt;),</span>
+<span class="sd">                   datetime.datetime(2018, 1, 1, 23, 59, 50, tzinfo=&lt;UTC&gt;)], dtype=object)</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+
+        <span class="n">time</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">num2time</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>  <span class="c1"># converting seconds since 1970 to datetime objects</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_local2UTC</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+</div>
+        <span class="k">return</span> <span class="n">time</span>
+
+<div class="viewcode-block" id="SfcWeather.getDataQuality"><a class="viewcode-back" href="../../../generated/BCO.Instruments.SfcWeather.SfcWeather.getDataQuality.html#BCO.Instruments.SfcWeather.SfcWeather.getDataQuality">[docs]</a>    <span class="k">def</span> <span class="nf">getDataQuality</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the data quality in percent.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            1D numpy array with the data quality in percent.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">sdq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="s2">&quot;SDQ&quot;</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">sdq</span>
+
+<div class="viewcode-block" id="SfcWeather.getWindDirection"><a class="viewcode-back" href="../../../generated/BCO.Instruments.SfcWeather.SfcWeather.getWindDirection.html#BCO.Instruments.SfcWeather.SfcWeather.getWindDirection">[docs]</a>    <span class="k">def</span> <span class="nf">getWindDirection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the surface wind direction in deg.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            1D numpy array with wind direction in deg.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="s2">&quot;DIR&quot;</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="nb">dir</span>
+
+<div class="viewcode-block" id="SfcWeather.getWindSpeed"><a class="viewcode-back" href="../../../generated/BCO.Instruments.SfcWeather.SfcWeather.getWindSpeed.html#BCO.Instruments.SfcWeather.SfcWeather.getWindSpeed">[docs]</a>    <span class="k">def</span> <span class="nf">getWindSpeed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">accumulation</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the windspeed in m/s.</span>
+<span class="sd">        Since the data is only available at a specific temporal resolution (usually 10s) it needs to be</span>
+<span class="sd">        accumulated in some way. By providing a &quot;accumulation&quot; parameter you can decide if you want the minimum,</span>
+<span class="sd">        the mean or the maximum of this 10s accumulation.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            accumulation: str: One of &quot;mean&quot;, &quot;min&quot;, &quot;max&quot;. Default is mean.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            1D numpy array containing the windspeed in m/s.</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        To get the 10s maximum values:</span>
+
+<span class="sd">            &gt;&gt;&gt; from BCO.Instruments import SfcWeather</span>
+<span class="sd">            &gt;&gt;&gt; met = SfcWeather(&quot;20180101&quot;,&quot;20180101&quot;)</span>
+<span class="sd">            &gt;&gt;&gt; max_velocity = met.getWindSpeed(&quot;max&quot;)</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;min&quot;</span><span class="p">,</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span><span class="s2">&quot;max&quot;</span><span class="p">]</span>
+        <span class="n">nc_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;MNV&quot;</span><span class="p">,</span><span class="s2">&quot;VEL&quot;</span><span class="p">,</span><span class="s2">&quot;MXV&quot;</span><span class="p">]</span>
+
+        <span class="n">nc_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="p">,</span><span class="n">nc_vars</span><span class="p">))</span>
+
+        <span class="n">__vel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="n">nc_dict</span><span class="p">[</span><span class="n">accumulation</span><span class="p">])</span></div>
+        <span class="k">return</span> <span class="n">__vel</span>
+
+<div class="viewcode-block" id="SfcWeather.getTemperature"><a class="viewcode-back" href="../../../generated/BCO.Instruments.SfcWeather.SfcWeather.getTemperature.html#BCO.Instruments.SfcWeather.SfcWeather.getTemperature">[docs]</a>    <span class="k">def</span> <span class="nf">getTemperature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="s2">&quot;K&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the air temperature.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            unit: return temperature in kelvin &quot;K&quot; or Celsius &quot;C&quot;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            1D numpy array containing the temperature in specified unit.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">__t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">__t</span>
+        <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;K&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">convert</span><span class="o">.</span><span class="n">Celsius2Kelvin</span><span class="p">(</span><span class="n">__t</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Not a valid temperature unit: </span><span class="si">%s</span><span class="s2">.</span><span class="se">\n</span><span class="s2"> Use &#39;K&#39; or &#39;C&#39;.&quot;</span><span class="o">%</span><span class="n">unit</span><span class="p">)</span></div>
+            <span class="k">return</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="SfcWeather.getHumidity"><a class="viewcode-back" href="../../../generated/BCO.Instruments.SfcWeather.SfcWeather.getHumidity.html#BCO.Instruments.SfcWeather.SfcWeather.getHumidity">[docs]</a>    <span class="k">def</span> <span class="nf">getHumidity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the relative humidity in percent.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            1D numpy array of the relative humidity in percent.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">__RH</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="s2">&quot;RH&quot;</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">__RH</span>
+
+<div class="viewcode-block" id="SfcWeather.getPressure"><a class="viewcode-back" href="../../../generated/BCO.Instruments.SfcWeather.SfcWeather.getPressure.html#BCO.Instruments.SfcWeather.SfcWeather.getPressure">[docs]</a>    <span class="k">def</span> <span class="nf">getPressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get preesure in hPa</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            1D numpy array of the pressure in hPa.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">__p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="s2">&quot;P&quot;</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">__p</span>
+
+<div class="viewcode-block" id="SfcWeather.getPrecipitation"><a class="viewcode-back" href="../../../generated/BCO.Instruments.SfcWeather.SfcWeather.getPrecipitation.html#BCO.Instruments.SfcWeather.SfcWeather.getPrecipitation">[docs]</a>    <span class="k">def</span> <span class="nf">getPrecipitation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">value</span><span class="o">=</span><span class="s2">&quot;RI&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get one of the following Rain properties:</span>
+<span class="sd">            -   R: Amount of Rain in mm.</span>
+<span class="sd">            -   RDS: Duration of rain in seconds.</span>
+<span class="sd">            -   RDH: Duration of rain in hours.</span>
+<span class="sd">            -   RI: Mean rain intensity in mm/h [Default].</span>
+<span class="sd">            -   MXRI: Max rain intensity in mm/h.</span>
+<span class="sd">            -   RP: Summit of rain intenstity in mm/h.</span>
+
+<span class="sd">            -   H: Strikes of hail in cm⁻².</span>
+<span class="sd">            -   HDS: Duration of hail in seconds.</span>
+<span class="sd">            -   HDH: Durtaion of hail in hours.</span>
+<span class="sd">            -   HI: Mean hail intensity in cm⁻².</span>
+<span class="sd">            -   MXHI: Max hail intensity in cm⁻².</span>
+<span class="sd">            -   HP: Summit of hail intensity in cm⁻².</span>
+
+
+
+<span class="sd">        Args:</span>
+<span class="sd">            value: str: one of &quot;R&quot;,&quot;RDS&quot;,&quot;RDH&quot;,&quot;RI&quot;,&quot;MXRI&quot;,&quot;RP&quot;,&quot;H&quot;,&quot;HDS&quot;,&quot;HDH&quot;,&quot;HI&quot;,&quot;MXHI&quot;,&quot;HP&quot;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            1D numpy array of the specified value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">,</span><span class="s2">&quot;RDS&quot;</span><span class="p">,</span><span class="s2">&quot;RDH&quot;</span><span class="p">,</span><span class="s2">&quot;RI&quot;</span><span class="p">,</span><span class="s2">&quot;MXRI&quot;</span><span class="p">,</span><span class="s2">&quot;RP&quot;</span><span class="p">,</span><span class="s2">&quot;H&quot;</span><span class="p">,</span><span class="s2">&quot;HDS&quot;</span><span class="p">,</span><span class="s2">&quot;HDH&quot;</span><span class="p">,</span><span class="s2">&quot;HI&quot;</span><span class="p">,</span><span class="s2">&quot;MXHI&quot;</span><span class="p">,</span><span class="s2">&quot;HP&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;value needs to be one of </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">__var</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">__var</span>
+
+<div class="viewcode-block" id="SfcWeather.getTechnicalValues"><a class="viewcode-back" href="../../../generated/BCO.Instruments.SfcWeather.SfcWeather.getTechnicalValues.html#BCO.Instruments.SfcWeather.SfcWeather.getTechnicalValues">[docs]</a>    <span class="k">def</span> <span class="nf">getTechnicalValues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">            -   TI: Internal temperature in °C.</span>
+<span class="sd">            -   TH: Heater temperature in °C.</span>
+<span class="sd">            -   VH: Electric power at the heater in V.</span>
+<span class="sd">            -   VS: Supply voltage in V.</span>
+<span class="sd">            -   VR: Reference voltage in V.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value: str: one of &quot;TI&quot;, &quot;TH&quot;, &quot;VH&quot;, &quot;VS&quot;, &quot;VR&quot;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            1D numpy array of the specified value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;TI&quot;</span><span class="p">,</span> <span class="s2">&quot;TH&quot;</span><span class="p">,</span> <span class="s2">&quot;VH&quot;</span><span class="p">,</span> <span class="s2">&quot;VS&quot;</span><span class="p">,</span> <span class="s2">&quot;VR&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;value needs to be one of: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
+
+        <span class="n">__var</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">__var</span>
+
+
+
+
+
+
+
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Tobias Machnitzki.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.1.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

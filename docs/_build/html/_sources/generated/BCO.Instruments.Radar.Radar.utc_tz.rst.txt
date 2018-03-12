@@ -1,0 +1,6 @@
+utc_tz
+======
+
+.. currentmodule:: BCO.Instruments.Radar
+
+.. automethod:: Radar.utc_tz

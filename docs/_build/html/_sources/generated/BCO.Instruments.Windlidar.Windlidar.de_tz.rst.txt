@@ -1,0 +1,6 @@
+de_tz
+=====
+
+.. currentmodule:: BCO.Instruments.Windlidar
+
+.. automethod:: Windlidar.de_tz

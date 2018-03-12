@@ -1,0 +1,578 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>BCO.Quicklooks.RadarLidarVelocities &mdash; BCO 0.1.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+  
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="BCO 0.1.1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BCO
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">First Steps</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Instruments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html#tools">Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html#quicklooks">Quicklooks</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../help.html">HELP</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BCO</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>BCO.Quicklooks.RadarLidarVelocities</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for BCO.Quicklooks.RadarLidarVelocities</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module for plotting a combined vertical velocities plot. Inside clouds data from the Radar is being used.</span>
+<span class="sd">Outside the clouds, the data comes from the lidar.</span>
+
+<span class="sd">Usage:</span>
+<span class="sd">    &gt;&gt;&gt; python3 RadarLidarVelocies.py YYYYMMDD</span>
+
+<span class="sd">        where YYYYMMDD is the date, e.g.: 20180130 would be the 30th of January in 2018.</span>
+
+<span class="sd">    If no date is provided, the day before the actual system time will be used (usually yesterday).</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;/home/mpim/m300517/MPI/working/BCO&quot;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">BCO.Instruments</span> <span class="k">import</span> <span class="n">Radar</span><span class="p">,</span><span class="n">Windlidar</span>
+<span class="kn">from</span> <span class="nn">BCO.tools.tools</span> <span class="k">import</span> <span class="n">time2num</span><span class="p">,</span><span class="n">num2time</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span> <span class="k">as</span> <span class="n">dt</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">timedelta</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">matplotlib.patches</span> <span class="k">as</span> <span class="nn">mpatches</span>
+<span class="kn">import</span> <span class="nn">matplotlib.dates</span> <span class="k">as</span> <span class="nn">mdates</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="k">import</span> <span class="n">LinearSegmentedColormap</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">ndimage</span>
+<span class="kn">from</span> <span class="nn">scipy.ndimage.morphology</span> <span class="k">import</span> <span class="n">binary_erosion</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+
+
+
+<span class="k">def</span> <span class="nf">getStartEnd</span><span class="p">(</span><span class="n">datestr</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determine the start and end values for this script.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        start: datetime.datetime-obj</span>
+<span class="sd">        end: datetime.datetime-obj</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">datestr</span><span class="p">:</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">datestr</span><span class="p">,</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">today</span><span class="p">()</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">start</span> <span class="o">=</span> <span class="n">dt</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">year</span><span class="p">,</span><span class="n">date</span><span class="o">.</span><span class="n">month</span><span class="p">,</span><span class="n">date</span><span class="o">.</span><span class="n">day</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">dt</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">year</span><span class="p">,</span><span class="n">date</span><span class="o">.</span><span class="n">month</span><span class="p">,</span><span class="n">date</span><span class="o">.</span><span class="n">day</span><span class="p">,</span><span class="mi">23</span><span class="p">,</span><span class="mi">59</span><span class="p">,</span><span class="mi">59</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">start</span><span class="p">,</span><span class="n">end</span>
+
+<span class="k">def</span> <span class="nf">countClouds</span><span class="p">(</span><span class="n">radarVel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to label all values belonging to one cloud with the same number.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        radarVel: np.array of the radar Velocities or Reflection</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.array where each cloud now is a cluster of the same number. Each cloud gets a new number.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">radarVel</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">radarVel</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">999</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">radarVel</span> <span class="o">&gt;</span>  <span class="o">-</span><span class="mi">998</span>
+    <span class="n">structure_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+    <span class="n">label_im</span><span class="p">,</span> <span class="n">nb_labels</span> <span class="o">=</span> <span class="n">ndimage</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">structure</span><span class="o">=</span><span class="n">structure_array</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Clouds in picture: </span><span class="si">%i</span><span class="s2">&quot;</span> <span class="o">%</span><span class="n">nb_labels</span><span class="p">)</span>
+    <span class="n">label_im</span> <span class="o">=</span> <span class="n">label_im</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">label_im</span><span class="p">[</span><span class="n">label_im</span> <span class="o">==</span> <span class="o">-</span><span class="mi">999</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="k">return</span> <span class="n">label_im</span><span class="p">,</span> <span class="n">nb_labels</span>
+
+<span class="k">def</span> <span class="nf">cloudShapes</span><span class="p">(</span><span class="n">im</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to get the Contours of clouds from Radar Data.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        im: Array where clouds have only one value (return of countClouds)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.array where the contours of clouds are marked as 1, the rest is set to np.nan. The value [0,0] of the array</span>
+<span class="sd">        is set to -9999 for the right coloring later.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">im</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">im</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">im1</span> <span class="o">=</span> <span class="n">binary_erosion</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="n">iterations</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">im</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">im</span><span class="p">,</span><span class="n">im1</span><span class="p">)</span>
+
+    <span class="n">im</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">im</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="n">im</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">9999</span>
+
+    <span class="k">return</span> <span class="n">im</span>
+
+<span class="k">def</span> <span class="nf">rainRate</span><span class="p">(</span><span class="n">ref</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Rain rate calculated with Mashall-Palmer Relationship</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        ref: Radar reflectivity</span>
+
+<span class="sd">    Returns: Array with rain intensities</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="mf">0.036</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="mf">0.0625</span><span class="p">,</span><span class="n">ref</span><span class="p">)))</span>
+
+<span class="k">def</span> <span class="nf">getRainmask</span><span class="p">(</span><span class="n">vel</span><span class="p">,</span><span class="n">ref</span><span class="p">):</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+    <span class="n">mask</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">less</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span><span class="mi">999999</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="c1">#setting whole mask to nan</span>
+    <span class="n">rain</span> <span class="o">=</span> <span class="n">rainRate</span><span class="p">(</span><span class="n">ref</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+    <span class="n">mask</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">less</span><span class="p">(</span><span class="n">vel</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">greater_equal</span><span class="p">(</span><span class="n">rain</span><span class="p">,</span><span class="mf">0.1</span><span class="p">))]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">mask</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">9999</span>
+    <span class="k">return</span> <span class="n">mask</span>
+
+<span class="k">def</span> <span class="nf">noDataMask</span><span class="p">(</span><span class="n">lidarVel</span><span class="p">):</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">lidarVel</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+    <span class="n">mask</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">less</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span><span class="mi">999999</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="c1">#setting whole mask to nan</span>
+    <span class="n">mask</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">lidarVel</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">mask</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">9999</span>
+    <span class="k">return</span> <span class="n">mask</span>
+
+<span class="k">def</span> <span class="nf">get_xlims</span><span class="p">(</span><span class="n">time</span><span class="p">):</span>
+    <span class="n">start_date</span> <span class="o">=</span> <span class="n">dt</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">year</span><span class="p">,</span><span class="n">time</span><span class="o">.</span><span class="n">month</span><span class="p">,</span><span class="n">time</span><span class="o">.</span><span class="n">day</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">dates</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">6</span><span class="p">):</span>
+        <span class="n">dates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">start_date</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="n">n</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">dates</span>
+
+
+<span class="k">def</span> <span class="nf">plotData</span><span class="p">(</span><span class="n">lidarTime</span><span class="p">,</span><span class="n">lidarRange</span><span class="p">,</span><span class="n">lidarVel</span><span class="p">,</span><span class="n">coralTime</span><span class="p">,</span><span class="n">coralRange</span><span class="p">,</span><span class="n">coralVel</span><span class="p">,</span><span class="n">coralRef</span><span class="p">,</span><span class="n">threshold</span><span class="p">,</span><span class="n">datestr</span><span class="p">,</span><span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function for actually creating the plot.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Set up custom Colormap:</span>
+
+    <span class="n">colorlist</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;#ffffff&quot;</span><span class="p">,</span><span class="s2">&quot;#D3D3D3&quot;</span><span class="p">]</span>
+    <span class="n">cm_name</span> <span class="o">=</span> <span class="s2">&quot;anyName&quot;</span>
+
+    <span class="n">cm</span> <span class="o">=</span> <span class="n">LinearSegmentedColormap</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span><span class="n">cm_name</span><span class="p">,</span><span class="n">colorlist</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+
+
+    <span class="n">font_size</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="s2">&quot;bwr&quot;</span>
+
+    <span class="n">fig</span><span class="p">,(</span><span class="n">ax1</span><span class="p">,</span><span class="n">ax2</span><span class="p">,</span><span class="n">ax3</span><span class="p">,</span><span class="n">ax4</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">9</span><span class="p">))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">, Vertical Velocities from Radar and Lidar&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">lidarTime</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">.%m.%Y&quot;</span><span class="p">)),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+    <span class="n">hourlocators</span> <span class="o">=</span> <span class="p">[</span><span class="n">mdates</span><span class="o">.</span><span class="n">HourLocator</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
+    <span class="n">time_fmts</span> <span class="o">=</span> <span class="p">[</span><span class="n">mdates</span><span class="o">.</span><span class="n">DateFormatter</span><span class="p">(</span><span class="s2">&quot;%H:00&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
+
+
+    <span class="n">rain_patch</span> <span class="o">=</span> <span class="n">mpatches</span><span class="o">.</span><span class="n">Patch</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;lightgrey&quot;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.91</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Precipitation&#39;</span><span class="p">)</span>
+    <span class="n">noData_patch</span> <span class="o">=</span> <span class="n">mpatches</span><span class="o">.</span><span class="n">Patch</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;dimgrey&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Out of Lidar Range&#39;</span><span class="p">)</span>
+
+    <span class="n">label_im</span><span class="p">,</span><span class="n">nb_labels</span> <span class="o">=</span> <span class="n">countClouds</span><span class="p">(</span><span class="n">coralVel</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+    <span class="n">label_im</span> <span class="o">=</span> <span class="n">cloudShapes</span><span class="p">(</span><span class="n">label_im</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+    <span class="n">rainmask</span> <span class="o">=</span> <span class="n">getRainmask</span><span class="p">(</span><span class="n">coralVel</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">coralRef</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+    <span class="n">noData</span> <span class="o">=</span> <span class="n">noDataMask</span><span class="p">(</span><span class="n">lidarVel</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+
+    <span class="n">axes</span> <span class="o">=</span> <span class="p">[</span><span class="n">ax1</span><span class="p">,</span><span class="n">ax2</span><span class="p">,</span><span class="n">ax3</span><span class="p">,</span><span class="n">ax4</span><span class="p">]</span>
+    <span class="n">timesteps</span> <span class="o">=</span> <span class="n">get_xlims</span><span class="p">(</span><span class="n">coralTime</span><span class="p">[</span><span class="mi">10</span><span class="p">])</span>
+    <span class="n">timetups</span> <span class="o">=</span> <span class="p">[(</span><span class="n">timesteps</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">timesteps</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
+
+    <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="p">[</span><span class="n">rain_patch</span><span class="p">,</span> <span class="n">noData_patch</span><span class="p">],</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.01</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">borderaxespad</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">font_size</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">ax</span><span class="p">,</span><span class="n">step</span><span class="p">,</span><span class="n">hourlocator</span><span class="p">,</span><span class="n">time_fmt</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span><span class="n">timetups</span><span class="p">,</span><span class="n">hourlocators</span><span class="p">,</span><span class="n">time_fmts</span><span class="p">):</span>
+        <span class="c1"># print(step)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1500</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">step</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">step</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">lidarTime</span><span class="p">,</span> <span class="n">lidarRange</span><span class="p">,</span> <span class="n">lidarVel</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span> <span class="c1"># Lidar Data</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">lidarTime</span><span class="p">,</span><span class="n">lidarRange</span><span class="p">,</span><span class="n">noData</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span><span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Accent&quot;</span><span class="p">)</span> <span class="c1"># Above Lidar Range</span>
+        <span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">coralTime</span><span class="p">,</span> <span class="n">coralRange</span><span class="p">,</span> <span class="n">coralVel</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span> <span class="c1"># Rada Data</span>
+
+        <span class="c1"># ax.contourf(coralTime,coralRange,rainmask.transpose(),colors=&#39;none&#39;,hatches=[&quot;///&quot;]) # Mask for Rain</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">coralTime</span><span class="p">,</span> <span class="n">coralRange</span><span class="p">,</span> <span class="n">label_im</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;binary&quot;</span><span class="p">)</span> <span class="c1"># Mask for cloud contours</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">coralTime</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1500</span><span class="p">,</span><span class="n">where</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">rainmask</span><span class="p">[:,:</span><span class="mi">44</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;lightgrey&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.91</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">hourlocator</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">time_fmt</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="n">font_size</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Height [m]&quot;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">font_size</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time [UTC]&quot;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">font_size</span><span class="p">)</span> <span class="c1"># set xlabel just on the last plot</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">right</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span><span class="n">top</span><span class="o">=</span><span class="mf">0.92</span><span class="p">)</span>
+    <span class="n">cbar_ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.85</span><span class="p">,</span><span class="mf">0.15</span><span class="p">,</span><span class="mf">0.02</span><span class="p">,</span><span class="mf">0.6</span><span class="p">])</span>
+
+    <span class="n">norm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=-</span><span class="n">threshold</span><span class="p">,</span><span class="n">vmax</span><span class="o">=</span><span class="n">threshold</span><span class="p">)</span>
+    <span class="n">cb</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colorbar</span><span class="o">.</span><span class="n">ColorbarBase</span><span class="p">(</span><span class="n">cbar_ax</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span><span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span><span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span><span class="p">,</span><span class="n">extend</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">)</span>
+    <span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="n">font_size</span><span class="p">)</span>
+    <span class="n">cb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s2">&quot;Vertical Velocity [m$\,$s$^{-1}$]&quot;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="n">font_size</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">save_path</span> <span class="o">+</span> <span class="s2">&quot;Velocities_</span><span class="si">%s</span><span class="s2">.png&quot;</span><span class="o">%</span><span class="n">datestr</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">roundLidarVel</span><span class="p">(</span><span class="n">lidarTime</span><span class="p">,</span><span class="n">lidarVel</span><span class="p">,</span><span class="n">lidarInt</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to lower the amount of data used. The lidar has a temporal resolution of about 1s. Plotting all this data</span>
+<span class="sd">    takes ages and does not bring any more information in this case than a 10s resolution data. Therefore this function</span>
+<span class="sd">    smallers the original temporal resolution by a factor 7.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        lidarTime: np.array of the timesteps of the lidar</span>
+<span class="sd">        lidarVel: np.array of the Velocities of the lidar</span>
+<span class="sd">        lidarInt: np.array of the Intensities of the backscatterering function of the Lidar</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        All inputs reduced in size by a factor 7.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lidarTimeNew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">lidarTime</span><span class="p">[::</span><span class="mi">7</span><span class="p">])</span>
+    <span class="n">lidarVelNew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">lidarVel</span><span class="p">[::</span><span class="mi">7</span><span class="p">,:])</span>
+    <span class="n">lidarIntNew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">lidarInt</span><span class="p">[::</span><span class="mi">7</span><span class="p">,:])</span>
+    <span class="k">return</span> <span class="n">lidarTimeNew</span><span class="p">,</span><span class="n">lidarVelNew</span><span class="p">,</span><span class="n">lidarIntNew</span>
+
+
+<span class="k">def</span> <span class="nf">filterWindLidar</span><span class="p">(</span><span class="n">lidarVel</span><span class="p">,</span><span class="n">lidarInt</span><span class="p">,</span><span class="n">windFilter</span><span class="o">=-</span><span class="mf">18.3</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to filter out the noise of the Windlidar (copied from Aude Untersee (MPI))</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        lidarVel: np.array of the Velocities of the lidar</span>
+<span class="sd">        lidarInt: np.array of the Intensities of the backscatterering function of the Lidar</span>
+<span class="sd">        windFilter: The Filter-value in dBZ</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        lidarVelFiltered: np.array of the filtered Velocities</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">SNR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">lidarInt</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">SNR_dB</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">SNR</span><span class="p">))</span> <span class="c1">#SNR in dBz</span>
+    <span class="n">lidarVelFiltered</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">less_equal</span><span class="p">(</span><span class="n">SNR_dB</span><span class="p">,</span><span class="n">windFilter</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span><span class="n">lidarVel</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">lidarVelFiltered</span>
+
+
+<div class="viewcode-block" id="plot_RadarLidarVelcities"><a class="viewcode-back" href="../../../generated/BCO.Quicklooks.RadarLidarVelocities.plot_RadarLidarVelcities.html#BCO.Quicklooks.RadarLidarVelocities.plot_RadarLidarVelcities">[docs]</a><span class="k">def</span> <span class="nf">plot_RadarLidarVelcities</span><span class="p">(</span><span class="n">datestr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates an image with the combined vertical velocities from Radar and Windlidar.</span>
+<span class="sd">    The image is created for the day defined by the datestr-argument.</span>
+<span class="sd">    If no datestr is provided the plot will be created for yesterdays data.</span>
+
+
+<span class="sd">    Args:</span>
+<span class="sd">        datestr: Format: YYYYMMDD</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Saves an image in the defined output_path.</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">        &gt;&gt;&gt; from BCO.Quicklooks import plot_RadarLidarVelcities</span>
+<span class="sd">        &gt;&gt;&gt; plot_RadarLidarVelcities(&quot;20170723&quot;)</span>
+
+<span class="sd">    .. image:: ../_images/Velocities_20170723.png</span>
+<span class="sd">        :width: 400px</span>
+<span class="sd">        :align: center</span>
+<span class="sd">        :height: 200px</span>
+<span class="sd">        :alt: alternate text</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span> <span class="c1"># for debugging comment this line!!!</span>
+
+    <span class="n">save_path</span> <span class="o">=</span> <span class="n">output_path</span> <span class="c1"># path where image will be saved.</span>
+
+
+    <span class="c1"># ================================</span>
+    <span class="c1"># Load Data:</span>
+    <span class="c1"># ================================</span>
+
+
+    <span class="n">start</span><span class="p">,</span><span class="n">end</span> <span class="o">=</span> <span class="n">getStartEnd</span><span class="p">(</span><span class="n">datestr</span><span class="p">)</span>
+
+
+    <span class="n">coral</span> <span class="o">=</span> <span class="n">Radar</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="n">end</span><span class="p">,</span><span class="n">version</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">lidar</span> <span class="o">=</span> <span class="n">Windlidar</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="n">end</span><span class="p">)</span>
+
+
+    <span class="n">coralTime</span> <span class="o">=</span> <span class="n">coral</span><span class="o">.</span><span class="n">getTime</span><span class="p">()</span>
+    <span class="n">lidarTime</span> <span class="o">=</span> <span class="n">lidar</span><span class="o">.</span><span class="n">getTime</span><span class="p">()</span>
+
+    <span class="n">coralRange</span> <span class="o">=</span> <span class="n">coral</span><span class="o">.</span><span class="n">getRange</span><span class="p">()</span>
+    <span class="n">lidarRange</span> <span class="o">=</span> <span class="n">lidar</span><span class="o">.</span><span class="n">getRange</span><span class="p">()</span>
+
+    <span class="n">coralVel</span> <span class="o">=</span> <span class="n">coral</span><span class="o">.</span><span class="n">getVelocity</span><span class="p">()</span>
+    <span class="n">lidarVel</span> <span class="o">=</span> <span class="n">lidar</span><span class="o">.</span><span class="n">getVelocity</span><span class="p">()</span>
+    <span class="n">lidarVel</span><span class="p">[:,:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+
+
+    <span class="n">lidarInt</span> <span class="o">=</span> <span class="n">lidar</span><span class="o">.</span><span class="n">getIntensity</span><span class="p">()</span>
+    <span class="n">coralRef</span> <span class="o">=</span> <span class="n">coral</span><span class="o">.</span><span class="n">getReflectivity</span><span class="p">()</span>
+
+
+    <span class="c1"># ================================</span>
+    <span class="c1"># Adjusting Data for Plotting:</span>
+    <span class="c1"># ================================</span>
+
+    <span class="n">lidarTime</span><span class="p">,</span><span class="n">lidarVel</span><span class="p">,</span><span class="n">lidarInt</span> <span class="o">=</span> <span class="n">roundLidarVel</span><span class="p">(</span><span class="n">lidarTime</span><span class="p">,</span><span class="n">lidarVel</span><span class="p">,</span><span class="n">lidarInt</span><span class="p">)</span> <span class="c1"># make the timeresolution ca. 10s</span>
+    <span class="n">lidarVel</span> <span class="o">=</span> <span class="n">filterWindLidar</span><span class="p">(</span><span class="n">lidarVel</span><span class="p">,</span><span class="n">lidarInt</span><span class="p">)</span>
+
+    <span class="n">coralRef</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">less</span><span class="p">(</span><span class="n">coralRef</span><span class="p">,</span> <span class="o">-</span><span class="mi">50</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>  <span class="c1"># Filter all values smaller than -50 dbZ</span>
+    <span class="n">coralVel</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">coralRef</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="c1"># Applying the same filter to the Velocities</span>
+
+    <span class="n">lidarVel</span><span class="p">[:,</span> <span class="mi">33</span><span class="p">:][</span><span class="n">np</span><span class="o">.</span><span class="n">greater_equal</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">lidarVel</span><span class="p">[:,</span> <span class="mi">33</span><span class="p">:]),</span> <span class="mi">3</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>  <span class="c1"># removes noise above 1km</span>
+
+    <span class="c1">#Setting everything above the threshold to threshold, to make smaller values visible</span>
+
+    <span class="n">threshold</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">lidarVel</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">greater</span><span class="p">(</span><span class="n">lidarVel</span><span class="p">,</span><span class="n">threshold</span><span class="p">)]</span> <span class="o">=</span> <span class="n">threshold</span>
+    <span class="n">coralVel</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">greater</span><span class="p">(</span><span class="n">coralVel</span><span class="p">,</span><span class="n">threshold</span><span class="p">)]</span> <span class="o">=</span> <span class="n">threshold</span>
+    <span class="n">lidarVel</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">less</span><span class="p">(</span><span class="n">lidarVel</span><span class="p">,</span><span class="o">-</span><span class="n">threshold</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="n">threshold</span>
+    <span class="n">coralVel</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">less</span><span class="p">(</span><span class="n">coralVel</span><span class="p">,</span><span class="o">-</span><span class="n">threshold</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="n">threshold</span>
+
+
+
+
+    <span class="c1"># =================================</span>
+    <span class="c1"># Plotting:</span>
+    <span class="c1"># =================================</span>
+</div>
+    <span class="n">plotData</span><span class="p">(</span><span class="n">lidarTime</span><span class="p">,</span><span class="n">lidarRange</span><span class="p">,</span><span class="n">lidarVel</span><span class="p">,</span><span class="n">coralTime</span><span class="p">,</span><span class="n">coralRange</span><span class="p">,</span><span class="n">coralVel</span><span class="p">,</span><span class="n">coralRef</span><span class="p">,</span><span class="n">threshold</span><span class="p">,</span><span class="n">start</span><span class="p">,</span><span class="n">save_path</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># ================================</span>
+    <span class="c1"># Get Parameters:</span>
+    <span class="c1"># ================================</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">datestr</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">datestr</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">save_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="c1"># ================================</span>
+    <span class="c1"># Start program:</span>
+    <span class="c1"># ================================</span>
+    <span class="n">plot_RadarLidarVelcities</span><span class="p">(</span><span class="n">datestr</span><span class="p">,</span><span class="n">save_path</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Tobias Machnitzki.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.1.1',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,6 @@
+utc_tz
+======
+
+.. currentmodule:: BCO.Instruments.SfcWeather
+
+.. automethod:: SfcWeather.utc_tz

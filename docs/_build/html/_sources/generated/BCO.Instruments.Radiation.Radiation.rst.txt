@@ -1,0 +1,69 @@
+Radiation
+===================================
+
+.. currentmodule:: BCO.Instruments.Radiation
+
+.. autoclass:: Radiation
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+
+     :toctree:
+
+     :toctree:
+
+     :toctree:
+
+     :toctree:
+
+     :toctree:
+
+     :toctree:
+
+     :toctree:
+
+     :toctree:
+
+     :toctree:
+
+     :toctree:
+
+     :toctree:
+
+     :toctree:
+
+     :toctree:
+
+     :toctree:
+
+     :toctree:
+
+     :toctree:
+
+     :toctree:
+
+  
+      ~Radiation.close
+      ~Radiation.getRadiation
+      ~Radiation.getSensitivity
+      ~Radiation.getTemperature
+      ~Radiation.getTime
+      ~Radiation.getVoltage
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Radiation.de_tz
+      ~Radiation.utc_tz
+   
+   
