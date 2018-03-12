@@ -9,7 +9,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(name='BCO',
-      version='0.0.4',
+      version='0.1.1',
       description='Python Interface to the Max-Planck-Institut Barbados Cloud Observatory data.',
       author='Tobias Machnitzki',
       author_email='tobias.machnitzki@mpimet.mpg.de',
