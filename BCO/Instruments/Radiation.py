@@ -122,7 +122,7 @@ class Radiation(__Device):
         time = self._getArrayFromNc('time')
 
         time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
-        time = self._local2UTC(time)
+        # time = self._local2UTC(time)
 
 
         return time
