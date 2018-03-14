@@ -1,5 +1,5 @@
 num2time
-========================
+===========================
 
 .. currentmodule:: BCO.tools.tools
 

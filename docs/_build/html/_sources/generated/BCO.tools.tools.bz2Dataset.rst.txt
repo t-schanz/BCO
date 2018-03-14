@@ -1,5 +1,5 @@
 bz2Dataset
-==========================
+=============================
 
 .. currentmodule:: BCO.tools.tools
 

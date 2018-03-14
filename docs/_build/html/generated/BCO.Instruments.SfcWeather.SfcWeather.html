@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>SfcWeather &mdash; BCO 0.1.1 documentation</title>
+  <title>SfcWeather &mdash; BCO 0.1.2 documentation</title>
   
 
   
@@ -37,10 +37,10 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="BCO 0.1.1 documentation" href="../index.html"/>
+    <link rel="top" title="BCO 0.1.2 documentation" href="../index.html"/>
         <link rel="up" title="Radar" href="../BCO.Instruments.html"/>
-        <link rel="next" title="General Tools" href="../BCO.tools.html"/>
-        <link rel="prev" title="Radiation" href="BCO.Instruments.Radiation.Radiation.html"/> 
+        <link rel="next" title="close" href="BCO.Instruments.SfcWeather.SfcWeather.close.html"/>
+        <link rel="prev" title="getVoltage" href="BCO.Instruments.Radiation.Radiation.getVoltage.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                0.1.1
+                0.1.2
               </div>
             
           
@@ -102,7 +102,19 @@
 <li class="toctree-l2"><a class="reference internal" href="../BCO.Instruments.html#windlidar">Windlidar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../BCO.Instruments.html#module-BCO.Instruments.Radiation">Radiation</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../BCO.Instruments.html#module-BCO.Instruments.SfcWeather">Surface Weather</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">SfcWeather</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">SfcWeather</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.close.html">close</a></li>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getDataQuality.html">getDataQuality</a></li>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getHumidity.html">getHumidity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getPrecipitation.html">getPrecipitation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getPressure.html">getPressure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getTechnicalValues.html">getTechnicalValues</a></li>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getTemperature.html">getTemperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getTime.html">getTime</a></li>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getWindDirection.html">getWindDirection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getWindSpeed.html">getWindSpeed</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -230,39 +242,37 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.close.html#BCO.Instruments.SfcWeather.SfcWeather.close" title="BCO.Instruments.SfcWeather.SfcWeather.close"><code class="xref py py-obj docutils literal notranslate"><span class="pre">close</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.close.html#BCO.Instruments.SfcWeather.SfcWeather.close" title="BCO.Instruments.SfcWeather.SfcWeather.close"><code class="xref py py-obj docutils literal"><span class="pre">close</span></code></a>()</td>
 <td>Deletes all temporary stored files from the instance.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getDataQuality.html#BCO.Instruments.SfcWeather.SfcWeather.getDataQuality" title="BCO.Instruments.SfcWeather.SfcWeather.getDataQuality"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getDataQuality</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getDataQuality.html#BCO.Instruments.SfcWeather.SfcWeather.getDataQuality" title="BCO.Instruments.SfcWeather.SfcWeather.getDataQuality"><code class="xref py py-obj docutils literal"><span class="pre">getDataQuality</span></code></a>()</td>
 <td>Get the data quality in percent.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getHumidity.html#BCO.Instruments.SfcWeather.SfcWeather.getHumidity" title="BCO.Instruments.SfcWeather.SfcWeather.getHumidity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getHumidity</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getHumidity.html#BCO.Instruments.SfcWeather.SfcWeather.getHumidity" title="BCO.Instruments.SfcWeather.SfcWeather.getHumidity"><code class="xref py py-obj docutils literal"><span class="pre">getHumidity</span></code></a>()</td>
 <td>Get the relative humidity in percent.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getPrecipitation.html#BCO.Instruments.SfcWeather.SfcWeather.getPrecipitation" title="BCO.Instruments.SfcWeather.SfcWeather.getPrecipitation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPrecipitation</span></code></a>([value])</td>
+<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getPrecipitation.html#BCO.Instruments.SfcWeather.SfcWeather.getPrecipitation" title="BCO.Instruments.SfcWeather.SfcWeather.getPrecipitation"><code class="xref py py-obj docutils literal"><span class="pre">getPrecipitation</span></code></a>([value])</td>
 <td>Get one of the following Rain properties:     -   R: Amount of Rain in mm.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getPressure.html#BCO.Instruments.SfcWeather.SfcWeather.getPressure" title="BCO.Instruments.SfcWeather.SfcWeather.getPressure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPressure</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getPressure.html#BCO.Instruments.SfcWeather.SfcWeather.getPressure" title="BCO.Instruments.SfcWeather.SfcWeather.getPressure"><code class="xref py py-obj docutils literal"><span class="pre">getPressure</span></code></a>()</td>
 <td>Get preesure in hPa</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getTechnicalValues.html#BCO.Instruments.SfcWeather.SfcWeather.getTechnicalValues" title="BCO.Instruments.SfcWeather.SfcWeather.getTechnicalValues"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getTechnicalValues</span></code></a>([value])</td>
-<td><blockquote>
-<div><ul class="simple">
+<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getTechnicalValues.html#BCO.Instruments.SfcWeather.SfcWeather.getTechnicalValues" title="BCO.Instruments.SfcWeather.SfcWeather.getTechnicalValues"><code class="xref py py-obj docutils literal"><span class="pre">getTechnicalValues</span></code></a>([value])</td>
+<td><ul class="simple">
 <li>TI: Internal temperature in °C.</li>
 </ul>
-</div></blockquote>
 </td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getTemperature.html#BCO.Instruments.SfcWeather.SfcWeather.getTemperature" title="BCO.Instruments.SfcWeather.SfcWeather.getTemperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getTemperature</span></code></a>([unit])</td>
+<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getTemperature.html#BCO.Instruments.SfcWeather.SfcWeather.getTemperature" title="BCO.Instruments.SfcWeather.SfcWeather.getTemperature"><code class="xref py py-obj docutils literal"><span class="pre">getTemperature</span></code></a>([unit])</td>
 <td>Get the air temperature.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getTime.html#BCO.Instruments.SfcWeather.SfcWeather.getTime" title="BCO.Instruments.SfcWeather.SfcWeather.getTime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getTime</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getTime.html#BCO.Instruments.SfcWeather.SfcWeather.getTime" title="BCO.Instruments.SfcWeather.SfcWeather.getTime"><code class="xref py py-obj docutils literal"><span class="pre">getTime</span></code></a>()</td>
 <td>Loads the time steps over the desired timeframe from all netCDF-files and returns them as one array.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getWindDirection.html#BCO.Instruments.SfcWeather.SfcWeather.getWindDirection" title="BCO.Instruments.SfcWeather.SfcWeather.getWindDirection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getWindDirection</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getWindDirection.html#BCO.Instruments.SfcWeather.SfcWeather.getWindDirection" title="BCO.Instruments.SfcWeather.SfcWeather.getWindDirection"><code class="xref py py-obj docutils literal"><span class="pre">getWindDirection</span></code></a>()</td>
 <td>Get the surface wind direction in deg.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getWindSpeed.html#BCO.Instruments.SfcWeather.SfcWeather.getWindSpeed" title="BCO.Instruments.SfcWeather.SfcWeather.getWindSpeed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getWindSpeed</span></code></a>([accumulation])</td>
+<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getWindSpeed.html#BCO.Instruments.SfcWeather.SfcWeather.getWindSpeed" title="BCO.Instruments.SfcWeather.SfcWeather.getWindSpeed"><code class="xref py py-obj docutils literal"><span class="pre">getWindSpeed</span></code></a>([accumulation])</td>
 <td>Get the windspeed in m/s.</td>
 </tr>
 </tbody>
@@ -281,10 +291,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../BCO.tools.html" class="btn btn-neutral float-right" title="General Tools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="BCO.Instruments.SfcWeather.SfcWeather.close.html" class="btn btn-neutral float-right" title="close" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="BCO.Instruments.Radiation.Radiation.html" class="btn btn-neutral" title="Radiation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="BCO.Instruments.Radiation.Radiation.getVoltage.html" class="btn btn-neutral" title="getVoltage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -315,7 +325,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.1.1',
+            VERSION:'0.1.2',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

@@ -1,5 +1,5 @@
 time2num
-========================
+===========================
 
 .. currentmodule:: BCO.tools.tools
 

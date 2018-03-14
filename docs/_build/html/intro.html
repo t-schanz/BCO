@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>First Steps &mdash; BCO 0.1.1 documentation</title>
+  <title>First Steps &mdash; BCO 0.1.2 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="BCO 0.1.1 documentation" href="index.html"/>
+    <link rel="top" title="BCO 0.1.2 documentation" href="index.html"/>
         <link rel="next" title="Instruments" href="modules.html"/>
         <link rel="prev" title="Documentation of the BCO Project" href="index.html"/> 
 
@@ -68,7 +68,7 @@
             
             
               <div class="version">
-                0.1.1
+                0.1.2
               </div>
             
           
@@ -223,7 +223,7 @@
 <li>In a terminal navigate to the folder “BCO”</li>
 <li>Run:</li>
 </ol>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; python setup.py bdist_wheel
+<div class="highlight-python3"><div class="highlight"><pre><span></span>&gt;&gt;&gt; python setup.py bdist_wheel
 &gt;&gt;&gt; pip install dist/BCO-?.?.?-py3-none-any.whl
 </pre></div>
 </div>
@@ -242,21 +242,21 @@
 <div class="section" id="basics-demonstrated-on-the-radar">
 <span id="id1"></span><h3>Basics demonstrated on the Radar<a class="headerlink" href="#basics-demonstrated-on-the-radar" title="Permalink to this headline">¶</a></h3>
 <p>To work with the Radar class we need to import it:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">BCO.Instruments</span> <span class="k">import</span> <span class="n">Radar</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">BCO.Instruments</span> <span class="k">import</span> <span class="n">Radar</span>
 </pre></div>
 </div>
 <p>First we want to initiate the Radar class. We therefore only need to provide a timewindow with “start” and “end”, for
 which data will be used. Additionally we could change the Radar class from using Default: device=”CORAL” to
-device=”KATRIN”. To have a look at all parameters check the <a class="reference internal" href="generated/BCO.Instruments.Radar.Radar.html#BCO.Instruments.Radar.Radar" title="BCO.Instruments.Radar.Radar"><code class="xref py py-class docutils literal notranslate"><span class="pre">Radar</span></code></a> documentation.
+device=”KATRIN”. To have a look at all parameters check the <a class="reference internal" href="generated/BCO.Instruments.Radar.Radar.html#BCO.Instruments.Radar.Radar" title="BCO.Instruments.Radar.Radar"><code class="xref py py-class docutils literal"><span class="pre">Radar</span></code></a> documentation.
 In this example we will use the default CORAL data and therefore name our class “coral”:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span> <span class="o">=</span> <span class="n">Radar</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;20180101&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;2018010315&quot;</span><span class="p">)</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span> <span class="o">=</span> <span class="n">Radar</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;20180101&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;2018010315&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Now we have initiated an instance named “coral” which uses data from the 1st January 2018 00:00 UTC to the 3rd January
 2018 15:00 UTC. Trailing Zeros do not need to be supplied.</p>
 <p>Lets get started loading some data with this class using its methods. We want the timesteps,
 the range and the reflectivity:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral_time</span> <span class="o">=</span> <span class="n">coral</span><span class="o">.</span><span class="n">getTime</span><span class="p">()</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral_time</span> <span class="o">=</span> <span class="n">coral</span><span class="o">.</span><span class="n">getTime</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">coral_range</span> <span class="o">=</span> <span class="n">coral</span><span class="o">.</span><span class="n">getRange</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">coral_ref</span> <span class="o">=</span> <span class="n">coral</span><span class="o">.</span><span class="n">getReflectivity</span><span class="p">(</span><span class="n">postprocessing</span><span class="o">=</span><span class="s2">&quot;Zu&quot;</span><span class="p">)</span>
 </pre></div>
@@ -265,19 +265,19 @@ the range and the reflectivity:</p>
 to change these defaults. Here for the reflectivity instead of the default “filtered reflectivity Zf” we have used
 the “unfiltered reflectivity Zu”.</p>
 <p>We could now have a look at what data we have loaded by simply using matplotlib.pyplot:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">coral_time</span><span class="p">,</span> <span class="n">coral_range</span><span class="p">,</span><span class="n">coral_ref</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/coral_tutorial1.png"><img alt="alternate text" class="align-center" src="_images/coral_tutorial1.png" style="width: 400px; height: 200px;" /></a>
 <p>Another way to quickly have a look at the data from your instance is using the
-<a class="reference internal" href="generated/BCO.Instruments.Radar.Radar.quickplot2D.html#BCO.Instruments.Radar.Radar.quickplot2D" title="BCO.Instruments.Radar.Radar.quickplot2D"><code class="xref py py-func docutils literal notranslate"><span class="pre">quickplot2D()</span></code></a> method of the Radar class:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span><span class="o">.</span><span class="n">quickplot2D</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">coral</span><span class="o">.</span><span class="n">getReflectivity</span><span class="p">(),</span><span class="n">save_name</span><span class="o">=</span><span class="s2">&quot;test.png&quot;</span><span class="p">)</span>
+<code class="xref py py-func docutils literal"><span class="pre">quickplot2D()</span></code> method of the Radar class:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span><span class="o">.</span><span class="n">quickplot2D</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">coral</span><span class="o">.</span><span class="n">getReflectivity</span><span class="p">(),</span><span class="n">save_name</span><span class="o">=</span><span class="s2">&quot;test.png&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/coral_tutorial2.png"><img alt="alternate text" class="align-center" src="_images/coral_tutorial2.png" style="width: 400px; height: 200px;" /></a>
 <p>Methods are chainable with the instance of a class, which means that it is possible to load the data directly:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral_ref</span> <span class="o">=</span> <span class="n">Radar</span><span class="p">(</span><span class="s2">&quot;20170723&quot;</span><span class="p">,</span><span class="s2">&quot;20170723&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getReflectivity</span><span class="p">()</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coral_ref</span> <span class="o">=</span> <span class="n">Radar</span><span class="p">(</span><span class="s2">&quot;20170723&quot;</span><span class="p">,</span><span class="s2">&quot;20170723&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getReflectivity</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -285,7 +285,7 @@ the “unfiltered reflectivity Zu”.</p>
 <span id="id2"></span><h3>Setup the package for ftp-access<a class="headerlink" href="#setup-the-package-for-ftp-access" title="Permalink to this headline">¶</a></h3>
 <p>When loading the package BCO, it will try to determine if you are inside the mpi or zmaw network and adjust the
 settings if you are not. You can manually tell the package to only retrieve data over the ftp server with:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">BCO</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">BCO</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">BCO</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">set_ftp</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -296,14 +296,14 @@ Please store the username and password in a file at a place which never will be 
 The file should unly contain 2 lines:</p>
 <blockquote>
 <div><p>ExampleFile:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">user</span><span class="o">=</span><span class="n">test_user</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">user</span><span class="o">=</span><span class="n">test_user</span>
 <span class="n">passwd</span><span class="o">=</span><span class="n">my_passwd</span>
 </pre></div>
 </div>
 </div></blockquote>
 <p>The file needs to have the keywords “user” and “passwd” in two separate lines, followed by a “=” and then the arguments.</p>
 <p>Now you need to tell the package the path to this file:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">BCO</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">path_to_ftp_file</span><span class="p">(</span><span class="s2">&quot;/home/.../test_user/my_ftp_settings.txt&quot;</span><span class="p">)</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">BCO</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">path_to_ftp_file</span><span class="p">(</span><span class="s2">&quot;/home/.../test_user/my_ftp_settings.txt&quot;</span><span class="p">)</span>
 <span class="go">Successfully loaded username and password</span>
 </pre></div>
 </div>
@@ -311,7 +311,7 @@ The file should unly contain 2 lines:</p>
 <p>At this point you can use the whole package as if you were inside the mpi-network. The only difference is, that when you
 initiate an instance of an instrument, the needed data will be downloaded from the ftp server and stored at the local
 directory for temporal files (in unix usually /tmp/).</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">BCO.Instruments</span> <span class="k">import</span> <span class="n">Radar</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">BCO.Instruments</span> <span class="k">import</span> <span class="n">Radar</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">coral</span> <span class="o">=</span> <span class="n">Radar</span><span class="p">(</span><span class="s2">&quot;20180101&quot;</span><span class="p">,</span><span class="s2">&quot;20180101&quot;</span><span class="p">)</span>
 <span class="go">Downloading...</span>
 </pre></div>
@@ -367,7 +367,7 @@ Afterwards you can use the methods and attributes as described in the <a class="
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.1.1',
+            VERSION:'0.1.2',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

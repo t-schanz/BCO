@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Radiation &mdash; BCO 0.1.1 documentation</title>
+  <title>Radiation &mdash; BCO 0.1.2 documentation</title>
   
 
   
@@ -37,10 +37,10 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="BCO 0.1.1 documentation" href="../index.html"/>
+    <link rel="top" title="BCO 0.1.2 documentation" href="../index.html"/>
         <link rel="up" title="Radar" href="../BCO.Instruments.html"/>
-        <link rel="next" title="SfcWeather" href="BCO.Instruments.SfcWeather.SfcWeather.html"/>
-        <link rel="prev" title="Windlidar" href="BCO.Instruments.Windlidar.Windlidar.html"/> 
+        <link rel="next" title="close" href="BCO.Instruments.Radiation.Radiation.close.html"/>
+        <link rel="prev" title="getVelocity" href="BCO.Instruments.Windlidar.Windlidar.getVelocity.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                0.1.1
+                0.1.2
               </div>
             
           
@@ -101,7 +101,15 @@
 <li class="toctree-l2"><a class="reference internal" href="../BCO.Instruments.html">Radar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../BCO.Instruments.html#windlidar">Windlidar</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../BCO.Instruments.html#module-BCO.Instruments.Radiation">Radiation</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Radiation</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Radiation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.close.html">close</a></li>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getRadiation.html">getRadiation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getSensitivity.html">getSensitivity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getTemperature.html">getTemperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getTime.html">getTime</a></li>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getVoltage.html">getVoltage</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../BCO.Instruments.html#module-BCO.Instruments.SfcWeather">Surface Weather</a></li>
@@ -291,7 +299,7 @@
 
 <p class="rubric">Examples</p>
 <p>Example for loading some data from the 1st January 2018:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">BCO.Instruments</span> <span class="k">import</span> <span class="n">Radiation</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">BCO.Instruments</span> <span class="k">import</span> <span class="n">Radiation</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rad</span> <span class="o">=</span> <span class="n">Radiation</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;20180101&quot;</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s2">&quot;20180101&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rad</span><span class="o">.</span><span class="n">getTime</span><span class="p">()</span>
 <span class="go">array([datetime.datetime(2018, 1, 1, 0, 0, tzinfo=&lt;UTC&gt;),</span>
@@ -302,7 +310,7 @@
 <span class="go">       datetime.datetime(2018, 1, 1, 23, 59, 59, tzinfo=&lt;UTC&gt;)], dtype=object)</span>
 </pre></div>
 </div>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">radiation</span> <span class="o">=</span> <span class="n">rad</span><span class="o">.</span><span class="n">getRadiation</span><span class="p">(</span><span class="s2">&quot;LW&quot;</span><span class="p">,</span><span class="s2">&quot;diffuse&quot;</span><span class="p">)</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">radiation</span> <span class="o">=</span> <span class="n">rad</span><span class="o">.</span><span class="n">getRadiation</span><span class="p">(</span><span class="s2">&quot;LW&quot;</span><span class="p">,</span><span class="s2">&quot;diffuse&quot;</span><span class="p">)</span>
 <span class="go">array([ 420.35998535,  420.35998535,  420.35998535, ...,  410.29000854,</span>
 <span class="go">410.29000854,  410.61999512], dtype=float32)</span>
 </pre></div>
@@ -314,22 +322,22 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.close.html#BCO.Instruments.Radiation.Radiation.close" title="BCO.Instruments.Radiation.Radiation.close"><code class="xref py py-obj docutils literal notranslate"><span class="pre">close</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.close.html#BCO.Instruments.Radiation.Radiation.close" title="BCO.Instruments.Radiation.Radiation.close"><code class="xref py py-obj docutils literal"><span class="pre">close</span></code></a>()</td>
 <td>Deletes all temporary stored files from the instance.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getRadiation.html#BCO.Instruments.Radiation.Radiation.getRadiation" title="BCO.Instruments.Radiation.Radiation.getRadiation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getRadiation</span></code></a>(scope[,&nbsp;scattering])</td>
+<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getRadiation.html#BCO.Instruments.Radiation.Radiation.getRadiation" title="BCO.Instruments.Radiation.Radiation.getRadiation"><code class="xref py py-obj docutils literal"><span class="pre">getRadiation</span></code></a>(scope[,&nbsp;scattering])</td>
 <td>Returns the timeseries for the radiation for the specified scope and scattering type.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getSensitivity.html#BCO.Instruments.Radiation.Radiation.getSensitivity" title="BCO.Instruments.Radiation.Radiation.getSensitivity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getSensitivity</span></code></a>(instrument)</td>
+<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getSensitivity.html#BCO.Instruments.Radiation.Radiation.getSensitivity" title="BCO.Instruments.Radiation.Radiation.getSensitivity"><code class="xref py py-obj docutils literal"><span class="pre">getSensitivity</span></code></a>(instrument)</td>
 <td>Returns the sensitivity timeseries for the specified instrument.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getTemperature.html#BCO.Instruments.Radiation.Radiation.getTemperature" title="BCO.Instruments.Radiation.Radiation.getTemperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getTemperature</span></code></a>(instrument)</td>
+<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getTemperature.html#BCO.Instruments.Radiation.Radiation.getTemperature" title="BCO.Instruments.Radiation.Radiation.getTemperature"><code class="xref py py-obj docutils literal"><span class="pre">getTemperature</span></code></a>(instrument)</td>
 <td>Returns the temperature timeseries for the specified instrument.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getTime.html#BCO.Instruments.Radiation.Radiation.getTime" title="BCO.Instruments.Radiation.Radiation.getTime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getTime</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getTime.html#BCO.Instruments.Radiation.Radiation.getTime" title="BCO.Instruments.Radiation.Radiation.getTime"><code class="xref py py-obj docutils literal"><span class="pre">getTime</span></code></a>()</td>
 <td>Loads the time steps over the desired timeframe from all netCDF-files and returns them as one array.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getVoltage.html#BCO.Instruments.Radiation.Radiation.getVoltage" title="BCO.Instruments.Radiation.Radiation.getVoltage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getVoltage</span></code></a>(scope[,&nbsp;scattering])</td>
+<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getVoltage.html#BCO.Instruments.Radiation.Radiation.getVoltage" title="BCO.Instruments.Radiation.Radiation.getVoltage"><code class="xref py py-obj docutils literal"><span class="pre">getVoltage</span></code></a>(scope[,&nbsp;scattering])</td>
 <td>Returns the sensitivity timeseries for the specified scopte and scattering type.</td>
 </tr>
 </tbody>
@@ -348,10 +356,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="BCO.Instruments.SfcWeather.SfcWeather.html" class="btn btn-neutral float-right" title="SfcWeather" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="BCO.Instruments.Radiation.Radiation.close.html" class="btn btn-neutral float-right" title="close" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="BCO.Instruments.Windlidar.Windlidar.html" class="btn btn-neutral" title="Windlidar" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="BCO.Instruments.Windlidar.Windlidar.getVelocity.html" class="btn btn-neutral" title="getVelocity" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -382,7 +390,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.1.1',
+            VERSION:'0.1.2',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
