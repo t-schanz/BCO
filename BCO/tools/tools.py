@@ -79,6 +79,7 @@ def time2num(time):
 
     if type(time) == np.ndarray:
         epo = lambda x: x.timestamp()
+
         date = np.asarray(list(map(epo, time)))
     else:
         date = time.timestamp()
