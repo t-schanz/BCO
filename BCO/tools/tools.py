@@ -7,7 +7,8 @@ import numpy as np
 from datetime import datetime as dt
 from datetime import timedelta
 import os
-
+from ftplib import FTP
+import BCO
 
 __all__ = [
     'daterange',
@@ -129,4 +130,76 @@ def bz2Dataset(bz2file: str):
     bz2Obj = bz2.BZ2File(bz2file)
     nc = Dataset(dummy_nc_file,memory=bz2Obj.read())
     return nc
+
+
+def download_from_zmaw_ftp(device,start,end,output_folder):
+
+    devs = ["CORAL","KATRIN","CEILOMETER","RADIATION","WEATHER","WINDLIDAR"]
+    assert device in devs
+
+    def getfilenames(dev):
+        namestrings = []
+        for _date in daterange(dev.start.date(), dev.end.date()):
+            _datestr = _date.strftime(dev._dateformat_str)
+            tmp_nameStr = dev._name_str.replace("#", _datestr)
+            namestrings.append(tmp_nameStr)
+
+        return namestrings
+
+
+    if not output_folder.lstrip()[-1] == "/":
+        output_folder += "/"
+
+
+    # get the path on the ftp-server:
+    package_directory = os.path.dirname(os.path.abspath(__file__))
+    ini_file = package_directory + "/../ftp_settings.ini"
+    __counter = 0
+    with open(ini_file, "r") as f:
+        while __counter < 1e5:
+            try:
+                line = f.readline().rstrip()
+                if device.upper() + "_PATH:" in line:
+                    ftp_path =  line.split(":")[1]
+                __counter += 1
+            except:
+                break
+
+    # get the file_name:
+    if device == "CORAL":
+        dev = BCO.Instruments.Radar(start,end,device)
+    if device == "KATRIN":
+        dev = BCO.Instruments.Radar(start,end,device)
+    if device == "CEILOMETER":
+        dev = BCO.Instruments.Ceilometer(start,end)
+    if device == "RADIATION":
+        dev = BCO.Instruments.Radiation(start,end)
+    if device == "WEATHER":
+        dev = BCO.Instruments.SfcWeather(start,end)
+    if device == "WINDLIDAR":
+        dev = BCO.Instruments.Windlidar(start,end)
+
+    assert dev
+
+    files = getfilenames(dev)
+
+
+
+    # download the file:
+    ftp = FTP(BCO.FTP_SERVER)
+    ftp.login(user=BCO.FTP_USER, passwd=BCO.FTP_PASSWD)
+
+    for file in files:
+        file_to_retrieve = ftp.nlst(ftp_path + file)[0]
+        try:
+            __save_file = file_to_retrieve.split("/")[-1]
+        except:
+            __save_file = file_to_retrieve
+
+        if not os.path.isfile(output_folder + __save_file): # check if the file is already there:
+            print("Downloading %s"%__save_file)
+            ftp.retrbinary('RETR ' + file_to_retrieve, open(output_folder + __save_file, 'wb').write)
+        else:
+            print("File already in provided output folder. No need to download it again.")
+
 
