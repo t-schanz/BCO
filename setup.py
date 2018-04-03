@@ -8,8 +8,12 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
+with open("version.txt","r") as f:
+    lines = f.readlines()
+    version_from_file = lines[0].rstrip().lstrip()
+
 setup(name='BCO',
-      version='0.1.2',
+      version=version_from_file,
       description='Python Interface to the Max-Planck-Institut Barbados Cloud Observatory data.',
       author='Tobias Machnitzki',
       author_email='tobias.machnitzki@mpimet.mpg.de',
