@@ -79,7 +79,6 @@ class Radiation(__Device):
 
         self.path = self._getPath()
 
-
         # Attributes:
         self.title = None
         self.devices = None
@@ -101,12 +100,8 @@ class Radiation(__Device):
         self.temporalResolution = self._getAttrFromNC("resolution")[0]
         self.location = self._getAttrFromNC("location")
 
-
         self.lat = self._getValueFromNc("lat")
         self.lon = self._getValueFromNc("lon")
-
-
-
 
     def getTime(self):
         """
