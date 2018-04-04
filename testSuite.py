@@ -22,14 +22,15 @@ def testRadar():
     coral.quickplot2D(ref,ylim=(100,2000))
 
 if __name__ == "__main__":
-    BCO.settings.set_ftp(True)
-    BCO.settings.path_to_ftp_file("/home/tobias/Documents/ftp_access.txt")
+    # BCO.settings.set_ftp(True)
+    # BCO.settings.path_to_ftp_file("/home/tobias/Documents/ftp_access.txt")
 
 
 
     # lidar = Windlidar("20180101","20180101")
     Rad = Radiation("20180101","20180101")
-    Rad.getTime()
+    print("HERE")
+    # Rad.getTime()
     # coral = Radar("20180101","20180101")
     # met = BCO.Instruments.SfcWeather("20180101","20180103")
     # plt.plot(Rad.getTime())

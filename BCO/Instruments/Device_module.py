@@ -12,6 +12,7 @@ import glob
 import tempfile
 import re
 import fnmatch
+import configparser
 
 try:
     from netCDF4 import Dataset
@@ -29,6 +30,7 @@ class __Device(object):
 
     __de_tz = timezone("Europe/Berlin")
     __utc_tz = timezone("UTC")
+
 
 
 
@@ -278,6 +280,8 @@ class __Device(object):
                     _file = _f
                     break
         else:
+            print(self.path)
+            print(_nameStr)
             _file = glob.glob(self.path + _nameStr)[0]
 
         if "bz2" in _file[-5:]:
@@ -331,7 +335,9 @@ class __Device(object):
             return __path
 
         else:
-            return getValueFromSettings("%s_PATH"%self._instrument)
+            tmp_path =  BCO.config[self._instrument]["PATH"]
+            return tmp_path
+
 
 
     def _get_nc(self):
