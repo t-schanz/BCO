@@ -9,6 +9,8 @@ from datetime import timedelta
 import os
 from ftplib import FTP
 import BCO
+from configparser import ConfigParser
+import glob
 
 __all__ = [
     'daterange',
@@ -201,5 +203,62 @@ def download_from_zmaw_ftp(device,start,end,output_folder):
             ftp.retrbinary('RETR ' + file_to_retrieve, open(output_folder + __save_file, 'wb').write)
         else:
             print("File already in provided output folder. No need to download it again.")
+
+
+def getFileName(instrument, date, use_ftp=BCO.USE_FTP_ACCESS):
+
+    # check if instrument is supported:
+    instruments = ["CORAL", "KATRIN", "CEILOMETER", "RADIATION", "WEATHER", "WINDLIDAR"]
+    assert instrument in instruments
+
+    # check if date is in right format:
+    assert type(date) == dt
+
+    # special treatment for Radars:
+    if instrument in ["CORAL","KATRIN","KIT"]:
+        device = instrument
+        instrument = "RADAR"
+        if device == "CORAL":
+            device = "MBR"
+
+    # get the right variable from settings.ini
+    if not use_ftp:
+        tmp_path = BCO.config[instrument]["PATH"]
+
+    else:
+        tmp_path = BCO.config[instrument]["FTP_PATH"]
+
+    # handle paths including dates:
+    print(tmp_path)
+    path_addition = ""
+    if BCO.config[instrument]["PATH_ADDITION"] != "None":
+        path_addition = BCO.config[instrument]["PATH_ADDITION"]
+        tmp_path += date.strftime(path_addition)
+
+    print(tmp_path)
+
+    # Again extra treatment for Radar:
+    if instrument == "RADAR":
+        tmp_path += date.strftime(BCO.config[instrument]["NAME_SCHEME"].replace("%s",device))
+    else:
+        tmp_path += date.strftime(BCO.config[instrument]["NAME_SCHEME"])
+
+
+    # get the resolved filename:
+    if not use_ftp:
+        name = glob.glob(tmp_path)
+
+    else:
+        ftp = FTP(BCO.FTP_SERVER)
+        ftp.login(user=BCO.FTP_USER, passwd=BCO.FTP_PASSWD)
+        print(tmp_path)
+        name = ftp.nlst(tmp_path)
+        ftp.close()
+
+    # make sure only one file with that name was found:
+    assert len(name) == 1
+    name = name[0]
+
+    return name
 
 
