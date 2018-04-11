@@ -128,13 +128,12 @@ class __Device(object):
         return np.asarray(list(map(f1, time)))
 
 
-    def _downloadFromFTP(self,ftp_path,file):
+    def _downloadFromFTP(self,file):
         """
         Downloads the file from the mpi-zmaw server and saves it on the local machine.
 
         Args:
-            ftp_path: Path on the ftp-server to the file.
-            file: Filename as listed on the FTP-server. Allowed to contain Wildcards.
+            file: Filename and path as listed on the FTP-server. Allowed to contain Wildcards.
 
         Returns:
             Path to the local directory of the downloaded file.
@@ -145,7 +144,7 @@ class __Device(object):
         ftp = FTP(BCO.FTP_SERVER)
         ftp.login(user=BCO.FTP_USER, passwd=BCO.FTP_PASSWD)
         # print(ftp_path + file)
-        file_to_retrieve = ftp.nlst(ftp_path + file)[0]
+        file_to_retrieve = ftp.nlst(file)[0]
         try:
             __save_file = file_to_retrieve.split("/")[-1]
         except:
@@ -181,8 +180,10 @@ class __Device(object):
         var_list = []
         skippedDates = []
         for _date in tools.daterange(self.start.date(), self.end.date()):
-            _datestr = _date.strftime(self._dateformat_str)
-            _nameStr = self._name_str.replace("#",_datestr)
+            if not self._path_addition:
+                _nameStr = tools.getFileName(self._instrument, _date).split("/")[-1]
+            else:
+                _nameStr = "/".join(tools.getFileName(self._instrument, _date).split("/")[-2:])
 
             if BCO.USE_FTP_ACCESS:
                 for _f in self._ftp_files:
@@ -235,8 +236,10 @@ class __Device(object):
             Numpy array
         """
         _date = self.start.date()
-        _datestr = _date.strftime(self._dateformat_str)
-        _nameStr = self._name_str.replace("#", _datestr)
+        if not self._path_addition:
+            _nameStr = tools.getFileName(self._instrument, _date).split("/")[-1]
+        else:
+            _nameStr = "/".join(tools.getFileName(self._instrument, _date).split("/")[-2:])
 
         if BCO.USE_FTP_ACCESS:
             for _f in self._ftp_files:
@@ -270,9 +273,11 @@ class __Device(object):
         """
 
         _date = self.start.date()
-        _datestr = _date.strftime(self._dateformat_str)
-        _nameStr = self._name_str.replace("#", _datestr)
-        # print(_nameStr)
+
+        if not self._path_addition:
+            _nameStr = tools.getFileName(self._instrument, _date).split("/")[-1]
+        else:
+            _nameStr = "/".join(tools.getFileName(self._instrument, _date).split("/")[-2:])
 
         if BCO.USE_FTP_ACCESS:
             for _f in self._ftp_files:
@@ -280,8 +285,6 @@ class __Device(object):
                     _file = _f
                     break
         else:
-            print(self.path)
-            print(_nameStr)
             _file = glob.glob(self.path + _nameStr)[0]
 
         if "bz2" in _file[-5:]:
@@ -323,15 +326,8 @@ class __Device(object):
         """
         if BCO.USE_FTP_ACCESS:
             for _date in tools.daterange(self.start.date(), self.end.date()):
-                _datestr = _date.strftime(self._dateformat_str)
-                tmp_nameStr = self._name_str.replace("#", _datestr)
-                tmp_path = getValueFromSettings("%s_PATH"%self._instrument)
-                if self._path_addition:
-                    if "%" in self._path_addition:
-                        tmp_path += _date.strftime(self._path_addition)
-                    else:
-                        tmp_path += self._path_addition
-                __path = self._downloadFromFTP(ftp_path=tmp_path, file=tmp_nameStr)
+                tmp_file = tools.getFileName(self._instrument,_date)
+                __path = self._downloadFromFTP(file=tmp_file)
             return __path
 
         else:

@@ -6,6 +6,7 @@ enduser, as well.
 import numpy as np
 from datetime import datetime as dt
 from datetime import timedelta
+import datetime
 import os
 from ftplib import FTP
 import BCO
@@ -212,7 +213,7 @@ def getFileName(instrument, date, use_ftp=BCO.USE_FTP_ACCESS):
     assert instrument in instruments
 
     # check if date is in right format:
-    assert type(date) == dt
+    assert type(date) in [dt, datetime.date]
 
     # special treatment for Radars:
     if instrument in ["CORAL","KATRIN","KIT"]:

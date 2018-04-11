@@ -92,26 +92,14 @@ class Radar(__Device):
         self.end = self._checkInputTime(end)
         self.data_version = version
         self._instrument = "RADAR" # String used for retrieving the filepath from settings.ini
+        BCO.config[self._instrument]["PATH_ADDITION"] = "Version_%i/"%self.data_version
         print(self._instrument)
-        self._name_str = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, "#")  # general name-structure of file.
-                                                                                    # "#" indicates where date will be replaced
-        self._dateformat_str = "%y%m%d"
-        self._path_addition = None
+        self._name_str = BCO.config[self._instrument]["NAME_SCHEME"]
+        self._path_addition = BCO.config[self._instrument]["PATH_ADDITION"]
 
         self._ftp_files = []
 
-        self.path = self._getPath()
-
-        # if BCO.USE_FTP_ACCESS:
-        #     for _date in tools.daterange(self.start.date(), self.end.date()):
-        #         _datestr = _date.strftime(self._dateformat_str)
-        #         _nameStr = self._name_str.replace("#", _datestr)
-        #         print(_nameStr)
-        #         self.path = self._downloadFromFTP(ftp_path=getValueFromSettings("%s_PATH"%self._instrument), file=_nameStr)
-        #
-        # else:
-        #     self.path = self._getPath()
-
+        self.path = self._getPath() + self._path_addition
         self.__checkInput()
 
         self.lat = self._getValueFromNc("lat")
@@ -144,9 +132,11 @@ class Radar(__Device):
                 "The version of the Dataset needs to be between %i and %i" % (_versions_avail[0], _versions_avail[-1]))
             sys.exit(1)
 
+        print(self.path)
         try:  # check if device was running on selected timeframe
             for _date in tools.daterange(self.start, self.end):
-                _nameStr = "MMCR__%s__Spectral_Moments*%s.nc" % (self.pathFlag, tools.datestr(_date))
+                _nameStr = tools.getFileName(self.device,_date).split("/")[-1]
+                print(_nameStr)
                 _file = glob.glob(self.path + _nameStr)[0]
         except:
             print("The Device %s was not running on %s. Please adjust timeframe.\n"

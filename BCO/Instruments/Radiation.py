@@ -74,7 +74,7 @@ class Radiation(__Device):
         self._name_str = BCO.config["RADIATION"]["NAME_SCHEME"]
         self._path_addition = BCO.config["RADIATION"]["PATH_ADDITION"]
         self._path_addition = None if self._path_addition == "None" else self._path_addition # convert str to None
-        self._dateformat_str = BCO.config["RADIATION"]["DATE_FORMAT"]
+        # self._dateformat_str = BCO.config["RADIATION"]["DATE_FORMAT"]
         self._ftp_files = []
 
         self.path = self._getPath()
