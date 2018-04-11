@@ -9,7 +9,7 @@ import numpy as np
 from datetime import timedelta
 
 import BCO.tools.tools as tools
-from BCO.Instruments.Device_module import __Device,getValueFromSettings
+from BCO.Instruments.Device_module import __Device
 import BCO
 
 try:
@@ -20,6 +20,8 @@ except:
 
 # TODO: DAS WINDLIDAR IST MOMENTAN NOCH NICHT VIA FTP ERREICHBAR.
 # TODO: SOBALD DAS GEÄNDERT IST MUSS HIER NOCH EINIGES ANGEPASST WERDEN WAHRSCHEINLICH!
+
+
 class Windlidar(__Device):
     """
     Class for working with the Windlidar Data from the BCO.
@@ -68,21 +70,12 @@ class Windlidar(__Device):
         self.skipped = None  # needed to store skipped dates.
 
         self._instrument = "WINDLIDAR"  # String used for retrieving the filepath from settings.ini
-        self._name_str = "WindLidar__Deebles_Point*__%s.nc*" % ("#")  # general name-structure of file.
+        self._name_str = BCO.config[self._instrument]["NAME_SCHEME"]  # general name-structure of file.
                                                             # "#" indicates where date will be replaced
-        self._dateformat_str = "%Y%m%d"  # the datetime format this instrument uses
-        self._path_addition = None
+        self._path_addition = BCO.config[self._instrument]["PATH_ADDITION"]
         self._ftp_files = []
 
-        if BCO.USE_FTP_ACCESS:
-            for _date in tools.daterange(self.start.date(), self.end.date()):
-                _datestr = _date.strftime(self._dateformat_str)
-                _nameStr = self._name_str.replace("#", _datestr)
-                print(_nameStr)
-                self.path = self._downloadFromFTP(ftp_path=getValueFromSettings("RADAR_PATH"), file=_nameStr)
-
-        else:
-            self.path = self.__getPath()
+        self.path = self._getPath()
         # print(self.path)
 
         # Attributes:
@@ -122,7 +115,6 @@ class Windlidar(__Device):
         time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
         time = self._local2UTC(time)
 
-
         return time
 
     def getRange(self):
@@ -143,8 +135,7 @@ class Windlidar(__Device):
         range = self._getArrayFromNc("range")
 
         # in case of many days being loaded and their range might be concatenated they will be split here:
-        range = range[:np.nanargmax(range)+1]
-
+        # range = range[:np.nanargmax(range)+1]
 
         return range
 
@@ -192,31 +183,17 @@ class Windlidar(__Device):
 
         return vel
 
- 
-    def __getPath(self):
-        """
-        Reads the Path from the settings.ini file by calling the right function from Device_module.
-
-        Returns: Path of the Windlidar data.
-
-        """
-        return getValueFromSettings("WINDLIDAR_PATH")
-
-
 
     def __getAttributes(self):
         """
         Function to load the static attributes from the netCDF file.
         """
         _date = self.start.date()
-        _datestr = _date.strftime("%Y%m")
-        _nameStr = "WindLidar__Deebles_Point__VerticalVelocity__STARE__1s__%s.nc*" % _date.strftime("%Y%m%d")
-        # _file = glob.glob(self.path + _datestr + "/" +  _nameStr)[0]
 
         if BCO.USE_FTP_ACCESS:
             _file = self._ftp_files[0]
         else:
-            _file = glob.glob(self.path + _nameStr)[0]
+            _file = tools.getFileName(self._instrument,_date)
 
         if "bz2" in _file[-5:]:
             nc = tools.bz2Dataset(_file)
@@ -231,12 +208,12 @@ class Windlidar(__Device):
         self.location = nc.location
         nc.close()
 
-        self.lat = self._getValueFromNC("lat")
-        self.lon = self._getValueFromNC("lon")
-        self.pitch = self._getValueFromNC("pitch")
-        self.azi = self._getValueFromNC("azi")
-        self.ele = self._getValueFromNC("ele")
-        self.roll = self._getValueFromNC("roll")
+        self.lat = self._getValueFromNc("lat")
+        self.lon = self._getValueFromNc("lon")
+        self.pitch = self._getValueFromNc("pitch")
+        self.azi = self._getValueFromNc("azi")
+        self.ele = self._getValueFromNc("ele")
+        self.roll = self._getValueFromNc("roll")
 
 
 

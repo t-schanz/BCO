@@ -49,7 +49,7 @@ def daterange(start_date, end_date):
 
 
 
-def num2time(num):
+def num2time(num,utc=False):
     """
     Converts seconds since 1970 to datetime objects.
     If input is a numpy array, ouput will be a numpy array as well.
@@ -66,10 +66,15 @@ def num2time(num):
         date = f(num)
     else:
         date = dt.fromtimestamp(num)
+
+    if utc:
+        f = np.vectorize(lambda x,y: x-y)
+        date = f(date,timedelta(hours=1))
+
     return date
 
 
-def time2num(time):
+def time2num(time,utc=False):
     """
     Converts a datetime.datetime object to seconds since 1970 as float.
     If input is a numpy array, ouput will be a numpy array as well.
@@ -87,6 +92,9 @@ def time2num(time):
         date = np.asarray(list(map(epo, time)))
     else:
         date = time.timestamp()
+
+    if utc:
+        date = np.subtract(date,timedelta(hours=1).seconds)
     return date
 
 

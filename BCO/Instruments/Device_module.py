@@ -107,10 +107,10 @@ class __Device(object):
         _start = 0
         _end = 0
         if _date == self.start.date():
-            _start = np.argmin(np.abs(np.subtract(nc.variables["time"][:], tools.time2num(self.start))))
+            _start = np.argmin(np.abs(np.subtract(nc.variables["time"][:], tools.time2num(self.start,utc=True))))
             # print("start", _start)
         if _date == self.end.date():
-            _end = np.argmin(np.abs(np.subtract(nc.variables["time"][:], tools.time2num(self.end))))
+            _end = np.argmin(np.abs(np.subtract(nc.variables["time"][:], tools.time2num(self.end,utc=True))))
             # print("end ", _end)
 
         return _start, _end
@@ -187,31 +187,32 @@ class __Device(object):
 
             if BCO.USE_FTP_ACCESS:
                 for _f in self._ftp_files:
-                    if fnmatch.fnmatch(_f,"*"+_nameStr):
+                    if fnmatch.fnmatch(_f,"*"+_nameStr.split("/")[-1]):
                         _file = _f
                         break
             else:
                 _file = glob.glob(self.path + _nameStr)[0]
 
+            # try:
+            if "bz2" in _file[-5:]:
+                nc = tools.bz2Dataset(_file)
+                print("bz file")
+            else:
+                nc = Dataset(_file)
 
-            try:
-                if "bz2" in _file[-5:]:
-                    nc = tools.bz2Dataset(_file)
-                else:
-                    nc = Dataset(_file)
+            # print(_date)
+            _start, _end = self._getStartEnd(_date, nc)
+            print(_start,_end)
+            if _end != 0:
+                varFromDate = nc.variables[value][_start:_end].copy()
+            else:
+                varFromDate = nc.variables[value][_start:].copy()
+            var_list.append(varFromDate)
+            nc.close()
+            # except:
+            #     skippedDates.append(_date)
+            #     continue
 
-                # print(_date)
-                _start, _end = self._getStartEnd(_date, nc)
-                # print(_start,_end)
-                if _end != 0:
-                    varFromDate = nc.variables[value][_start:_end].copy()
-                else:
-                    varFromDate = nc.variables[value][_start:].copy()
-                var_list.append(varFromDate)
-                nc.close()
-            except:
-                skippedDates.append(_date)
-                continue
 
         _var = var_list[0]
         if len(var_list) > 1:
@@ -226,7 +227,7 @@ class __Device(object):
     def _getValueFromNc(self, value: str):
         """
         This function gets values from the netCDF-Dataset, which stay constant over the whole timeframe. So its very
-        similar to __getArrayFromNc(), but without the looping.
+        similar to _getArrayFromNc(), but without the looping.
 
         Args:
             value: A string for accessing the netCDF-file.
@@ -243,7 +244,7 @@ class __Device(object):
 
         if BCO.USE_FTP_ACCESS:
             for _f in self._ftp_files:
-                if fnmatch.fnmatch(_f, "*" + _nameStr):
+                if fnmatch.fnmatch(_f, "*" + _nameStr.split("/")[-1]):
                     _file = _f
                     break
         else:
@@ -281,11 +282,13 @@ class __Device(object):
 
         if BCO.USE_FTP_ACCESS:
             for _f in self._ftp_files:
-                if fnmatch.fnmatch(_f, "*" + _nameStr):
+                if fnmatch.fnmatch(_f, "*" + _nameStr.split("/")[-1]):
                     _file = _f
                     break
         else:
             _file = glob.glob(self.path + _nameStr)[0]
+
+        assert _file
 
         if "bz2" in _file[-5:]:
             nc = tools.bz2Dataset(_file)
@@ -326,7 +329,7 @@ class __Device(object):
         """
         if BCO.USE_FTP_ACCESS:
             for _date in tools.daterange(self.start.date(), self.end.date()):
-                tmp_file = tools.getFileName(self._instrument,_date)
+                tmp_file = tools.getFileName(self._instrument,_date,use_ftp=BCO.USE_FTP_ACCESS)
                 __path = self._downloadFromFTP(file=tmp_file)
             return __path
 
@@ -345,8 +348,10 @@ class __Device(object):
 
         """
         _date = self.start.date()
-        _datestr = _date.strftime(self._dateformat_str)
-        _nameStr = self._instrument.replace("#", _datestr)
+        if not self._path_addition:
+            _nameStr = tools.getFileName(self._instrument, _date).split("/")[-1]
+        else:
+            _nameStr = "/".join(tools.getFileName(self._instrument, _date).split("/")[-2:])
 
 
         if BCO.USE_FTP_ACCESS:
