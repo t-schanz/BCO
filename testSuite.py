@@ -24,8 +24,10 @@ from netCDF4 import Dataset
 if __name__ == "__main__":
     BCO.settings.set_ftp(True)
     # BCO.settings.path_to_ftp_file("/home/tobias/Documents/ftp_access.txt")
-    BCO.settings.path_to_ftp_file("C:/Users/darkl/PycharmProjects/BCO/BCO/ftp_access.txt")
-
+    BCO.settings.path_to_ftp_file("/home/mpim/m300517/ftp_access.txt")
+    # BCO.settings.path_to_ftp_file("C:/Users/darkl/PycharmProjects/BCO/BCO/ftp_access.txt")
+    print(BCO.tools.tools.getFileName("RADIATION",dt(2018,1,1)))
+    print(BCO.tools.tools.getFileName("CORAL",dt(2018,1,1)))
 
 
     # lidar = Windlidar("20180101","20180101")

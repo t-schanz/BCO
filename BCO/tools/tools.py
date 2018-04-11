@@ -229,20 +229,18 @@ def getFileName(instrument, date, use_ftp=BCO.USE_FTP_ACCESS):
         tmp_path = BCO.config[instrument]["FTP_PATH"]
 
     # handle paths including dates:
-    print(tmp_path)
     path_addition = ""
     if BCO.config[instrument]["PATH_ADDITION"] != "None":
         path_addition = BCO.config[instrument]["PATH_ADDITION"]
         tmp_path += date.strftime(path_addition)
 
-    print(tmp_path)
+
 
     # Again extra treatment for Radar:
     if instrument == "RADAR":
         tmp_path += date.strftime(BCO.config[instrument]["NAME_SCHEME"].replace("%s",device))
     else:
         tmp_path += date.strftime(BCO.config[instrument]["NAME_SCHEME"])
-
 
     # get the resolved filename:
     if not use_ftp:
@@ -251,9 +249,9 @@ def getFileName(instrument, date, use_ftp=BCO.USE_FTP_ACCESS):
     else:
         ftp = FTP(BCO.FTP_SERVER)
         ftp.login(user=BCO.FTP_USER, passwd=BCO.FTP_PASSWD)
-        print(tmp_path)
         name = ftp.nlst(tmp_path)
         ftp.close()
+
 
     # make sure only one file with that name was found:
     assert len(name) == 1
