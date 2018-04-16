@@ -1,7 +1,8 @@
-# from BCO.Instruments import Radar
-# from BCO.Instruments import Windlidar
+from BCO.Instruments import Radar
+from BCO.Instruments import Windlidar
 from BCO.Instruments import Radiation
 from BCO.Instruments import SfcWeather
+from BCO.Instruments import Ceilometer
 import BCO
 
 from BCO.tools import tools
@@ -23,23 +24,25 @@ from netCDF4 import Dataset
 #     coral.quickplot2D(ref,ylim=(100,2000))
 
 if __name__ == "__main__":
-    BCO.settings.set_ftp(True)
+    # FTP-settings:
+
+    # BCO.settings.set_ftp(True)
     # BCO.settings.path_to_ftp_file("/home/tobias/Documents/ftp_access.txt")
-    BCO.settings.path_to_ftp_file("/home/mpim/m300517/ftp_access.txt",verbose=True)
+    # BCO.settings.path_to_ftp_file("/home/mpim/m300517/ftp_access.txt",verbose=True)
     # BCO.settings.path_to_ftp_file("C:/Users/darkl/PycharmProjects/BCO/BCO/ftp_access.txt")
 
 
+    # working devices:
 
-    Rad = Radiation("20180101","20180101")
+    # Rad = Radiation("20180101","20180101")
     # Wx = SfcWeather("20180101","20180101")
-    # lidar = Windlidar("20180201","20180201")
 
-    # Rad.getTime()
-    # coral = Radar("20180101","20180101")
-    # met = BCO.Instruments.SfcWeather("20180101","20180103")
-    # plt.plot(Rad.getTime())
-    # plt.show()
 
-    # from BCO.Instruments.Radar import getTime
+    #not working devices:
+    lidar = Windlidar("20180401","20180401") #seems to work with data version 1.01!
+    # ceilo = Ceilometer("20180101","20180101") # can not work yet as the data is not there.
+    # coral = Radar("20180101","20180101",device="CORAL") # does not work due to coral-katrin-radar problem
+
+
 
 

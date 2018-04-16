@@ -242,6 +242,7 @@ class __Device(object):
         else:
             _nameStr = "/".join(tools.getFileName(self._instrument, _date).split("/")[-2:])
 
+        print(_nameStr)
         if BCO.USE_FTP_ACCESS:
             for _f in self._ftp_files:
                 if fnmatch.fnmatch(_f, "*" + _nameStr.split("/")[-1]):

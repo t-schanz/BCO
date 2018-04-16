@@ -73,6 +73,7 @@ class Windlidar(__Device):
         self._name_str = BCO.config[self._instrument]["NAME_SCHEME"]  # general name-structure of file.
                                                             # "#" indicates where date will be replaced
         self._path_addition = BCO.config[self._instrument]["PATH_ADDITION"]
+        self._path_addition = None if self._path_addition == "None" else self._path_addition # convert str to None
         self._ftp_files = []
 
         self.path = self._getPath()

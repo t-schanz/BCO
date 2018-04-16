@@ -261,7 +261,8 @@ def getFileName(instrument, date, use_ftp=BCO.USE_FTP_ACCESS):
         name = ftp.nlst(tmp_path)
         ftp.close()
 
-
+    print(tmp_path)
+    print(name)
     # make sure only one file with that name was found:
     assert len(name) == 1
     name = name[0]
