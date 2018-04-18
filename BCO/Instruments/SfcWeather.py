@@ -39,9 +39,8 @@ class SfcWeather(__Device):
         self.end = self._checkInputTime(end) + timedelta(hours=0)
 
         self._instrument = "WEATHER"
-        self._name_str = "Meteorology__Deebles_Point*__#.nc"
-        self._path_addition = "%Y%m/"
-        self._dateformat_str = "%Y%m%d"
+        self._name_str = BCO.config[self._instrument]["NAME_SCHEME"]
+        self._path_addition = BCO.config[self._instrument]["PATH_ADDITION"]
         self._ftp_files = []
 
         self.path = self._getPath()
@@ -106,7 +105,7 @@ class SfcWeather(__Device):
         time = self._getArrayFromNc('time')
 
         time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
-        # time = self._local2UTC(time)
+        time = self._local2UTC(time)
 
         return time
 

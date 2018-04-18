@@ -6,6 +6,7 @@ enduser, as well.
 import numpy as np
 from datetime import datetime as dt
 from datetime import timedelta
+import datetime
 import os
 from ftplib import FTP
 import BCO
@@ -48,7 +49,7 @@ def daterange(start_date, end_date):
 
 
 
-def num2time(num):
+def num2time(num,utc=False):
     """
     Converts seconds since 1970 to datetime objects.
     If input is a numpy array, ouput will be a numpy array as well.
@@ -65,10 +66,15 @@ def num2time(num):
         date = f(num)
     else:
         date = dt.fromtimestamp(num)
+
+    if utc:
+        f = np.vectorize(lambda x,y: x-y)
+        date = f(date,timedelta(hours=1))
+
     return date
 
 
-def time2num(time):
+def time2num(time,utc=False):
     """
     Converts a datetime.datetime object to seconds since 1970 as float.
     If input is a numpy array, ouput will be a numpy array as well.
@@ -86,6 +92,9 @@ def time2num(time):
         date = np.asarray(list(map(epo, time)))
     else:
         date = time.timestamp()
+
+    if utc:
+        date = np.subtract(date,timedelta(hours=1).seconds)
     return date
 
 
@@ -212,7 +221,7 @@ def getFileName(instrument, date, use_ftp=BCO.USE_FTP_ACCESS):
     assert instrument in instruments
 
     # check if date is in right format:
-    assert type(date) == dt
+    assert type(date) in [dt, datetime.date]
 
     # special treatment for Radars:
     if instrument in ["CORAL","KATRIN","KIT"]:
@@ -229,20 +238,18 @@ def getFileName(instrument, date, use_ftp=BCO.USE_FTP_ACCESS):
         tmp_path = BCO.config[instrument]["FTP_PATH"]
 
     # handle paths including dates:
-    print(tmp_path)
     path_addition = ""
     if BCO.config[instrument]["PATH_ADDITION"] != "None":
         path_addition = BCO.config[instrument]["PATH_ADDITION"]
         tmp_path += date.strftime(path_addition)
 
-    print(tmp_path)
+
 
     # Again extra treatment for Radar:
     if instrument == "RADAR":
         tmp_path += date.strftime(BCO.config[instrument]["NAME_SCHEME"].replace("%s",device))
     else:
         tmp_path += date.strftime(BCO.config[instrument]["NAME_SCHEME"])
-
 
     # get the resolved filename:
     if not use_ftp:
@@ -251,10 +258,11 @@ def getFileName(instrument, date, use_ftp=BCO.USE_FTP_ACCESS):
     else:
         ftp = FTP(BCO.FTP_SERVER)
         ftp.login(user=BCO.FTP_USER, passwd=BCO.FTP_PASSWD)
-        print(tmp_path)
         name = ftp.nlst(tmp_path)
         ftp.close()
 
+    print(tmp_path)
+    print(name)
     # make sure only one file with that name was found:
     assert len(name) == 1
     name = name[0]
