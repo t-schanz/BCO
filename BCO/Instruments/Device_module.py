@@ -32,8 +32,6 @@ class __Device(object):
     __utc_tz = timezone("UTC")
 
 
-
-
     def _checkInputTime(self, input):
         """
         Checking input for the right dataformat. This can either be a string, then it will be converted to a
@@ -224,6 +222,7 @@ class __Device(object):
 
         return _var
 
+
     def _getValueFromNc(self, value: str):
         """
         This function gets values from the netCDF-Dataset, which stay constant over the whole timeframe. So its very
@@ -260,6 +259,7 @@ class __Device(object):
         nc.close()
 
         return _var
+
 
     def _getAttrFromNC(self,value):
 
@@ -301,6 +301,7 @@ class __Device(object):
             if value in line:
                 return ":".join(line.split(":")[1:]).lstrip()
 
+
     def close(self):
         """
         Deletes all temporary stored files from the instance.
@@ -339,7 +340,6 @@ class __Device(object):
             return tmp_path
 
 
-
     def _get_nc(self):
         """
         Only for development.
@@ -369,8 +369,6 @@ class __Device(object):
             nc = Dataset(_file)
 
         return nc
-
-
 
 
 def getValueFromSettings(value: str):
