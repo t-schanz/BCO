@@ -148,60 +148,29 @@ def download_from_zmaw_ftp(device,start,end,output_folder):
     devs = ["CORAL","KATRIN","CEILOMETER","RADIATION","WEATHER","WINDLIDAR"]
     assert device in devs
 
-    def getfilenames(dev):
-        namestrings = []
-        for _date in daterange(dev.start.date(), dev.end.date()):
-            _datestr = _date.strftime(dev._dateformat_str)
-            tmp_nameStr = dev._name_str.replace("#", _datestr)
-            namestrings.append(tmp_nameStr)
-
-        return namestrings
-
 
     if not output_folder.lstrip()[-1] == "/":
         output_folder += "/"
 
+    files = []
 
-    # get the path on the ftp-server:
-    package_directory = os.path.dirname(os.path.abspath(__file__))
-    ini_file = package_directory + "/../ftp_settings.ini"
-    __counter = 0
-    with open(ini_file, "r") as f:
-        while __counter < 1e5:
-            try:
-                line = f.readline().rstrip()
-                if device.upper() + "_PATH:" in line:
-                    ftp_path =  line.split(":")[1]
-                __counter += 1
-            except:
-                break
+    _path_addition = BCO.config[device]["PATH_ADDITION"]
+    _instrument = BCO.config[device]["INSTRUMENT"]
 
-    # get the file_name:
-    if device == "CORAL":
-        dev = BCO.Instruments.Radar(start,end,device)
-    if device == "KATRIN":
-        dev = BCO.Instruments.Radar(start,end,device)
-    if device == "CEILOMETER":
-        dev = BCO.Instruments.Ceilometer(start,end)
-    if device == "RADIATION":
-        dev = BCO.Instruments.Radiation(start,end)
-    if device == "WEATHER":
-        dev = BCO.Instruments.SfcWeather(start,end)
-    if device == "WINDLIDAR":
-        dev = BCO.Instruments.Windlidar(start,end)
+    for _date in daterange(start.date(), end.date()):
+        if not _path_addition:
+            _nameStr = getFileName(_instrument, _date).split("/")
+        else:
+            _nameStr = "/".join(getFileName(_instrument, _date).split("/"))
 
-    assert dev
-
-    files = getfilenames(dev)
-
-
+        files.append(_nameStr)
 
     # download the file:
     ftp = FTP(BCO.FTP_SERVER)
     ftp.login(user=BCO.FTP_USER, passwd=BCO.FTP_PASSWD)
 
     for file in files:
-        file_to_retrieve = ftp.nlst(ftp_path + file)[0]
+        file_to_retrieve = ftp.nlst(file)[0]
         try:
             __save_file = file_to_retrieve.split("/")[-1]
         except:
@@ -264,4 +233,16 @@ def getFileName(instrument, date, use_ftp=BCO.USE_FTP_ACCESS):
 
     return name
 
+def getFTPClient(user=None,passwd=None):
 
+    if not user:
+        user = BCO.FTP_USER
+        passwd = BCO.FTP_PASSWD
+
+    if not user:
+        print("User and password need to be provided either via parameters to \n"
+                "this function or by using the BCO.settings.path_to_ftp_file() function.")
+
+    ftp = FTP(BCO.FTP_SERVER)
+    ftp.login(user=passwd, passwd=passwd)
+    return ftp

@@ -97,7 +97,10 @@ class Radar(__Device):
         self._path_addition = None if self._path_addition == "None" else self._path_addition # convert str to None
         print("Name Str: " + self._name_str)
         self._ftp_files = []
-        self.path = self._getPath() + "Version_%i/"%version
+        self.path = self._getPath()
+
+        if not BCO.USE_FTP_ACCESS:
+            self.path += "Version_%i/" % version
         print("PATH: " + self.path)
         self.__checkInput()
 
@@ -226,7 +229,7 @@ class Radar(__Device):
         time = self._getArrayFromNc('time')
 
         time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
-        # time = self._local2UTC(time)
+        time = self._local2UTC(time)
 
         return time
 
