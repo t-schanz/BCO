@@ -55,3 +55,7 @@ def path_to_ftp_file(file_path:str,verbose=True):
 
     if verbose:
         print("Successfully loaded username and password")
+
+def setConfig(device,parameter,new_parameter_value):
+
+    BCO.config[device][parameter] = new_parameter_value

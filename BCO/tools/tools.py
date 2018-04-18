@@ -159,9 +159,9 @@ def download_from_zmaw_ftp(device,start,end,output_folder):
 
     for _date in daterange(start.date(), end.date()):
         if not _path_addition:
-            _nameStr = getFileName(_instrument, _date).split("/")
+            _nameStr = getFileName(_instrument, _date,use_ftp=True).split("/")
         else:
-            _nameStr = "/".join(getFileName(_instrument, _date).split("/"))
+            _nameStr = "/".join(getFileName(_instrument, _date,use_ftp=True).split("/"))
 
         files.append(_nameStr)
 
@@ -178,9 +178,11 @@ def download_from_zmaw_ftp(device,start,end,output_folder):
 
         if not os.path.isfile(output_folder + __save_file): # check if the file is already there:
             print("Downloading %s"%__save_file)
+            os.system("touch %s"%output_folder+__save_file)
             ftp.retrbinary('RETR ' + file_to_retrieve, open(output_folder + __save_file, 'wb').write)
         else:
             print("File already in provided output folder. No need to download it again.")
+    ftp.close()
 
 
 def getFileName(instrument, date, use_ftp=BCO.USE_FTP_ACCESS):
@@ -242,6 +244,9 @@ def getFTPClient(user=None,passwd=None):
     if not user:
         print("User and password need to be provided either via parameters to \n"
                 "this function or by using the BCO.settings.path_to_ftp_file() function.")
+
+    assert user
+    assert passwd
 
     ftp = FTP(BCO.FTP_SERVER)
     ftp.login(user=passwd, passwd=passwd)

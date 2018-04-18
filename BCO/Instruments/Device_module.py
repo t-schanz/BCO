@@ -154,6 +154,8 @@ class __Device(object):
         else:
             print("Found file in temporary folder. No need to download it again.")
         self._ftp_files.append(tmpdir + __save_file)
+
+        ftp.close()
         return tmpdir
 
 
