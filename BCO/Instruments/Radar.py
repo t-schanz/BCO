@@ -75,6 +75,7 @@ class Radar(__Device):
             north: Degrees of where from the instrument seen is north.
             skipped: if loading longer timeseries, where days might be missing, you can find those missing timesteps here.
     """
+
     def __init__(self, start, end, device="CORAL", version=2):
         """
         Args:
@@ -84,22 +85,20 @@ class Radar(__Device):
             version: The version of the dataset to use. Currently supported: 1,2,3  [note: 3 is in beta-phase]
         """
 
-
-
         self.device = device
         self.pathFlag = self.__getFlag()
         self.start = self._checkInputTime(start)
         self.end = self._checkInputTime(end)
         self.data_version = version
-        self._instrument = "RADAR" # String used for retrieving the filepath from settings.ini
-        BCO.config[self._instrument]["PATH_ADDITION"] = "Version_%i/"%self.data_version
+        self._instrument = BCO.config[device]["INSTRUMENT"] # String used for retrieving the filepath from settings.ini
         print(self._instrument)
         self._name_str = BCO.config[self._instrument]["NAME_SCHEME"]
         self._path_addition = BCO.config[self._instrument]["PATH_ADDITION"]
-
+        self._path_addition = None if self._path_addition == "None" else self._path_addition # convert str to None
+        print("Name Str: " + self._name_str)
         self._ftp_files = []
-
-        self.path = self._getPath() + self._path_addition
+        self.path = self._getPath() + "Version_%i/"%version
+        print("PATH: " + self.path)
         self.__checkInput()
 
         self.lat = self._getValueFromNc("lat")
@@ -136,7 +135,7 @@ class Radar(__Device):
         try:  # check if device was running on selected timeframe
             for _date in tools.daterange(self.start, self.end):
                 _nameStr = tools.getFileName(self.device,_date).split("/")[-1]
-                print(_nameStr)
+                print("CheckInput: " +self.path + _nameStr)
                 _file = glob.glob(self.path + _nameStr)[0]
         except:
             print("The Device %s was not running on %s. Please adjust timeframe.\n"
@@ -368,7 +367,6 @@ class Radar(__Device):
         # in case of many days being loaded and their range might be concatenated they will be split here:
         range = range[:np.nanargmax(range)+1]
 
-
         return range
 
     def getTransmitPower(self):
@@ -432,24 +430,6 @@ class Radar(__Device):
         _vars = getValueFromSettings("RADAR_VERSION_%i_REFLECTIVITY_VARIABLES" % self.data_version).split(",")
         return _vars
 
-    # def _getPath(self):
-    #     """
-    #     This function calls the getValueFromSettings-function from the __Device class with the right arguments. It then
-    #     concatenates it with the right version of the dataset.
-    #     To change the Filepath you need to edit the settings.ini file
-    #
-    #     Returns:
-    #         Filepath as string.
-    #     """
-    #     __versionStr = "Version_%i" % self.data_version
-    #     PATH = "%s%s/" % (getValueFromSettings("RADAR_PATH"), __versionStr)
-    #     # print(PATH)
-    #     return PATH
-
-    # @staticmethod
-    # def keys():
-    #     __keys = ['getReflectivity', 'getTime', 'getRange']
-    #     return __keys
 
     @staticmethod
     def help():

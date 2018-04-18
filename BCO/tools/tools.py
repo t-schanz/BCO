@@ -223,12 +223,6 @@ def getFileName(instrument, date, use_ftp=BCO.USE_FTP_ACCESS):
     # check if date is in right format:
     assert type(date) in [dt, datetime.date]
 
-    # special treatment for Radars:
-    if instrument in ["CORAL","KATRIN","KIT"]:
-        device = instrument
-        instrument = "RADAR"
-        if device == "CORAL":
-            device = "MBR"
 
     # get the right variable from settings.ini
     if not use_ftp:
@@ -237,19 +231,19 @@ def getFileName(instrument, date, use_ftp=BCO.USE_FTP_ACCESS):
     else:
         tmp_path = BCO.config[instrument]["FTP_PATH"]
 
+    print(tmp_path)
+
+    # handle paths including data versions:
+    if BCO.config[instrument]["DATA_VERSION"] != "None":
+        tmp_path += BCO.config[instrument]["DATA_VERSION"]
+
     # handle paths including dates:
     path_addition = ""
     if BCO.config[instrument]["PATH_ADDITION"] != "None":
         path_addition = BCO.config[instrument]["PATH_ADDITION"]
         tmp_path += date.strftime(path_addition)
 
-
-
-    # Again extra treatment for Radar:
-    if instrument == "RADAR":
-        tmp_path += date.strftime(BCO.config[instrument]["NAME_SCHEME"].replace("%s",device))
-    else:
-        tmp_path += date.strftime(BCO.config[instrument]["NAME_SCHEME"])
+    tmp_path += date.strftime(BCO.config[instrument]["NAME_SCHEME"])
 
     # get the resolved filename:
     if not use_ftp:
@@ -263,6 +257,7 @@ def getFileName(instrument, date, use_ftp=BCO.USE_FTP_ACCESS):
 
     print(tmp_path)
     print(name)
+
     # make sure only one file with that name was found:
     assert len(name) == 1
     name = name[0]

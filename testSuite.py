@@ -39,9 +39,9 @@ if __name__ == "__main__":
 
 
     #not working devices:
-    lidar = Windlidar("20180401","20180401") #seems to work with data version 1.01!
+    # lidar = Windlidar("20180401","20180401") #seems to work with data version 1.01!
     # ceilo = Ceilometer("20180101","20180101") # can not work yet as the data is not there.
-    # coral = Radar("20180101","20180101",device="CORAL") # does not work due to coral-katrin-radar problem
+    coral = Radar("20180101","20180101",device="CORAL") # does not work due to coral-katrin-radar problem
 
 
 

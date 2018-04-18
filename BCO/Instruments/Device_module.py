@@ -248,6 +248,9 @@ class __Device(object):
                     _file = _f
                     break
         else:
+            print(self.path)
+            print(_nameStr)
+            print(self._path_addition)
             _file = glob.glob(self.path + _nameStr)[0]
 
         if "bz2" in _file[-5:]:
