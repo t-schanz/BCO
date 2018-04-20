@@ -118,7 +118,7 @@ class Radar(__Device):
         self.lon = self._getValueFromNc("lon")
         self.azimuth = self._getValueFromNc("azi")
         self.elevation = self._getValueFromNc("elv")
-        self.north = self._getValueFromNc("north")
+        self.north = self._getValueFromNc("northangle")
         self.skipped = None
 
     def __str__(self):
