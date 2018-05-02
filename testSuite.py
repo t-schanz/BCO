@@ -43,8 +43,5 @@ if __name__ == "__main__":
 
     #not working devices:
 
-    for i in tools.daterange(dt(2017,3,1),dt(2018,7,1),step="month"):
-        print(i)
-
-
-    ceilo = Ceilometer("20180102","20180201") # can not work yet as the data is not there.
+    ceilo = Ceilometer("20180102","20180103") # can not work yet as the data is not there.
+    ceilo.getTime()

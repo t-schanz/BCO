@@ -95,7 +95,7 @@ class Ceilometer(__Device):
 
         var_list = []
         skippedDates = []
-        for _date in tools.daterange(self.start.date(), self.end.date()):
+        for _date in tools.daterange(self.start.date(), self.end.date(), step="month"):
             if not self._path_addition:
                 _nameStr = tools.getFileName(self._instrument, _date).split("/")[-1]
             else:
@@ -109,7 +109,6 @@ class Ceilometer(__Device):
             else:
                 _file = glob.glob(self.path + _nameStr)[0]
 
-
             if "bz2" in _file[-5:]:
                 nc = tools.bz2Dataset(_file)
                 print("bz file")
@@ -118,15 +117,13 @@ class Ceilometer(__Device):
 
             # print(_date)
             _start, _end = self._getStartEnd(_date, nc)
-            # print(_start,_end)
+            print(_start,_end)
             if _end != 0:
                 varFromDate = nc.variables[value][_start:_end].copy()
             else:
                 varFromDate = nc.variables[value][_start:].copy()
             var_list.append(varFromDate)
             nc.close()
-
-
 
         _var = var_list[0]
         if len(var_list) > 1:
@@ -137,3 +134,30 @@ class Ceilometer(__Device):
             self._FileNotAvail(skippedDates)
 
         return _var
+
+    def _getStartEnd(self, _date, nc):
+        """
+        Find the index of the start-date and end-date argument in the netCDF-file. If the time-stamp is not in the
+        actual netCDF-file then return the beginning and end of that file.
+        Args:
+            _date: datetime.datetime-object to compare self.start and self.end with.
+            nc: the netCDF-Dataset
+
+        Returns:
+            _start: index of the _date in the actual netCDF-file. If not index in the netCDF-file then return 0
+                    (beginning of the file)
+            _end: index of the _date in the actual netCDF-file. If not index in the netCDF-file then return -1
+                    (end of the file)
+        """
+        # This method overrides the standard method in device_module, because data is stored monthly and not daily
+
+        _start = 0
+        _end = 0
+        if _date == self.start.date():
+            _start = np.argmin(np.abs(np.subtract(nc.variables["time"][:], tools.time2num(self.start,utc=True))))
+            # print("start", _start)
+        if _date == self.end.date():
+            _end = np.argmin(np.abs(np.subtract(nc.variables["time"][:], tools.time2num(self.end,utc=True))))
+            # print("end ", _end)
+
+        return _start, _end
