@@ -28,8 +28,8 @@ class Radar(__Device):
     Currently supported devices: CORAL, KATRIN     \n
 
     Args:
-            start: Either String or datetime.datetime-object indicating the start of the timefwindow
-            end: Either String or datetime.datetime-object indicating the end of the timefwindow
+            start: Either String or datetime.datetime-object indicating the start of the timewindow
+            end: Either String or datetime.datetime-object indicating the end of the timewindow
             device: the device you want to use. Currently supported: CORAL, KATRIN
             version: The version of the dataset to use. Currently supported: 1,2,3  [note: 3 is in beta-phase]
 
