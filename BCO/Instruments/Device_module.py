@@ -193,25 +193,25 @@ class __Device(object):
             else:
                 _file = glob.glob(self.path + _nameStr)[0]
 
-            # try:
-            if "bz2" in _file[-5:]:
-                nc = tools.bz2Dataset(_file)
-                print("bz file")
-            else:
-                nc = Dataset(_file)
+            try:
+                if "bz2" in _file[-5:]:
+                    nc = tools.bz2Dataset(_file)
+                    print("bz file")
+                else:
+                    nc = Dataset(_file)
 
-            # print(_date)
-            _start, _end = self._getStartEnd(_date, nc)
-            # print(_start,_end)
-            if _end != 0:
-                varFromDate = nc.variables[value][_start:_end].copy()
-            else:
-                varFromDate = nc.variables[value][_start:].copy()
-            var_list.append(varFromDate)
-            nc.close()
-            # except:
-            #     skippedDates.append(_date)
-            #     continue
+                # print(_date)
+                _start, _end = self._getStartEnd(_date, nc)
+                # print(_start,_end)
+                if _end != 0:
+                    varFromDate = nc.variables[value][_start:_end].copy()
+                else:
+                    varFromDate = nc.variables[value][_start:].copy()
+                var_list.append(varFromDate)
+                nc.close()
+            except:
+                skippedDates.append(_date)
+                continue
 
 
         _var = var_list[0]
@@ -343,6 +343,27 @@ class __Device(object):
         else:
             tmp_path =  BCO.config[self._instrument]["PATH"]
             return tmp_path
+
+
+    def getTime(self):
+        """
+        Loads the time steps over the desired timeframe from all netCDF-files and returns them as one array.
+
+        Returns:
+            A numpy array containing datetime.datetime objects
+
+        Example:
+            Getting the time-stamps from an an already initiated Radiation object 'rad':
+
+            >>> rad.getTime()
+        """
+
+        time = self._getArrayFromNc('time')
+
+        time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
+        time = self._local2UTC(time)
+
+        return time
 
 
     def _get_nc(self):

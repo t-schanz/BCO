@@ -6,12 +6,14 @@ enduser, as well.
 import numpy as np
 from datetime import datetime as dt
 from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 import datetime
 import os
 from ftplib import FTP
 import BCO
 from configparser import ConfigParser
 import glob
+
 
 __all__ = [
     'daterange',
@@ -20,7 +22,7 @@ __all__ = [
     'datestr'
 ]
 
-def daterange(start_date, end_date):
+def daterange(start_date, end_date, step="day"):
     """
     This function is for looping over datetime.datetime objects within a timeframe from start_date to end_date.
     It will only loop over days.
@@ -44,9 +46,28 @@ def daterange(start_date, end_date):
         2017-01-03 00:00:00
     """
 
-    for n in range(int((end_date - start_date).days) + 1):
-        yield start_date + timedelta(n)
 
+    if step == "day":
+        for n in range(int((end_date - start_date).days) + 1):
+            yield start_date + timedelta(n)
+
+
+    if step == "month":
+        for y in range(int(end_date.year - start_date.year) + 1):
+
+            _start = 1
+            _end = 12
+
+            if y + start_date.year == end_date.year:
+                _end = end_date.month
+
+            if y + start_date.year == start_date.year:
+                _start = start_date.month
+
+            for m in np.arange(_start,_end+1):
+                _y = start_date.year + y
+                # print(_start, _end,_y,m)
+                yield dt(_y,m,1)
 
 
 def num2time(num,utc=False):
