@@ -13,27 +13,20 @@ for s in __server_list:
     if s in __server.lower():
         USE_FTP_ACCESS = False
 
+# -----------------------------------------------------------
+package_directory = os.path.dirname(os.path.abspath(__file__))
+
+# Setting up the config parser:
+config = configparser.RawConfigParser()
+config.read(package_directory+"/settings.ini")
+
+
 # ----------------------------------------------------------
 
 # Setting global variables for FTP:
 FTP_USER = None
 FTP_PASSWD = None
-FTP_SERVER = None
-
-package_directory = os.path.dirname(os.path.abspath(__file__))
-with open(package_directory + "/ftp_settings.ini") as f:
-    lines = f.readlines()
-
-    for line in lines:
-        if "SERVER_NAME:" in line:
-            FTP_SERVER = line.split(":")[1].rstrip()
-
-
-# -----------------------------------------------------------
-
-# Setting up the config parser:
-config = configparser.RawConfigParser()
-config.read(package_directory+"/settings.ini")
+FTP_SERVER = config["DEFAULT"]["SERVER_NAME"]
 
 # -----------------------------------------------------------
 from . import Instruments

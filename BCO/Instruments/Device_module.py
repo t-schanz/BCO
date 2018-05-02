@@ -202,7 +202,7 @@ class __Device(object):
 
             # print(_date)
             _start, _end = self._getStartEnd(_date, nc)
-            print(_start,_end)
+            # print(_start,_end)
             if _end != 0:
                 varFromDate = nc.variables[value][_start:_end].copy()
             else:
@@ -243,16 +243,16 @@ class __Device(object):
         else:
             _nameStr = "/".join(tools.getFileName(self._instrument, _date).split("/")[-2:])
 
-        print(_nameStr)
+        # print(_nameStr)
         if BCO.USE_FTP_ACCESS:
             for _f in self._ftp_files:
                 if fnmatch.fnmatch(_f, "*" + _nameStr.split("/")[-1]):
                     _file = _f
                     break
         else:
-            print(self.path)
-            print(_nameStr)
-            print(self._path_addition)
+            # print(self.path)
+            # print(_nameStr)
+            # print(self._path_addition)
             _file = glob.glob(self.path + _nameStr)[0]
 
         if "bz2" in _file[-5:]:

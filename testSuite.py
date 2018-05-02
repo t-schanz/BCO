@@ -2,7 +2,6 @@ from BCO.Instruments import Radar
 from BCO.Instruments import Windlidar
 from BCO.Instruments import Radiation
 from BCO.Instruments import SfcWeather
-from BCO.Instruments import Ceilometer
 import BCO
 
 from BCO.tools import tools
@@ -34,10 +33,16 @@ if __name__ == "__main__":
 
     # working devices:
 
-    Rad = Radiation("20180101","20180101")
+    # Rad = Radiation("20180101","20180101")
+    # Rad.getTime()
     # Wx = SfcWeather("20180101","20180101")
+    # Wx.getTime()
     # coral = Radar("20180101","20180101",device="CORAL")
-    # lidar = Windlidar("20180401","20180401") #seems to work with data version 1.01!
+    # coral.getTime()
+    lidar = Windlidar("20180401","20180401") #seems to work with data version 1.01!
+    lidar.getTime()
+
+
 
 
     #not working devices:
