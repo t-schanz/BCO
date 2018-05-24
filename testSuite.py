@@ -37,21 +37,14 @@ if __name__ == "__main__":
     #
     # Rad = Radiation("20180102","20180105")
     # rad_time = Rad.getTime()
-    Wx = SfcWeather("20180101","20180130")
-    wx_time = Wx.getTime()
-    coral = Radar("20180129","20180203",device="CORAL")
-    coral_time = coral.getTime()
+    # Wx = SfcWeather("20180101","20180130")
+    # wx_time = Wx.getTime()
+    # coral = Radar("20180129","20180203",device="CORAL")
+    # coral_time = coral.getTime()
     # lidar = Windlidar("20180401","20180401") #seems to work with data version 1.01!
+    # lidar_time = lidar.getTime()
+    # ceilo = Ceilometer("20180101","20180130") # can not work yet as the data is not there.
+    # ceilo_time = ceilo.getTime()
 
-    #not working devices:
-
-    ceilo = Ceilometer("20180101","20180130") # can not work yet as the data is not there.
-    ceilo_time = ceilo.getTime()
-
-    fig,ax = plt.subplots()
-    ax.plot(wx_time,Wx.getPrecipitation(), label="Wx")
-    ax.plot(ceilo_time,ceilo.getRainFlag(), label="Ceilo")
-    ax.fill_between(wx_time,0,100,where=Wx.getPrecipitation()>0.01,alpha=0.5,color="lime")
-    ax.legend()
-    plt.show()
-
+    nc = tools.bz2Dataset(
+        "/pool/OBS/BARBADOS_CLOUD_OBSERVATORY/Level_1/H_Liquid_water_content/201805/MRR__CIMH__LWC__60s_100m__20180523.nc.bz2")

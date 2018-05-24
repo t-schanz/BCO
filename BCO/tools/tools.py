@@ -104,10 +104,15 @@ def bz2Dataset(bz2file: str):
     import bz2
 
     package_directory = os.path.dirname(os.path.abspath(__file__))
-    dummy_nc_file = package_directory + "/dummy_nc_file.nc"
+
 
     bz2Obj = bz2.BZ2File(bz2file)
-    nc = Dataset(dummy_nc_file,memory=bz2Obj.read())
+    try:
+        dummy_nc_file = package_directory + "/dummy_nc_file.nc"
+        nc = Dataset(dummy_nc_file,memory=bz2Obj.read())
+    except:
+        dummy_nc_file = package_directory + "/dummy_nc_file_netcdf3.nc"
+        nc = Dataset(dummy_nc_file,data_model="NETCDF3_CLASSIC", memory=bz2Obj.read())
     return nc
 
 
