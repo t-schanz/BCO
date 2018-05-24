@@ -9,6 +9,7 @@ import glob
 import numpy as np
 from datetime import timedelta
 
+import BCO.tools.convert
 from BCO.tools import tools
 from BCO.tools import convert
 from BCO.Instruments.Device_module import __Device,getValueFromSettings
@@ -122,7 +123,7 @@ class SfcWeather(__Device):
 
         time = self._getArrayFromNc('time')
 
-        time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
+        time = BCO.tools.convert.num2time(time)  # converting seconds since 1970 to datetime objects
         time = self._local2UTC(time)
 
         return time

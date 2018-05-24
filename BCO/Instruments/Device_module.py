@@ -6,6 +6,8 @@ import numpy as np
 import os
 from pytz import timezone,utc
 from ftplib import FTP
+
+import BCO.tools.convert
 from BCO.tools import tools
 import BCO
 import glob
@@ -105,10 +107,10 @@ class __Device(object):
         _start = 0
         _end = 0
         if _date == self.start.date():
-            _start = np.argmin(np.abs(np.subtract(nc.variables["time"][:], tools.time2num(self.start,utc=True))))
+            _start = np.argmin(np.abs(np.subtract(nc.variables["time"][:], BCO.tools.convert.time2num(self.start, utc=True))))
             # print("start", _start)
         if _date == self.end.date():
-            _end = np.argmin(np.abs(np.subtract(nc.variables["time"][:], tools.time2num(self.end,utc=True))))
+            _end = np.argmin(np.abs(np.subtract(nc.variables["time"][:], BCO.tools.convert.time2num(self.end, utc=True))))
             # print("end ", _end)
 
         return _start, _end
@@ -360,7 +362,7 @@ class __Device(object):
 
         time = self._getArrayFromNc('time')
 
-        time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
+        time = BCO.tools.convert.num2time(time)  # converting seconds since 1970 to datetime objects
         time = self._local2UTC(time)
 
         return time

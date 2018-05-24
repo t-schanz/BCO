@@ -6,19 +6,15 @@ enduser, as well.
 import numpy as np
 from datetime import datetime as dt
 from datetime import timedelta
-from dateutil.relativedelta import relativedelta
 import datetime
 import os
 from ftplib import FTP
 import BCO
-from configparser import ConfigParser
 import glob
 
 
 __all__ = [
     'daterange',
-    'num2time',
-    'time2num',
     'datestr'
 ]
 
@@ -68,55 +64,6 @@ def daterange(start_date, end_date, step="day"):
                 _y = start_date.year + y
                 # print(_start, _end,_y,m)
                 yield dt(_y,m,1)
-
-
-def num2time(num,utc=False):
-    """
-    Converts seconds since 1970 to datetime objects.
-    If input is a numpy array, ouput will be a numpy array as well.
-
-    Args:
-        num: float/ndarray.  seconds since 1970
-
-    Returns:
-        datetime.datetime object
-    """
-
-    if type(num) == np.ndarray:
-        f = np.vectorize(dt.fromtimestamp)
-        date = f(num)
-    else:
-        date = dt.fromtimestamp(num)
-
-    if utc:
-        f = np.vectorize(lambda x,y: x-y)
-        date = f(date,timedelta(hours=1))
-
-    return date
-
-
-def time2num(time,utc=False):
-    """
-    Converts a datetime.datetime object to seconds since 1970 as float.
-    If input is a numpy array, ouput will be a numpy array as well.
-
-    Args:
-        time: datetime.datetime object / ndarray of datetime.datetime objects.
-
-    Returns:
-        Float of seconds since 1970 / ndarray of floats.
-    """
-
-    if type(time) == np.ndarray:
-        epo = lambda x: x.timestamp()
-
-        date = np.asarray(list(map(epo, time)))
-    else:
-        date = time.timestamp()
-
-    if utc:
-        date = np.subtract(date,timedelta(hours=1).seconds)
-    return date
 
 
 def datestr(dt_obj):

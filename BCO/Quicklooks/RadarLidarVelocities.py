@@ -14,7 +14,7 @@ import sys
 sys.path.insert(0,"/home/mpim/m300517/MPI/working/BCO")
 
 from BCO.Instruments import Radar,Windlidar
-from BCO.tools.tools import time2num,num2time
+from BCO.tools.convert import num2time, time2num
 from datetime import datetime as dt
 from datetime import timedelta
 import matplotlib.pyplot as plt

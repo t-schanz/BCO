@@ -9,7 +9,7 @@ import numpy as np
 from datetime import timedelta
 import fnmatch
 
-
+import BCO.tools.convert
 from BCO.tools import tools
 from BCO.Instruments.Device_module import __Device,getValueFromSettings
 import BCO
@@ -24,7 +24,19 @@ except:
 
 class Ceilometer(__Device):
     """
+    The ceilometer is an instrument for detecting the cloud base height (CBH).
 
+    Args:
+        start: Either String or datetime.datetime-object indicating the start of the timewindow
+        end: Either String or datetime.datetime-object indicating the end of the timewindow
+
+    Attributes:
+        title: Short description of the data.
+        location: Latitude and Longitude.
+        rain_info: Description of the rain flag.
+        cbh_info: Description of the different methods for deriving the CBH.
+        resolution: temporal and vertical Resolution.
+        instrument: Short description of the instrument.
 
     """
     def __init__(self, start, end):
@@ -123,6 +135,7 @@ class Ceilometer(__Device):
             else:
                 varFromDate = nc.variables[value][_start:].copy()
             var_list.append(varFromDate)
+
             nc.close()
 
         _var = var_list[0]
@@ -134,6 +147,7 @@ class Ceilometer(__Device):
             self._FileNotAvail(skippedDates)
 
         return _var
+
 
     def _getStartEnd(self, _date, nc):
         """
@@ -153,11 +167,129 @@ class Ceilometer(__Device):
 
         _start = 0
         _end = 0
-        if _date == self.start.date():
-            _start = np.argmin(np.abs(np.subtract(nc.variables["time"][:], tools.time2num(self.start,utc=True))))
+        if _date.month == self.start.month:
+            _start = np.argmin(np.abs(np.subtract(nc.variables["time"][:], BCO.tools.convert.time2num(self.start, utc=False))))
             # print("start", _start)
-        if _date == self.end.date():
-            _end = np.argmin(np.abs(np.subtract(nc.variables["time"][:], tools.time2num(self.end,utc=True))))
+        if _date.month == self.end.month:
+            _end = np.argmin(np.abs(np.subtract(nc.variables["time"][:], BCO.tools.convert.time2num(self.end + timedelta(days=1), utc=False))))
             # print("end ", _end)
 
         return _start, _end
+
+
+    def getTime(self):
+        """
+        Loads the time steps over the desired timeframe from all netCDF-files and returns them as one array.
+
+        Returns:
+            A numpy array containing datetime.datetime objects
+
+        Example:
+            Getting the time-stamps from an an already initiated Radiation object 'rad':
+
+            >>> rad.getTime()
+        """
+
+        time = self._getArrayFromNc('time')
+
+        time = BCO.tools.convert.num2time(time)  # converting seconds since 1970 to datetime objects
+
+        return time
+
+    def getCBH(self,method="cbh"):
+        """
+        This method retrieves the cloud base height (CBH) from the ceilometer data.
+        Three different cloud base heights are included, derived using different methods:
+
+        The first method detects a cbh as the lowest of two consecutive heights at which the smoothed backscattered
+        signal (smoothed using a sliding average over 180 m) exceeds the average of the unsmoothed backscattered signal
+        (in # of photons) plus a standarderror (the squared root of # of photons) of a 60 m window below it:
+        a height-and-time dependent threshold (cbh). (Default)
+
+        The second method defines the first cloud base height (chb_2s) as the height at which the unsmoothed
+        backscatter signal in 2 consecutive range bins of 15 m exceeds the average backscatter of that profile plus
+        2 times its standard deviation: a time-dependent threshold.
+
+        The third method simply reads the cloud base height estimates provided by the instrument
+        software (jenoptik).
+
+        Args:
+            method: one of: [cbh], cbh_2s, jenoptik
+
+        Returns:
+            Numpy array containing the CBH.
+        """
+
+        methods = {"cbh":"cbh_1",
+                   "cbh_2s":"cbh_2s_1",
+                   "jenoptik":"cbh_jenoptik_1"}
+
+        if not method in methods:
+            print("method must be one of: %s"%",".join(methods))
+            print(self.cbh_info)
+
+        cbh = np.asarray(self._getArrayFromNc(methods[method]))
+        cbh[np.where(cbh < -990)] = np.nan
+        return cbh
+
+
+    def getRainFlag(self):
+        """
+        The values can be either 0 or 1.
+
+            0 = No Rain
+            1 = Rain
+
+        Returns:
+            Numpy array containing the rain flag.
+        """
+
+        rf = self._getArrayFromNc("flag_rain").astype(float)
+        rf[np.where(rf < -990)] = np.nan
+        return rf
+
+    def getInstrumentStatusFlag(self):
+        """
+        This method provides information on the status of the Instrument:
+
+            0 = Instrument down
+            1 = Instrument up and running
+
+        Returns:
+            Numpy array containing the status flag.
+        """
+
+        status = self._getArrayFromNc("flag_ceilo_status").astype(float)
+        status[np.where(status < -990)] = np.nan
+        return status
+
+    def getJenoptikOutputFlag(self):
+        """
+        Status of standard Jenoptik output files.
+
+            0 = Absent
+            1 = Present
+
+        Returns:
+            Numpy array containing the status flag.
+        """
+
+        status = self._getArrayFromNc("flag_jenoptik_output").astype(float)
+        status[np.where(status < -990)] = np.nan
+        return status
+
+
+    def getMRRStatusFlag(self):
+        """
+        MRR operational status.
+
+            0 = Down
+            1 = Up and running
+
+        Returns:
+            Numpy array containing the status flag.
+        """
+
+        status = self._getArrayFromNc("flag_mrr_status").astype(float)
+        status[np.where(status < -990)] = np.nan
+        return status

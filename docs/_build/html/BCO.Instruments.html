@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Radar &mdash; BCO version=1.1.4 documentation</title>
+  <title>Ceilometer &mdash; BCO version=1.1.4 documentation</title>
   
 
   
@@ -39,7 +39,7 @@
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="BCO version=1.1.4 documentation" href="index.html"/>
         <link rel="up" title="Instruments" href="modules.html"/>
-        <link rel="next" title="Radar" href="generated/BCO.Instruments.Radar.Radar.html"/>
+        <link rel="next" title="Ceilometer" href="generated/BCO.Instruments.Ceilometer.Ceilometer.html"/>
         <link rel="prev" title="Instruments" href="modules.html"/> 
 
   
@@ -98,12 +98,12 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">Instruments</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Radar</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="generated/BCO.Instruments.Radar.Radar.html">Radar</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Ceilometer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/BCO.Instruments.Ceilometer.Ceilometer.html">Ceilometer</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#windlidar">Windlidar</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="generated/BCO.Instruments.Windlidar.Windlidar.html">Windlidar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-BCO.Instruments.Radar">Radar</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/BCO.Instruments.Radar.Radar.html">Radar</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#module-BCO.Instruments.Radiation">Radiation</a><ul>
@@ -112,6 +112,10 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#module-BCO.Instruments.SfcWeather">Surface Weather</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="generated/BCO.Instruments.SfcWeather.SfcWeather.html">SfcWeather</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-BCO.Instruments.Windlidar">Windlidar</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/BCO.Instruments.Windlidar.Windlidar.html">Windlidar</a></li>
 </ul>
 </li>
 </ul>
@@ -172,7 +176,7 @@
         
           <li><a href="modules.html">Instruments</a> &raquo;</li>
         
-      <li>Radar</li>
+      <li>Ceilometer</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -225,6 +229,21 @@
     margin-right: 4px;  /* make room for the exclamation icon */
 }
 </style>
+<div class="section" id="module-BCO.Instruments.Ceilometer">
+<span id="ceilometer"></span><h1>Ceilometer<a class="headerlink" href="#module-BCO.Instruments.Ceilometer" title="Permalink to this headline">¶</a></h1>
+<p>This Module contains the Ceilometer class. This class is for easy working with the cloud base height.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.Instruments.Ceilometer.Ceilometer.html#BCO.Instruments.Ceilometer.Ceilometer" title="BCO.Instruments.Ceilometer.Ceilometer"><code class="xref py py-obj docutils literal"><span class="pre">Ceilometer</span></code></a>(start,&nbsp;end)</td>
+<td>The ceilometer is an instrument for detecting the cloud base height (CBH).</td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="section" id="module-BCO.Instruments.Radar">
 <span id="radar"></span><h1>Radar<a class="headerlink" href="#module-BCO.Instruments.Radar" title="Permalink to this headline">¶</a></h1>
 <p>This Module contains the Radar class. This class is for easy working with the BCO radar data.</p>
@@ -236,25 +255,6 @@
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/BCO.Instruments.Radar.Radar.html#BCO.Instruments.Radar.Radar" title="BCO.Instruments.Radar.Radar"><code class="xref py py-obj docutils literal"><span class="pre">Radar</span></code></a>(start,&nbsp;end[,&nbsp;device,&nbsp;version])</td>
 <td>Class for working with radar data from Barbados.</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="windlidar">
-<h1>Windlidar<a class="headerlink" href="#windlidar" title="Permalink to this headline">¶</a></h1>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">Due to some structural dependencies it is not possible to use the windlidar class over ftp at the moment.</p>
-</div>
-<span class="target" id="module-BCO.Instruments.Windlidar"></span><p>This Module contains the Windlidar class. This class is for easy working with the BCO Windlidar data.</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.Instruments.Windlidar.Windlidar.html#BCO.Instruments.Windlidar.Windlidar" title="BCO.Instruments.Windlidar.Windlidar"><code class="xref py py-obj docutils literal"><span class="pre">Windlidar</span></code></a>(start,&nbsp;end)</td>
-<td>Class for working with the Windlidar Data from the BCO.</td>
 </tr>
 </tbody>
 </table>
@@ -290,6 +290,21 @@ station (height ~ 20m) at the BCO site.</p>
 </tbody>
 </table>
 </div>
+<div class="section" id="module-BCO.Instruments.Windlidar">
+<span id="windlidar"></span><h1>Windlidar<a class="headerlink" href="#module-BCO.Instruments.Windlidar" title="Permalink to this headline">¶</a></h1>
+<p>This Module contains the Windlidar class. This class is for easy working with the BCO Windlidar data.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.Instruments.Windlidar.Windlidar.html#BCO.Instruments.Windlidar.Windlidar" title="BCO.Instruments.Windlidar.Windlidar"><code class="xref py py-obj docutils literal"><span class="pre">Windlidar</span></code></a>(start,&nbsp;end)</td>
+<td>Class for working with the Windlidar Data from the BCO.</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 
            </div>
@@ -301,7 +316,7 @@ station (height ~ 20m) at the BCO site.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="generated/BCO.Instruments.Radar.Radar.html" class="btn btn-neutral float-right" title="Radar" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="generated/BCO.Instruments.Ceilometer.Ceilometer.html" class="btn btn-neutral float-right" title="Ceilometer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="modules.html" class="btn btn-neutral" title="Instruments" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

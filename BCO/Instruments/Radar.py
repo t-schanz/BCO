@@ -5,6 +5,8 @@ This Module contains the Radar class. This class is for easy working with the BC
 import sys
 from datetime import datetime as dt
 import datetime
+
+import BCO.tools.convert
 from BCO.Instruments.Device_module import __Device, getValueFromSettings
 import BCO.tools.tools as tools
 import glob
@@ -228,7 +230,7 @@ class Radar(__Device):
 
         time = self._getArrayFromNc('time')
 
-        time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
+        time = BCO.tools.convert.num2time(time)  # converting seconds since 1970 to datetime objects
         time = self._local2UTC(time)
 
         return time
