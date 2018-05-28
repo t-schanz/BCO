@@ -5,23 +5,38 @@ Module for setting global attributes.
 
 import BCO
 
-def set_ftp(ftp:bool):
+def set_ftp(ftp:bool,user=None,passwd=None):
     """
     Function to set-up ftp-access.
 
+    User and Password can be set via this function or via providing a file
+    containing those. For more information pls have a look at the documentation
+    on how to set up this package for ftp-access.
+
     Args:
         ftp: Boolean. If true the package will use ftp connection for data access.
-
+        user: Username for the ftp-server.
+        passwd: Password for the ftp-server.
     Example:
 
         >>> from BCO import settings
         >>> settings.set_ftp(True)
 
-        Now the package would try to retrieve all data using the ftp-server.
+        Now the package would try to retrieve all data using the ftp-server,
+        but you need to provide your username and password via the
+        path_to_ftp_file function. If you want to submit your username and
+        password with plain text in the code (not recommended):
+
+        >>> settings.set_ftp(True, user="Heinz", passwd="secret")
 
     """
 
     BCO.USE_FTP_ACCESS = ftp
+
+    if (user and passwd):
+        BCO.FTP_USER = user
+        BCO.FTP_PASSWD = passwd
+
 
 def path_to_ftp_file(file_path:str,verbose=True):
     """

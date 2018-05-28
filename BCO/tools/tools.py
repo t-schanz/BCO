@@ -178,7 +178,7 @@ def getFileName(instrument, date, use_ftp=BCO.USE_FTP_ACCESS):
     else:
         tmp_path = BCO.config[instrument]["FTP_PATH"]
 
-    print(tmp_path)
+    # print(tmp_path)
 
     # handle paths including data versions:
     if BCO.config[instrument]["DATA_VERSION"] != "None":
