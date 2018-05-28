@@ -1,5 +1,5 @@
 Radar
-==============================
+===========================
 
 .. currentmodule:: BCO.Instruments.Radar
 

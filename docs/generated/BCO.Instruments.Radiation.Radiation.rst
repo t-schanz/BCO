@@ -1,5 +1,5 @@
 Radiation
-======================================
+===================================
 
 .. currentmodule:: BCO.Instruments.Radiation
 

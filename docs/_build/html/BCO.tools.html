@@ -101,15 +101,18 @@
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html#tools">Tools</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">General Tools</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="generated/BCO.tools.tools.daterange.html">daterange</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/BCO.tools.tools.num2time.html">num2time</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/BCO.tools.tools.time2num.html">time2num</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/BCO.tools.tools.datestr.html">datestr</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/BCO.tools.tools.bz2Dataset.html">bz2Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/BCO.tools.tools.download_from_zmaw_ftp.html">download_from_zmaw_ftp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/BCO.tools.tools.getFileName.html">getFileName</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/BCO.tools.tools.getFTPClient.html">getFTPClient</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#module-BCO.tools.convert">Converters</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="generated/BCO.tools.convert.Celsius2Kelvin.html">Celsius2Kelvin</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/BCO.tools.convert.Kelvin2Celsius.html">Kelvin2Celsius</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/BCO.tools.convert.num2time.html">num2time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/BCO.tools.convert.time2num.html">time2num</a></li>
 </ul>
 </li>
 </ul>
@@ -232,20 +235,23 @@ enduser, as well.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.tools.tools.daterange.html#BCO.tools.tools.daterange" title="BCO.tools.tools.daterange"><code class="xref py py-obj docutils literal"><span class="pre">daterange</span></code></a>(start_date,&nbsp;end_date[,&nbsp;step])</td>
-<td>This function is for looping over datetime.datetime objects within a timeframe from start_date to end_date.</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.tools.tools.daterange.html#BCO.tools.tools.daterange" title="BCO.tools.tools.daterange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">daterange</span></code></a>(start_date,&nbsp;end_date[,&nbsp;step])</td>
+<td>This function is for looping over datetime.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/BCO.tools.tools.num2time.html#BCO.tools.tools.num2time" title="BCO.tools.tools.num2time"><code class="xref py py-obj docutils literal"><span class="pre">num2time</span></code></a>(num[,&nbsp;utc])</td>
-<td>Converts seconds since 1970 to datetime objects.</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/BCO.tools.tools.datestr.html#BCO.tools.tools.datestr" title="BCO.tools.tools.datestr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datestr</span></code></a>(dt_obj)</td>
+<td>Converts a datetime.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.tools.tools.time2num.html#BCO.tools.tools.time2num" title="BCO.tools.tools.time2num"><code class="xref py py-obj docutils literal"><span class="pre">time2num</span></code></a>(time[,&nbsp;utc])</td>
-<td>Converts a datetime.datetime object to seconds since 1970 as float.</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.tools.tools.bz2Dataset.html#BCO.tools.tools.bz2Dataset" title="BCO.tools.tools.bz2Dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bz2Dataset</span></code></a>(bz2file)</td>
+<td>Generates a netCDF Dataset from a .</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/BCO.tools.tools.datestr.html#BCO.tools.tools.datestr" title="BCO.tools.tools.datestr"><code class="xref py py-obj docutils literal"><span class="pre">datestr</span></code></a>(dt_obj)</td>
-<td>Converts a datetime.datetime object to a string in the commonly used shape for this module.</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/BCO.tools.tools.download_from_zmaw_ftp.html#BCO.tools.tools.download_from_zmaw_ftp" title="BCO.tools.tools.download_from_zmaw_ftp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">download_from_zmaw_ftp</span></code></a>(device,&nbsp;start,&nbsp;end[,&nbsp;…])</td>
+<td>This function can be used to download data from the bco ftp-server to store it on your local machine.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.tools.tools.bz2Dataset.html#BCO.tools.tools.bz2Dataset" title="BCO.tools.tools.bz2Dataset"><code class="xref py py-obj docutils literal"><span class="pre">bz2Dataset</span></code></a>(bz2file:&nbsp;str)</td>
-<td>Generates a netCDF Dataset from a .nc.bz2 file.</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.tools.tools.getFileName.html#BCO.tools.tools.getFileName" title="BCO.tools.tools.getFileName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getFileName</span></code></a>(instrument,&nbsp;date[,&nbsp;use_ftp])</td>
+<td>This function can be used to get the full path and name of the file as on the server.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/BCO.tools.tools.getFTPClient.html#BCO.tools.tools.getFTPClient" title="BCO.tools.tools.getFTPClient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getFTPClient</span></code></a>([user,&nbsp;passwd])</td>
+<td>This function can be used to get an open ftp-client to our ftp-server using the python library ‘ftplib’.</td>
 </tr>
 </tbody>
 </table>
@@ -259,11 +265,17 @@ enduser, as well.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.tools.convert.Celsius2Kelvin.html#BCO.tools.convert.Celsius2Kelvin" title="BCO.tools.convert.Celsius2Kelvin"><code class="xref py py-obj docutils literal"><span class="pre">Celsius2Kelvin</span></code></a>(value)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.tools.convert.Celsius2Kelvin.html#BCO.tools.convert.Celsius2Kelvin" title="BCO.tools.convert.Celsius2Kelvin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Celsius2Kelvin</span></code></a>(value)</td>
 <td>Converts a Temperature from °C to K.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/BCO.tools.convert.Kelvin2Celsius.html#BCO.tools.convert.Kelvin2Celsius" title="BCO.tools.convert.Kelvin2Celsius"><code class="xref py py-obj docutils literal"><span class="pre">Kelvin2Celsius</span></code></a>(value)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/BCO.tools.convert.Kelvin2Celsius.html#BCO.tools.convert.Kelvin2Celsius" title="BCO.tools.convert.Kelvin2Celsius"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Kelvin2Celsius</span></code></a>(value)</td>
 <td>Converts a Temperature from K to °C.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.tools.convert.num2time.html#BCO.tools.convert.num2time" title="BCO.tools.convert.num2time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num2time</span></code></a>(num[,&nbsp;utc])</td>
+<td>Converts seconds since 1970 to datetime objects.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/BCO.tools.convert.time2num.html#BCO.tools.convert.time2num" title="BCO.tools.convert.time2num"><code class="xref py py-obj docutils literal notranslate"><span class="pre">time2num</span></code></a>(time[,&nbsp;utc])</td>
+<td>Converts a datetime.</td>
 </tr>
 </tbody>
 </table>

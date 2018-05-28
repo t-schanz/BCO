@@ -292,7 +292,7 @@
 
 <p class="rubric">Examples</p>
 <p>Example for loading some data from the 1st January 2018:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">BCO.Instruments</span> <span class="k">import</span> <span class="n">Radiation</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">BCO.Instruments</span> <span class="k">import</span> <span class="n">Radiation</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rad</span> <span class="o">=</span> <span class="n">Radiation</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;20180101&quot;</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s2">&quot;20180101&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rad</span><span class="o">.</span><span class="n">getTime</span><span class="p">()</span>
 <span class="go">array([datetime.datetime(2018, 1, 1, 0, 0, tzinfo=&lt;UTC&gt;),</span>
@@ -303,7 +303,7 @@
 <span class="go">       datetime.datetime(2018, 1, 1, 23, 59, 59, tzinfo=&lt;UTC&gt;)], dtype=object)</span>
 </pre></div>
 </div>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">radiation</span> <span class="o">=</span> <span class="n">rad</span><span class="o">.</span><span class="n">getRadiation</span><span class="p">(</span><span class="s2">&quot;LW&quot;</span><span class="p">,</span><span class="s2">&quot;diffuse&quot;</span><span class="p">)</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">radiation</span> <span class="o">=</span> <span class="n">rad</span><span class="o">.</span><span class="n">getRadiation</span><span class="p">(</span><span class="s2">&quot;LW&quot;</span><span class="p">,</span><span class="s2">&quot;diffuse&quot;</span><span class="p">)</span>
 <span class="go">array([ 420.35998535,  420.35998535,  420.35998535, ...,  410.29000854,</span>
 <span class="go">410.29000854,  410.61999512], dtype=float32)</span>
 </pre></div>
@@ -315,22 +315,22 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.close.html#BCO.Instruments.Radiation.Radiation.close" title="BCO.Instruments.Radiation.Radiation.close"><code class="xref py py-obj docutils literal"><span class="pre">close</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.close.html#BCO.Instruments.Radiation.Radiation.close" title="BCO.Instruments.Radiation.Radiation.close"><code class="xref py py-obj docutils literal notranslate"><span class="pre">close</span></code></a>()</td>
 <td>Deletes all temporary stored files from the instance.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getRadiation.html#BCO.Instruments.Radiation.Radiation.getRadiation" title="BCO.Instruments.Radiation.Radiation.getRadiation"><code class="xref py py-obj docutils literal"><span class="pre">getRadiation</span></code></a>(scope[,&nbsp;scattering])</td>
+<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getRadiation.html#BCO.Instruments.Radiation.Radiation.getRadiation" title="BCO.Instruments.Radiation.Radiation.getRadiation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getRadiation</span></code></a>(scope[,&nbsp;scattering])</td>
 <td>Returns the timeseries for the radiation for the specified scope and scattering type.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getSensitivity.html#BCO.Instruments.Radiation.Radiation.getSensitivity" title="BCO.Instruments.Radiation.Radiation.getSensitivity"><code class="xref py py-obj docutils literal"><span class="pre">getSensitivity</span></code></a>(instrument)</td>
+<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getSensitivity.html#BCO.Instruments.Radiation.Radiation.getSensitivity" title="BCO.Instruments.Radiation.Radiation.getSensitivity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getSensitivity</span></code></a>(instrument)</td>
 <td>Returns the sensitivity timeseries for the specified instrument.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getTemperature.html#BCO.Instruments.Radiation.Radiation.getTemperature" title="BCO.Instruments.Radiation.Radiation.getTemperature"><code class="xref py py-obj docutils literal"><span class="pre">getTemperature</span></code></a>(instrument)</td>
+<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getTemperature.html#BCO.Instruments.Radiation.Radiation.getTemperature" title="BCO.Instruments.Radiation.Radiation.getTemperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getTemperature</span></code></a>(instrument)</td>
 <td>Returns the temperature timeseries for the specified instrument.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getTime.html#BCO.Instruments.Radiation.Radiation.getTime" title="BCO.Instruments.Radiation.Radiation.getTime"><code class="xref py py-obj docutils literal"><span class="pre">getTime</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getTime.html#BCO.Instruments.Radiation.Radiation.getTime" title="BCO.Instruments.Radiation.Radiation.getTime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getTime</span></code></a>()</td>
 <td>Loads the time steps over the desired timeframe from all netCDF-files and returns them as one array.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getVoltage.html#BCO.Instruments.Radiation.Radiation.getVoltage" title="BCO.Instruments.Radiation.Radiation.getVoltage"><code class="xref py py-obj docutils literal"><span class="pre">getVoltage</span></code></a>(scope[,&nbsp;scattering])</td>
+<tr class="row-even"><td><a class="reference internal" href="BCO.Instruments.Radiation.Radiation.getVoltage.html#BCO.Instruments.Radiation.Radiation.getVoltage" title="BCO.Instruments.Radiation.Radiation.getVoltage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getVoltage</span></code></a>(scope[,&nbsp;scattering])</td>
 <td>Returns the sensitivity timeseries for the specified scopte and scattering type.</td>
 </tr>
 </tbody>

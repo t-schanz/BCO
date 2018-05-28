@@ -1,5 +1,5 @@
 Celsius2Kelvin
-===================================
+================================
 
 .. currentmodule:: BCO.tools.convert
 

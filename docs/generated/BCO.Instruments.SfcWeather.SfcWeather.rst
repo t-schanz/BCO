@@ -1,5 +1,5 @@
 SfcWeather
-========================================
+=====================================
 
 .. currentmodule:: BCO.Instruments.SfcWeather
 

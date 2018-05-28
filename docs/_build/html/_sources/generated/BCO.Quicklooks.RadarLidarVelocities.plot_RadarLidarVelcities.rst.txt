@@ -1,5 +1,5 @@
 plot\_RadarLidarVelcities
-================================================================
+=============================================================
 
 .. currentmodule:: BCO.Quicklooks.RadarLidarVelocities
 

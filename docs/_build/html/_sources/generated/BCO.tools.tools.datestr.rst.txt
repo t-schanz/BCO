@@ -1,5 +1,5 @@
 datestr
-==========================
+=======================
 
 .. currentmodule:: BCO.tools.tools
 

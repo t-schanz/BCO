@@ -9,10 +9,12 @@ General Tools
    :toctree: generated
 
    daterange
-   num2time
-   time2num
    datestr
    bz2Dataset
+   download_from_zmaw_ftp
+   getFileName
+   getFTPClient
+
 
 
 Converters
@@ -25,6 +27,7 @@ Converters
 .. autosummary::
    :toctree: generated
 
-
    Celsius2Kelvin
    Kelvin2Celsius
+   num2time
+   time2num

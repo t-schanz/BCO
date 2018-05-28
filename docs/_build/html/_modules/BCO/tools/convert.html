@@ -171,6 +171,8 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This module contains functions to convert units.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span> <span class="k">as</span> <span class="n">dt</span><span class="p">,</span> <span class="n">timedelta</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
@@ -183,8 +185,8 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Same as input format, containing values in K.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="mf">273.15</span><span class="p">)</span></div>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="mf">273.15</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="Kelvin2Celsius"><a class="viewcode-back" href="../../../generated/BCO.tools.convert.Kelvin2Celsius.html#BCO.tools.convert.Kelvin2Celsius">[docs]</a><span class="k">def</span> <span class="nf">Kelvin2Celsius</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
@@ -196,8 +198,57 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Same as input format, containing values in °C.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="mf">273.15</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="num2time"><a class="viewcode-back" href="../../../generated/BCO.tools.convert.num2time.html#BCO.tools.convert.num2time">[docs]</a><span class="k">def</span> <span class="nf">num2time</span><span class="p">(</span><span class="n">num</span><span class="p">,</span><span class="n">utc</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts seconds since 1970 to datetime objects.</span>
+<span class="sd">    If input is a numpy array, ouput will be a numpy array as well.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        num: float/ndarray.  seconds since 1970</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        datetime.datetime object</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="mf">273.15</span><span class="p">)</span></div>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">)</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">utc</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span> <span class="n">x</span><span class="o">-</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">date</span><span class="p">,</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+</div>
+    <span class="k">return</span> <span class="n">date</span>
+
+
+<div class="viewcode-block" id="time2num"><a class="viewcode-back" href="../../../generated/BCO.tools.convert.time2num.html#BCO.tools.convert.time2num">[docs]</a><span class="k">def</span> <span class="nf">time2num</span><span class="p">(</span><span class="n">time</span><span class="p">,</span><span class="n">utc</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts a datetime.datetime object to seconds since 1970 as float.</span>
+<span class="sd">    If input is a numpy array, ouput will be a numpy array as well.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        time: datetime.datetime object / ndarray of datetime.datetime objects.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Float of seconds since 1970 / ndarray of floats.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">time</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="n">epo</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">timestamp</span><span class="p">()</span>
+
+        <span class="n">date</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">epo</span><span class="p">,</span> <span class="n">time</span><span class="p">)))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">timestamp</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">utc</span><span class="p">:</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">date</span><span class="p">,</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">seconds</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">date</span>
 </pre></div>
 
            </div>

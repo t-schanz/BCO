@@ -15,7 +15,12 @@ import glob
 
 __all__ = [
     'daterange',
-    'datestr'
+    'datestr',
+    'bz2Dataset',
+    'download_from_zmaw_ftp',
+    'getFileName',
+    'getFTPClient'
+
 ]
 
 def daterange(start_date, end_date, step="day"):
