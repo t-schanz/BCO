@@ -111,6 +111,9 @@ def bz2Dataset(bz2file: str):
         dummy_nc_file = package_directory + "/dummy_nc_file.nc"
         nc = Dataset(dummy_nc_file,memory=bz2Obj.read())
     except: # does not yet work:
+        print("This function only works with netCDF-4 Datasets.")
+        print("If the datamodel of your netcdf file is e.g 'classic' instead of" +
+              " 'netCDF-4' it will break.")
         dummy_nc_file = package_directory + "/MRR__CIMH__LWC__60s_100m__20180520.nc"
         nc = Dataset(filename=dummy_nc_file,mode="r", memory=bz2Obj.read())
     return nc
