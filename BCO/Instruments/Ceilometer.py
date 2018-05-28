@@ -7,10 +7,13 @@ import bz2
 import glob
 import numpy as np
 from datetime import timedelta
+import fnmatch
 
+import BCO.tools.convert
 from BCO.tools import tools
 from BCO.Instruments.Device_module import __Device,getValueFromSettings
 import BCO
+
 
 try:
     from netCDF4 import Dataset
@@ -21,7 +24,19 @@ except:
 
 class Ceilometer(__Device):
     """
+    The ceilometer is an instrument for detecting the cloud base height (CBH).
 
+    Args:
+        start: Either String or datetime.datetime-object indicating the start of the timewindow
+        end: Either String or datetime.datetime-object indicating the end of the timewindow
+
+    Attributes:
+        title: Short description of the data.
+        location: Latitude and Longitude.
+        rain_info: Description of the rain flag.
+        cbh_info: Description of the different methods for deriving the CBH.
+        resolution: temporal and vertical Resolution.
+        instrument: Short description of the instrument.
 
     """
     def __init__(self, start, end):
@@ -36,25 +51,25 @@ class Ceilometer(__Device):
         self.start = self._checkInputTime(start) + timedelta(hours=0)
         self.end = self._checkInputTime(end) + timedelta(hours=0)
 
-        self._instrument = "CEILOMETER"
-        self._name_str = "CEILO__*__#.nc"
-        self._dateformat_str = "%Y%m"
-        self._path_addition = None
+
+        self._instrument = BCO.config["CEILOMETER"]["INSTRUMENT"] # String used for retrieving the filepath from settings.ini
+        print(self._instrument)
+        self._name_str = BCO.config[self._instrument]["NAME_SCHEME"]
+        self._path_addition = BCO.config[self._instrument]["PATH_ADDITION"]
+        self._path_addition = None if self._path_addition == "None" else self._path_addition # convert str to None
+        print("Name Str: " + self._name_str)
         self._ftp_files = []
-
         self.path = self._getPath()
-
 
         # Attributes:
         self.title = None
-        self.devices = None
-        self.temporalResolution = None
         self.location = None
+        self.rain_info = None
+        self.cbh_info = None
+        self.resolution = None
+        self.instrument = None
 
-        self.lat = None
-        self.lon = None
-
-        # self.__getAttributes()
+        self.__getAttributes()
 
     def __getAttributes(self):
         """
@@ -62,15 +77,104 @@ class Ceilometer(__Device):
         """
 
         self.title = self._getAttrFromNC("title")
-        self.devices = self._getAttrFromNC("devices")
-        self.temporalResolution = self._getAttrFromNC("resolution")[0]
         self.location = self._getAttrFromNC("location")
 
+        self.rain_info = self._getAttrFromNC("details_rain")
+        self.cbh_info = self._getAttrFromNC("details_cbh")
 
-        self.lat = self._getValueFromNc("lat")
-        self.lon = self._getValueFromNc("lon")
+        self.resolution = self._getAttrFromNC("resolution")
+        self.instrument = self._getAttrFromNC("instrument")
+
+    def _getArrayFromNc(self, value):
+        """
+        Retrieving the 'value' from the netCDF-Dataset reading just the desired timeframe.
+
+        Args:
+            value: String which is a valid key for the Dataset.variables[key].
+
+        Returns:
+            Numpy array with the values of the desired key and the inititated time-window.
+
+        Example:
+            What behind the scenes happens for an example-key 'VEL' is something like:
+
+            >>> nc = Dataset(input_file)
+            >>> _var = nc.variables["VEL"][self.start:self.end].copy()
+
+            Just that in this function we are looping over all files and in the end concatinating them.
+        """
+        # This method overrides the standard method in device_module, because data is stored monthly and not daily
+
+        var_list = []
+        skippedDates = []
+        for _date in tools.daterange(self.start.date(), self.end.date(), step="month"):
+            if not self._path_addition:
+                _nameStr = tools.getFileName(self._instrument, _date).split("/")[-1]
+            else:
+                _nameStr = "/".join(tools.getFileName(self._instrument, _date).split("/")[-2:])
+
+            if BCO.USE_FTP_ACCESS:
+                for _f in self._ftp_files:
+                    if fnmatch.fnmatch(_f,"*"+_nameStr.split("/")[-1]):
+                        _file = _f
+                        break
+            else:
+                _file = glob.glob(self.path + _nameStr)[0]
+
+            if "bz2" in _file[-5:]:
+                nc = tools.bz2Dataset(_file)
+                print("bz file")
+            else:
+                nc = Dataset(_file)
+
+            # print(_date)
+            _start, _end = self._getStartEnd(_date, nc)
+            print(_start,_end)
+            if _end != 0:
+                varFromDate = nc.variables[value][_start:_end].copy()
+            else:
+                varFromDate = nc.variables[value][_start:].copy()
+            var_list.append(varFromDate)
+
+            nc.close()
+
+        _var = var_list[0]
+        if len(var_list) > 1:
+            for item in var_list[1:]:
+                _var = np.concatenate((_var, item))
+
+        if skippedDates:
+            self._FileNotAvail(skippedDates)
+
+        return _var
 
 
+    def _getStartEnd(self, _date, nc):
+        """
+        Find the index of the start-date and end-date argument in the netCDF-file. If the time-stamp is not in the
+        actual netCDF-file then return the beginning and end of that file.
+        Args:
+            _date: datetime.datetime-object to compare self.start and self.end with.
+            nc: the netCDF-Dataset
+
+        Returns:
+            _start: index of the _date in the actual netCDF-file. If not index in the netCDF-file then return 0
+                    (beginning of the file)
+            _end: index of the _date in the actual netCDF-file. If not index in the netCDF-file then return -1
+                    (end of the file)
+        """
+        # This method overrides the standard method in device_module, because data is stored monthly and not daily
+
+        _start = 0
+        _end = 0
+        if _date.month == self.start.month:
+            _start = np.argmin(np.abs(np.subtract(nc.variables["time"][:], BCO.tools.convert.time2num(self.start, utc=False))))
+            # print("start", _start)
+        if _date.month == self.end.month:
+            _end = np.argmin(np.abs(np.subtract(nc.variables["time"][:], BCO.tools.convert.time2num(self.end + timedelta(days=1), utc=False))))
+            # print("end ", _end)
+
+        return _start, _end
 
 
     def getTime(self):
@@ -88,160 +192,104 @@ class Ceilometer(__Device):
 
         time = self._getArrayFromNc('time')
 
-        time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
-        time = self._local2UTC(time)
-
+        time = BCO.tools.convert.num2time(time)  # converting seconds since 1970 to datetime objects
 
         return time
 
-    def getRadiation(self,scope,scattering=None):
+    def getCBH(self,method="cbh"):
         """
-        Returns the timeseries for the radiation for the specified scope and scattering type.
+        This method retrieves the cloud base height (CBH) from the ceilometer data.
+        Three different cloud base heights are included, derived using different methods:
 
-        Mind that when scope=="LW", then scattering does not need to be provided, because longwave radiation is always
-        measured diffuse. If scattering is provided anyway it will fall back to "diffuse".
+        The first method detects a cbh as the lowest of two consecutive heights at which the smoothed backscattered
+        signal (smoothed using a sliding average over 180 m) exceeds the average of the unsmoothed backscattered signal
+        (in # of photons) plus a standarderror (the squared root of # of photons) of a 60 m window below it:
+        a height-and-time dependent threshold (cbh). (Default)
 
+        The second method defines the first cloud base height (chb_2s) as the height at which the unsmoothed
+        backscatter signal in 2 consecutive range bins of 15 m exceeds the average backscatter of that profile plus
+        2 times its standard deviation: a time-dependent threshold.
+
+        The third method simply reads the cloud base height estimates provided by the instrument
+        software (jenoptik).
 
         Args:
-            scope: One of: "LW","SW". (LW = long wave,, SW = short wave)
-            scattering: One of: "direct","diffuse","global"
+            method: one of: [cbh], cbh_2s, jenoptik
 
         Returns:
-            1-D numpy array of the radiation.
+            Numpy array containing the CBH.
         """
 
-        scopes = ["LW","SW"]
-        scatterings = ["direct","diffuse","global"]
+        methods = {"cbh":"cbh_1",
+                   "cbh_2s":"cbh_2s_1",
+                   "jenoptik":"cbh_jenoptik_1"}
 
-        def keys():
-            """
-            Get the keys for the parameters
-            Returns:
-                Parameter Keys
-            """
-            return "scopes: %s \nscatterings: %s"%(" ".join([s for s in scopes])," ".join([s for s in scopes]))
+        if not method in methods:
+            print("method must be one of: %s"%",".join(methods))
+            print(self.cbh_info)
 
-
-
-        if not scope in scopes:
-            print("Scope needs to be either 'SW' (shortwave) or 'LW' (longwave)")
-            return None
-
-        if not scattering in scatterings:
-            print("Scattering needs to be one of: %s"%" ,".join([s for s in scatterings]))
+        cbh = np.asarray(self._getArrayFromNc(methods[method]))
+        cbh[np.where(cbh < -990)] = np.nan
+        return cbh
 
 
-        if scope == "LW":
-            if not scattering == "diffuse":
-                print("Longwaveradiation at the surface is only measured as diffuse radiation. Setting scattering to diffuse!")
-
-            _rad = self._getArrayFromNc("LWdown_diffuse")
-
-        elif scope == "SW":
-
-            _rad = self._getArrayFromNc("SWdown_%s"%scattering)
-
-        return _rad
-
-
-    def getVoltage(self,scope,scattering=None):
+    def getRainFlag(self):
         """
-        Returns the sensitivity timeseries for the specified scopte and scattering type.
+        The values can be either 0 or 1.
 
-        Mind that when scope=="LW", then scattering does not need to be provided, because longwave radiation is always
-        measured diffuse. If scattering is provided anyway it will fall back to "diffuse".
-
-
-        Args:
-            scope: One of: "LW","SW". (LW = long wave,, SW = short wave)
-            scattering: One of: "direct","diffuse","global"
+            0 = No Rain
+            1 = Rain
 
         Returns:
-            1-D numpy array of the voltage.
+            Numpy array containing the rain flag.
         """
-        scopes = ["LW","SW"]
-        scatterings = ["direct","diffuse","global"]
 
-        def keys():
-            """
-            Get the keys for the parameters
-            Returns:
-                Parameter Keys
-            """
-            return "scopes: %s \nscatterings: %s"%(", ".join([s for s in scopes]),", ".join([s for s in scatterings]))
+        rf = self._getArrayFromNc("flag_rain").astype(float)
+        rf[np.where(rf < -990)] = np.nan
+        return rf
 
-        if not scope:
-            print("Following parameter configurations are allowed:")
-            print(keys())
-            return None
-
-        if not scope in scopes:
-            print("Scope needs to be either 'SW' (shortwave) or 'LW' (longwave)")
-            return None
-
-        if not scattering in scatterings:
-            print("Scattering needs to be one of: %s"%" ,".join([s for s in scatterings]))
-
-
-        if scope == "LW":
-            if not scattering == "diffuse":
-                print("Longwaveradiation at the surface is only measured as diffuse radiation. Setting scattering to diffuse!")
-
-            _volt = self._getArrayFromNc("LWdown_diffuse_voltage")
-
-        elif scope == "SW":
-
-            _volt = self._getArrayFromNc("SWdown_%s_voltage"%scattering)
-
-        return _volt
-
-    def getSensitivity(self,instrument):
+    def getInstrumentStatusFlag(self):
         """
-        Returns the sensitivity timeseries for the specified instrument.
+        This method provides information on the status of the Instrument:
 
-        Args:
-            instrument: One of: "GeoSh", "AnoSh", "AnoGlob", "Hel"
+            0 = Instrument down
+            1 = Instrument up and running
 
         Returns:
-            1-D numpy array of the sensitivity.
-
+            Numpy array containing the status flag.
         """
 
-        instruments = ["GeoSh", "AnoSh", "AnoGlob","Hel"]
+        status = self._getArrayFromNc("flag_ceilo_status").astype(float)
+        status[np.where(status < -990)] = np.nan
+        return status
 
-        if instrument in instruments:
-            _sens = self._getArrayFromNc("%s_Sensitivity"%instrument)
-
-            return _sens
-
-        else:
-            print("Instruments must be one of: %s"%", ".join(instruments))
-            return None
-
-    def getTemperature(self, instrument):
+    def getJenoptikOutputFlag(self):
         """
-        Returns the temperature timeseries for the specified instrument.
+        Status of standard Jenoptik output files.
 
-        Args:
-            instrument: One of: "GeoSh", "AnoSh", "AnoGlob", "Hel"
+            0 = Absent
+            1 = Present
 
         Returns:
-            1-D numpy array of the temperature.
-
+            Numpy array containing the status flag.
         """
 
-        instruments = ["GeoSh", "AnoSh", "AnoGlob", "Hel"]
-
-        if instrument in instruments:
-            _temp = self._getArrayFromNc("%s_temp" % instrument)
-
-            return _temp
-
-        else:
-            print("Instruments must be one of: %s" % ", ".join(instruments))
-            return None
+        status = self._getArrayFromNc("flag_jenoptik_output").astype(float)
+        status[np.where(status < -990)] = np.nan
+        return status
 
 
+    def getMRRStatusFlag(self):
+        """
+        MRR operational status.
 
+            0 = Down
+            1 = Up and running
 
+        Returns:
+            Numpy array containing the status flag.
+        """
 
+        status = self._getArrayFromNc("flag_mrr_status").astype(float)
+        status[np.where(status < -990)] = np.nan
+        return status

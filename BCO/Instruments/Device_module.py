@@ -6,12 +6,15 @@ import numpy as np
 import os
 from pytz import timezone,utc
 from ftplib import FTP
+
+import BCO.tools.convert
 from BCO.tools import tools
 import BCO
 import glob
 import tempfile
 import re
 import fnmatch
+import configparser
 
 try:
     from netCDF4 import Dataset
@@ -29,7 +32,6 @@ class __Device(object):
 
     __de_tz = timezone("Europe/Berlin")
     __utc_tz = timezone("UTC")
-
 
 
     def _checkInputTime(self, input):
@@ -105,10 +107,10 @@ class __Device(object):
         _start = 0
         _end = 0
         if _date == self.start.date():
-            _start = np.argmin(np.abs(np.subtract(nc.variables["time"][:], tools.time2num(self.start))))
+            _start = np.argmin(np.abs(np.subtract(nc.variables["time"][:], BCO.tools.convert.time2num(self.start, utc=True))))
             # print("start", _start)
         if _date == self.end.date():
-            _end = np.argmin(np.abs(np.subtract(nc.variables["time"][:], tools.time2num(self.end))))
+            _end = np.argmin(np.abs(np.subtract(nc.variables["time"][:], BCO.tools.convert.time2num(self.end, utc=True))))
             # print("end ", _end)
 
         return _start, _end
@@ -126,13 +128,12 @@ class __Device(object):
         return np.asarray(list(map(f1, time)))
 
 
-    def _downloadFromFTP(self,ftp_path,file):
+    def _downloadFromFTP(self,file):
         """
         Downloads the file from the mpi-zmaw server and saves it on the local machine.
 
         Args:
-            ftp_path: Path on the ftp-server to the file.
-            file: Filename as listed on the FTP-server. Allowed to contain Wildcards.
+            file: Filename and path as listed on the FTP-server. Allowed to contain Wildcards.
 
         Returns:
             Path to the local directory of the downloaded file.
@@ -143,7 +144,7 @@ class __Device(object):
         ftp = FTP(BCO.FTP_SERVER)
         ftp.login(user=BCO.FTP_USER, passwd=BCO.FTP_PASSWD)
         # print(ftp_path + file)
-        file_to_retrieve = ftp.nlst(ftp_path + file)[0]
+        file_to_retrieve = ftp.nlst(file)[0]
         try:
             __save_file = file_to_retrieve.split("/")[-1]
         except:
@@ -155,6 +156,8 @@ class __Device(object):
         else:
             print("Found file in temporary folder. No need to download it again.")
         self._ftp_files.append(tmpdir + __save_file)
+
+        ftp.close()
         return tmpdir
 
 
@@ -179,21 +182,23 @@ class __Device(object):
         var_list = []
         skippedDates = []
         for _date in tools.daterange(self.start.date(), self.end.date()):
-            _datestr = _date.strftime(self._dateformat_str)
-            _nameStr = self._name_str.replace("#",_datestr)
+            if not self._path_addition:
+                _nameStr = tools.getFileName(self._instrument, _date).split("/")[-1]
+            else:
+                _nameStr = "/".join(tools.getFileName(self._instrument, _date).split("/")[-2:])
 
             if BCO.USE_FTP_ACCESS:
                 for _f in self._ftp_files:
-                    if fnmatch.fnmatch(_f,"*"+_nameStr):
+                    if fnmatch.fnmatch(_f,"*"+_nameStr.split("/")[-1]):
                         _file = _f
                         break
             else:
                 _file = glob.glob(self.path + _nameStr)[0]
 
-
             try:
                 if "bz2" in _file[-5:]:
                     nc = tools.bz2Dataset(_file)
+                    print("bz file")
                 else:
                     nc = Dataset(_file)
 
@@ -210,6 +215,7 @@ class __Device(object):
                 skippedDates.append(_date)
                 continue
 
+
         _var = var_list[0]
         if len(var_list) > 1:
             for item in var_list[1:]:
@@ -220,10 +226,11 @@ class __Device(object):
 
         return _var
 
+
     def _getValueFromNc(self, value: str):
         """
         This function gets values from the netCDF-Dataset, which stay constant over the whole timeframe. So its very
-        similar to __getArrayFromNc(), but without the looping.
+        similar to _getArrayFromNc(), but without the looping.
 
         Args:
             value: A string for accessing the netCDF-file.
@@ -233,15 +240,21 @@ class __Device(object):
             Numpy array
         """
         _date = self.start.date()
-        _datestr = _date.strftime(self._dateformat_str)
-        _nameStr = self._name_str.replace("#", _datestr)
+        if not self._path_addition:
+            _nameStr = tools.getFileName(self._instrument, _date).split("/")[-1]
+        else:
+            _nameStr = "/".join(tools.getFileName(self._instrument, _date).split("/")[-2:])
 
+        # print(_nameStr)
         if BCO.USE_FTP_ACCESS:
             for _f in self._ftp_files:
-                if fnmatch.fnmatch(_f, "*" + _nameStr):
+                if fnmatch.fnmatch(_f, "*" + _nameStr.split("/")[-1]):
                     _file = _f
                     break
         else:
+            # print(self.path)
+            # print(_nameStr)
+            # print(self._path_addition)
             _file = glob.glob(self.path + _nameStr)[0]
 
         if "bz2" in _file[-5:]:
@@ -253,6 +266,7 @@ class __Device(object):
         nc.close()
 
         return _var
+
 
     def _getAttrFromNC(self,value):
 
@@ -268,17 +282,21 @@ class __Device(object):
         """
 
         _date = self.start.date()
-        _datestr = _date.strftime(self._dateformat_str)
-        _nameStr = self._name_str.replace("#", _datestr)
-        # print(_nameStr)
+
+        if not self._path_addition:
+            _nameStr = tools.getFileName(self._instrument, _date).split("/")[-1]
+        else:
+            _nameStr = "/".join(tools.getFileName(self._instrument, _date).split("/")[-2:])
 
         if BCO.USE_FTP_ACCESS:
             for _f in self._ftp_files:
-                if fnmatch.fnmatch(_f, "*" + _nameStr):
+                if fnmatch.fnmatch(_f, "*" + _nameStr.split("/")[-1]):
                     _file = _f
                     break
         else:
             _file = glob.glob(self.path + _nameStr)[0]
+
+        assert _file
 
         if "bz2" in _file[-5:]:
             nc = tools.bz2Dataset(_file)
@@ -289,6 +307,7 @@ class __Device(object):
         for line in nc_lines:
             if value in line:
                 return ":".join(line.split(":")[1:]).lstrip()
+
 
     def close(self):
         """
@@ -319,19 +338,34 @@ class __Device(object):
         """
         if BCO.USE_FTP_ACCESS:
             for _date in tools.daterange(self.start.date(), self.end.date()):
-                _datestr = _date.strftime(self._dateformat_str)
-                tmp_nameStr = self._name_str.replace("#", _datestr)
-                tmp_path = getValueFromSettings("%s_PATH"%self._instrument)
-                if self._path_addition:
-                    if "%" in self._path_addition:
-                        tmp_path += _date.strftime(self._path_addition)
-                    else:
-                        tmp_path += self._path_addition
-                __path = self._downloadFromFTP(ftp_path=tmp_path, file=tmp_nameStr)
+                tmp_file = tools.getFileName(self._instrument,_date,use_ftp=BCO.USE_FTP_ACCESS)
+                __path = self._downloadFromFTP(file=tmp_file)
             return __path
 
         else:
-            return getValueFromSettings("%s_PATH"%self._instrument)
+            tmp_path =  BCO.config[self._instrument]["PATH"]
+            return tmp_path
+
+
+    def getTime(self):
+        """
+        Loads the time steps over the desired timeframe from all netCDF-files and returns them as one array.
+
+        Returns:
+            A numpy array containing datetime.datetime objects
+
+        Example:
+            Getting the time-stamps from an an already initiated Radiation object 'rad':
+
+            >>> rad.getTime()
+        """
+
+        time = self._getArrayFromNc('time')
+
+        time = BCO.tools.convert.num2time(time)  # converting seconds since 1970 to datetime objects
+        time = self._local2UTC(time)
+
+        return time
 
 
     def _get_nc(self):
@@ -343,8 +377,10 @@ class __Device(object):
 
         """
         _date = self.start.date()
-        _datestr = _date.strftime(self._dateformat_str)
-        _nameStr = self._instrument.replace("#", _datestr)
+        if not self._path_addition:
+            _nameStr = tools.getFileName(self._instrument, _date).split("/")[-1]
+        else:
+            _nameStr = "/".join(tools.getFileName(self._instrument, _date).split("/")[-2:])
 
 
         if BCO.USE_FTP_ACCESS:
@@ -361,8 +397,6 @@ class __Device(object):
             nc = Dataset(_file)
 
         return nc
-
-
 
 
 def getValueFromSettings(value: str):

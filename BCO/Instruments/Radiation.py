@@ -8,9 +8,11 @@ import glob
 import numpy as np
 from datetime import timedelta
 
+import BCO.tools.convert
 from BCO.tools import tools
 from BCO.Instruments.Device_module import __Device,getValueFromSettings
 import BCO
+import configparser
 
 try:
     from netCDF4 import Dataset
@@ -69,14 +71,14 @@ class Radiation(__Device):
         self.start = self._checkInputTime(start) + timedelta(hours=0)
         self.end = self._checkInputTime(end) + timedelta(hours=0)
 
-        self._instrument = "RADIATION"
-        self._name_str = "Radiation__Deebles_Point__DownwellingRadiation__*#.nc*"
-        self._path_addition = "%Y%m/"
-        self._dateformat_str = "%Y%m%d"
+        self._instrument = BCO.config["RADIATION"]["INSTRUMENT"]
+        self._name_str = BCO.config["RADIATION"]["NAME_SCHEME"]
+        self._path_addition = BCO.config["RADIATION"]["PATH_ADDITION"]
+        self._path_addition = None if self._path_addition == "None" else self._path_addition # convert str to None
+        # self._dateformat_str = BCO.config["RADIATION"]["DATE_FORMAT"]
         self._ftp_files = []
 
         self.path = self._getPath()
-
 
         # Attributes:
         self.title = None
@@ -99,12 +101,8 @@ class Radiation(__Device):
         self.temporalResolution = self._getAttrFromNC("resolution")[0]
         self.location = self._getAttrFromNC("location")
 
-
         self.lat = self._getValueFromNc("lat")
         self.lon = self._getValueFromNc("lon")
-
-
-
 
     def getTime(self):
         """
@@ -121,9 +119,8 @@ class Radiation(__Device):
 
         time = self._getArrayFromNc('time')
 
-        time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
-        # time = self._local2UTC(time)
-
+        time = BCO.tools.convert.num2time(time)  # converting seconds since 1970 to datetime objects
+        time = self._local2UTC(time)
 
         return time
 

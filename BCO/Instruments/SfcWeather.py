@@ -9,6 +9,7 @@ import glob
 import numpy as np
 from datetime import timedelta
 
+import BCO.tools.convert
 from BCO.tools import tools
 from BCO.tools import convert
 from BCO.Instruments.Device_module import __Device,getValueFromSettings
@@ -23,25 +24,42 @@ except:
 
 class SfcWeather(__Device):
     """
+    Class for working with the data collected by the ground weather station.
 
 
+    Args:
+            start: Either String or datetime.datetime-object indicating the start of the timewindow.
+            end: Either String or datetime.datetime-object indicating the end of the timewindow.
+
+
+    Attributes:
+            start: datetime.datetime object indicating the beginning of the chosen timewindow.
+            end: datetime.datetime object indicating the end of the chosen timewindow.
+            title: Name of the device as in the netCDF file.
+            device: Name of the device as in the Settings.ini.
+            temporalResolution:
+            location: Name of the location.
+            position: Position of the instrument.
+            height: height above surface.
+            lat: Latitude of the instruments location.
+            lon: Longitude of the instruments location.
     """
+
     def __init__(self, start, end):
         """
-        Sets up some variables and loads static parameters from the netcdf file.
-
         Args:
             start: start of the timeframe.
             end: end of the timeframe.
+
+
         """
 
         self.start = self._checkInputTime(start) + timedelta(hours=0)
         self.end = self._checkInputTime(end) + timedelta(hours=0)
 
         self._instrument = "WEATHER"
-        self._name_str = "Meteorology__Deebles_Point*__#.nc"
-        self._path_addition = "%Y%m/"
-        self._dateformat_str = "%Y%m%d"
+        self._name_str = BCO.config[self._instrument]["NAME_SCHEME"]
+        self._path_addition = BCO.config[self._instrument]["PATH_ADDITION"]
         self._ftp_files = []
 
         self.path = self._getPath()
@@ -105,8 +123,8 @@ class SfcWeather(__Device):
 
         time = self._getArrayFromNc('time')
 
-        time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
-        # time = self._local2UTC(time)
+        time = BCO.tools.convert.num2time(time)  # converting seconds since 1970 to datetime objects
+        time = self._local2UTC(time)
 
         return time
 
