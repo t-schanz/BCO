@@ -110,9 +110,9 @@ def bz2Dataset(bz2file: str):
     try:
         dummy_nc_file = package_directory + "/dummy_nc_file.nc"
         nc = Dataset(dummy_nc_file,memory=bz2Obj.read())
-    except:
-        dummy_nc_file = package_directory + "/dummy_nc_file_netcdf3.nc"
-        nc = Dataset(dummy_nc_file,data_model="NETCDF3_CLASSIC", memory=bz2Obj.read())
+    except: # does not yet work:
+        dummy_nc_file = package_directory + "/MRR__CIMH__LWC__60s_100m__20180520.nc"
+        nc = Dataset(filename=dummy_nc_file,mode="r", memory=bz2Obj.read())
     return nc
 
 
