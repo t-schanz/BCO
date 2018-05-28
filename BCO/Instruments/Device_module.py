@@ -6,6 +6,8 @@ import numpy as np
 import os
 from pytz import timezone,utc
 from ftplib import FTP
+
+import BCO.tools.convert
 from BCO.tools import tools
 import BCO
 import glob
@@ -105,10 +107,10 @@ class __Device(object):
         _start = 0
         _end = 0
         if _date == self.start.date():
-            _start = np.argmin(np.abs(np.subtract(nc.variables["time"][:], tools.time2num(self.start,utc=True))))
+            _start = np.argmin(np.abs(np.subtract(nc.variables["time"][:], BCO.tools.convert.time2num(self.start, utc=True))))
             # print("start", _start)
         if _date == self.end.date():
-            _end = np.argmin(np.abs(np.subtract(nc.variables["time"][:], tools.time2num(self.end,utc=True))))
+            _end = np.argmin(np.abs(np.subtract(nc.variables["time"][:], BCO.tools.convert.time2num(self.end, utc=True))))
             # print("end ", _end)
 
         return _start, _end
@@ -154,6 +156,8 @@ class __Device(object):
         else:
             print("Found file in temporary folder. No need to download it again.")
         self._ftp_files.append(tmpdir + __save_file)
+
+        ftp.close()
         return tmpdir
 
 
@@ -191,25 +195,25 @@ class __Device(object):
             else:
                 _file = glob.glob(self.path + _nameStr)[0]
 
-            # try:
-            if "bz2" in _file[-5:]:
-                nc = tools.bz2Dataset(_file)
-                print("bz file")
-            else:
-                nc = Dataset(_file)
+            try:
+                if "bz2" in _file[-5:]:
+                    nc = tools.bz2Dataset(_file)
+                    print("bz file")
+                else:
+                    nc = Dataset(_file)
 
-            # print(_date)
-            _start, _end = self._getStartEnd(_date, nc)
-            print(_start,_end)
-            if _end != 0:
-                varFromDate = nc.variables[value][_start:_end].copy()
-            else:
-                varFromDate = nc.variables[value][_start:].copy()
-            var_list.append(varFromDate)
-            nc.close()
-            # except:
-            #     skippedDates.append(_date)
-            #     continue
+                # print(_date)
+                _start, _end = self._getStartEnd(_date, nc)
+                # print(_start,_end)
+                if _end != 0:
+                    varFromDate = nc.variables[value][_start:_end].copy()
+                else:
+                    varFromDate = nc.variables[value][_start:].copy()
+                var_list.append(varFromDate)
+                nc.close()
+            except:
+                skippedDates.append(_date)
+                continue
 
 
         _var = var_list[0]
@@ -241,16 +245,16 @@ class __Device(object):
         else:
             _nameStr = "/".join(tools.getFileName(self._instrument, _date).split("/")[-2:])
 
-        print(_nameStr)
+        # print(_nameStr)
         if BCO.USE_FTP_ACCESS:
             for _f in self._ftp_files:
                 if fnmatch.fnmatch(_f, "*" + _nameStr.split("/")[-1]):
                     _file = _f
                     break
         else:
-            print(self.path)
-            print(_nameStr)
-            print(self._path_addition)
+            # print(self.path)
+            # print(_nameStr)
+            # print(self._path_addition)
             _file = glob.glob(self.path + _nameStr)[0]
 
         if "bz2" in _file[-5:]:
@@ -341,6 +345,27 @@ class __Device(object):
         else:
             tmp_path =  BCO.config[self._instrument]["PATH"]
             return tmp_path
+
+
+    def getTime(self):
+        """
+        Loads the time steps over the desired timeframe from all netCDF-files and returns them as one array.
+
+        Returns:
+            A numpy array containing datetime.datetime objects
+
+        Example:
+            Getting the time-stamps from an an already initiated Radiation object 'rad':
+
+            >>> rad.getTime()
+        """
+
+        time = self._getArrayFromNc('time')
+
+        time = BCO.tools.convert.num2time(time)  # converting seconds since 1970 to datetime objects
+        time = self._local2UTC(time)
+
+        return time
 
 
     def _get_nc(self):

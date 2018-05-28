@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>BCO.tools.tools &mdash; BCO version=1.1.3 documentation</title>
+  <title>BCO.tools.tools &mdash; BCO version=1.1.4 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="BCO version=1.1.3 documentation" href="../../../index.html"/>
+    <link rel="top" title="BCO version=1.1.4 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                version=1.1.3
+                version=1.1.4
               </div>
             
           
@@ -176,7 +176,13 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span> <span class="k">as</span> <span class="n">dt</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">dateutil.relativedelta</span> <span class="k">import</span> <span class="n">relativedelta</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">ftplib</span> <span class="k">import</span> <span class="n">FTP</span>
+<span class="kn">import</span> <span class="nn">BCO</span>
+<span class="kn">from</span> <span class="nn">configparser</span> <span class="k">import</span> <span class="n">ConfigParser</span>
+<span class="kn">import</span> <span class="nn">glob</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -186,7 +192,7 @@
     <span class="s1">&#39;datestr&#39;</span>
 <span class="p">]</span>
 
-<div class="viewcode-block" id="daterange"><a class="viewcode-back" href="../../../generated/BCO.tools.tools.daterange.html#BCO.tools.tools.daterange">[docs]</a><span class="k">def</span> <span class="nf">daterange</span><span class="p">(</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">):</span>
+<div class="viewcode-block" id="daterange"><a class="viewcode-back" href="../../../generated/BCO.tools.tools.daterange.html#BCO.tools.tools.daterange">[docs]</a><span class="k">def</span> <span class="nf">daterange</span><span class="p">(</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="s2">&quot;day&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function is for looping over datetime.datetime objects within a timeframe from start_date to end_date.</span>
 <span class="sd">    It will only loop over days.</span>
@@ -210,12 +216,31 @@
 <span class="sd">        2017-01-03 00:00:00</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">end_date</span> <span class="o">-</span> <span class="n">start_date</span><span class="p">)</span><span class="o">.</span><span class="n">days</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-        <span class="k">yield</span> <span class="n">start_date</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">n</span><span class="p">)</span></div>
+
+    <span class="k">if</span> <span class="n">step</span> <span class="o">==</span> <span class="s2">&quot;day&quot;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">end_date</span> <span class="o">-</span> <span class="n">start_date</span><span class="p">)</span><span class="o">.</span><span class="n">days</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">start_date</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 
 
+    <span class="k">if</span> <span class="n">step</span> <span class="o">==</span> <span class="s2">&quot;month&quot;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">end_date</span><span class="o">.</span><span class="n">year</span> <span class="o">-</span> <span class="n">start_date</span><span class="o">.</span><span class="n">year</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
 
-<div class="viewcode-block" id="num2time"><a class="viewcode-back" href="../../../generated/BCO.tools.tools.num2time.html#BCO.tools.tools.num2time">[docs]</a><span class="k">def</span> <span class="nf">num2time</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+            <span class="n">_start</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">_end</span> <span class="o">=</span> <span class="mi">12</span>
+
+            <span class="k">if</span> <span class="n">y</span> <span class="o">+</span> <span class="n">start_date</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="n">end_date</span><span class="o">.</span><span class="n">year</span><span class="p">:</span>
+                <span class="n">_end</span> <span class="o">=</span> <span class="n">end_date</span><span class="o">.</span><span class="n">month</span>
+
+            <span class="k">if</span> <span class="n">y</span> <span class="o">+</span> <span class="n">start_date</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="n">start_date</span><span class="o">.</span><span class="n">year</span><span class="p">:</span>
+                <span class="n">_start</span> <span class="o">=</span> <span class="n">start_date</span><span class="o">.</span><span class="n">month</span>
+
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">_start</span><span class="p">,</span><span class="n">_end</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">_y</span> <span class="o">=</span> <span class="n">start_date</span><span class="o">.</span><span class="n">year</span> <span class="o">+</span> <span class="n">y</span>
+                <span class="c1"># print(_start, _end,_y,m)</span>
+                <span class="k">yield</span> <span class="n">dt</span><span class="p">(</span><span class="n">_y</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="num2time"><a class="viewcode-back" href="../../../generated/BCO.tools.tools.num2time.html#BCO.tools.tools.num2time">[docs]</a><span class="k">def</span> <span class="nf">num2time</span><span class="p">(</span><span class="n">num</span><span class="p">,</span><span class="n">utc</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts seconds since 1970 to datetime objects.</span>
 <span class="sd">    If input is a numpy array, ouput will be a numpy array as well.</span>
@@ -232,10 +257,15 @@
         <span class="n">date</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">date</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">utc</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span> <span class="n">x</span><span class="o">-</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">date</span><span class="p">,</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
     <span class="k">return</span> <span class="n">date</span></div>
 
 
-<div class="viewcode-block" id="time2num"><a class="viewcode-back" href="../../../generated/BCO.tools.tools.time2num.html#BCO.tools.tools.time2num">[docs]</a><span class="k">def</span> <span class="nf">time2num</span><span class="p">(</span><span class="n">time</span><span class="p">):</span>
+<div class="viewcode-block" id="time2num"><a class="viewcode-back" href="../../../generated/BCO.tools.tools.time2num.html#BCO.tools.tools.time2num">[docs]</a><span class="k">def</span> <span class="nf">time2num</span><span class="p">(</span><span class="n">time</span><span class="p">,</span><span class="n">utc</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts a datetime.datetime object to seconds since 1970 as float.</span>
 <span class="sd">    If input is a numpy array, ouput will be a numpy array as well.</span>
@@ -253,6 +283,9 @@
         <span class="n">date</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">epo</span><span class="p">,</span> <span class="n">time</span><span class="p">)))</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">date</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">timestamp</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">utc</span><span class="p">:</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">date</span><span class="p">,</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">seconds</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">date</span></div>
 
 
@@ -300,6 +333,115 @@
     <span class="n">nc</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">dummy_nc_file</span><span class="p">,</span><span class="n">memory</span><span class="o">=</span><span class="n">bz2Obj</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
     <span class="k">return</span> <span class="n">nc</span></div>
 
+
+<span class="k">def</span> <span class="nf">download_from_zmaw_ftp</span><span class="p">(</span><span class="n">device</span><span class="p">,</span><span class="n">start</span><span class="p">,</span><span class="n">end</span><span class="p">,</span><span class="n">output_folder</span><span class="p">):</span>
+
+    <span class="n">devs</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CORAL&quot;</span><span class="p">,</span><span class="s2">&quot;KATRIN&quot;</span><span class="p">,</span><span class="s2">&quot;CEILOMETER&quot;</span><span class="p">,</span><span class="s2">&quot;RADIATION&quot;</span><span class="p">,</span><span class="s2">&quot;WEATHER&quot;</span><span class="p">,</span><span class="s2">&quot;WINDLIDAR&quot;</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">devs</span>
+
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">output_folder</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
+        <span class="n">output_folder</span> <span class="o">+=</span> <span class="s2">&quot;/&quot;</span>
+
+    <span class="n">files</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">_path_addition</span> <span class="o">=</span> <span class="n">BCO</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">device</span><span class="p">][</span><span class="s2">&quot;PATH_ADDITION&quot;</span><span class="p">]</span>
+    <span class="n">_instrument</span> <span class="o">=</span> <span class="n">BCO</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">device</span><span class="p">][</span><span class="s2">&quot;INSTRUMENT&quot;</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">_date</span> <span class="ow">in</span> <span class="n">daterange</span><span class="p">(</span><span class="n">start</span><span class="o">.</span><span class="n">date</span><span class="p">(),</span> <span class="n">end</span><span class="o">.</span><span class="n">date</span><span class="p">()):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">_path_addition</span><span class="p">:</span>
+            <span class="n">_nameStr</span> <span class="o">=</span> <span class="n">getFileName</span><span class="p">(</span><span class="n">_instrument</span><span class="p">,</span> <span class="n">_date</span><span class="p">,</span><span class="n">use_ftp</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_nameStr</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">getFileName</span><span class="p">(</span><span class="n">_instrument</span><span class="p">,</span> <span class="n">_date</span><span class="p">,</span><span class="n">use_ftp</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">))</span>
+
+        <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_nameStr</span><span class="p">)</span>
+
+    <span class="c1"># download the file:</span>
+    <span class="n">ftp</span> <span class="o">=</span> <span class="n">FTP</span><span class="p">(</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_SERVER</span><span class="p">)</span>
+    <span class="n">ftp</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_USER</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_PASSWD</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="n">file_to_retrieve</span> <span class="o">=</span> <span class="n">ftp</span><span class="o">.</span><span class="n">nlst</span><span class="p">(</span><span class="n">file</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">__save_file</span> <span class="o">=</span> <span class="n">file_to_retrieve</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">__save_file</span> <span class="o">=</span> <span class="n">file_to_retrieve</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">output_folder</span> <span class="o">+</span> <span class="n">__save_file</span><span class="p">):</span> <span class="c1"># check if the file is already there:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Downloading </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">__save_file</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;touch </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">output_folder</span><span class="o">+</span><span class="n">__save_file</span><span class="p">)</span>
+            <span class="n">ftp</span><span class="o">.</span><span class="n">retrbinary</span><span class="p">(</span><span class="s1">&#39;RETR &#39;</span> <span class="o">+</span> <span class="n">file_to_retrieve</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_folder</span> <span class="o">+</span> <span class="n">__save_file</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File already in provided output folder. No need to download it again.&quot;</span><span class="p">)</span>
+    <span class="n">ftp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">getFileName</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">use_ftp</span><span class="o">=</span><span class="n">BCO</span><span class="o">.</span><span class="n">USE_FTP_ACCESS</span><span class="p">):</span>
+
+    <span class="c1"># check if instrument is supported:</span>
+    <span class="n">instruments</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CORAL&quot;</span><span class="p">,</span> <span class="s2">&quot;KATRIN&quot;</span><span class="p">,</span> <span class="s2">&quot;CEILOMETER&quot;</span><span class="p">,</span> <span class="s2">&quot;RADIATION&quot;</span><span class="p">,</span> <span class="s2">&quot;WEATHER&quot;</span><span class="p">,</span> <span class="s2">&quot;WINDLIDAR&quot;</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="n">instrument</span> <span class="ow">in</span> <span class="n">instruments</span>
+
+    <span class="c1"># check if date is in right format:</span>
+    <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">date</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="n">dt</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">]</span>
+
+
+    <span class="c1"># get the right variable from settings.ini</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">use_ftp</span><span class="p">:</span>
+        <span class="n">tmp_path</span> <span class="o">=</span> <span class="n">BCO</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">instrument</span><span class="p">][</span><span class="s2">&quot;PATH&quot;</span><span class="p">]</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">tmp_path</span> <span class="o">=</span> <span class="n">BCO</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">instrument</span><span class="p">][</span><span class="s2">&quot;FTP_PATH&quot;</span><span class="p">]</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">)</span>
+
+    <span class="c1"># handle paths including data versions:</span>
+    <span class="k">if</span> <span class="n">BCO</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">instrument</span><span class="p">][</span><span class="s2">&quot;DATA_VERSION&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;None&quot;</span><span class="p">:</span>
+        <span class="n">tmp_path</span> <span class="o">+=</span> <span class="n">BCO</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">instrument</span><span class="p">][</span><span class="s2">&quot;DATA_VERSION&quot;</span><span class="p">]</span>
+
+    <span class="c1"># handle paths including dates:</span>
+    <span class="n">path_addition</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">BCO</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">instrument</span><span class="p">][</span><span class="s2">&quot;PATH_ADDITION&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;None&quot;</span><span class="p">:</span>
+        <span class="n">path_addition</span> <span class="o">=</span> <span class="n">BCO</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">instrument</span><span class="p">][</span><span class="s2">&quot;PATH_ADDITION&quot;</span><span class="p">]</span>
+        <span class="n">tmp_path</span> <span class="o">+=</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">path_addition</span><span class="p">)</span>
+
+    <span class="n">tmp_path</span> <span class="o">+=</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">BCO</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">instrument</span><span class="p">][</span><span class="s2">&quot;NAME_SCHEME&quot;</span><span class="p">])</span>
+
+    <span class="c1"># get the resolved filename:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">use_ftp</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ftp</span> <span class="o">=</span> <span class="n">FTP</span><span class="p">(</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_SERVER</span><span class="p">)</span>
+        <span class="n">ftp</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_USER</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_PASSWD</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">ftp</span><span class="o">.</span><span class="n">nlst</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">)</span>
+        <span class="n">ftp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="c1"># print(tmp_path)</span>
+    <span class="c1"># print(name)</span>
+
+    <span class="c1"># make sure only one file with that name was found:</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">name</span>
+
+<span class="k">def</span> <span class="nf">getFTPClient</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">passwd</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">BCO</span><span class="o">.</span><span class="n">FTP_USER</span>
+        <span class="n">passwd</span> <span class="o">=</span> <span class="n">BCO</span><span class="o">.</span><span class="n">FTP_PASSWD</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;User and password need to be provided either via parameters to </span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;this function or by using the BCO.settings.path_to_ftp_file() function.&quot;</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">user</span>
+    <span class="k">assert</span> <span class="n">passwd</span>
+
+    <span class="n">ftp</span> <span class="o">=</span> <span class="n">FTP</span><span class="p">(</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_SERVER</span><span class="p">)</span>
+    <span class="n">ftp</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">passwd</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="n">passwd</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ftp</span>
 </pre></div>
 
            </div>
@@ -336,7 +478,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'version=1.1.3',
+            VERSION:'version=1.1.4',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

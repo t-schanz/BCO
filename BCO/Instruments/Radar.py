@@ -5,6 +5,8 @@ This Module contains the Radar class. This class is for easy working with the BC
 import sys
 from datetime import datetime as dt
 import datetime
+
+import BCO.tools.convert
 from BCO.Instruments.Device_module import __Device, getValueFromSettings
 import BCO.tools.tools as tools
 import glob
@@ -28,8 +30,8 @@ class Radar(__Device):
     Currently supported devices: CORAL, KATRIN     \n
 
     Args:
-            start: Either String or datetime.datetime-object indicating the start of the timefwindow
-            end: Either String or datetime.datetime-object indicating the end of the timefwindow
+            start: Either String or datetime.datetime-object indicating the start of the timewindow
+            end: Either String or datetime.datetime-object indicating the end of the timewindow
             device: the device you want to use. Currently supported: CORAL, KATRIN
             version: The version of the dataset to use. Currently supported: 1,2,3  [note: 3 is in beta-phase]
 
@@ -228,7 +230,7 @@ class Radar(__Device):
 
         time = self._getArrayFromNc('time')
 
-        time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
+        time = BCO.tools.convert.num2time(time)  # converting seconds since 1970 to datetime objects
         time = self._local2UTC(time)
 
         return time

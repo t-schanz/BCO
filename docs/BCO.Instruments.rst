@@ -1,3 +1,16 @@
+Ceilometer
+===============
+
+.. automodule:: BCO.Instruments.Ceilometer
+
+.. currentmodule:: BCO.Instruments.Ceilometer
+
+.. autosummary::
+   :toctree: generated
+
+   Ceilometer
+
+
 Radar
 =====
 
@@ -9,22 +22,6 @@ Radar
    :toctree: generated
 
    Radar
-
-
-Windlidar
-=========
-
-.. warning::
-   Due to some structural dependencies it is not possible to use the windlidar class over ftp at the moment.
-
-.. automodule:: BCO.Instruments.Windlidar
-
-.. currentmodule:: BCO.Instruments.Windlidar
-
-.. autosummary::
-   :toctree: generated
-
-   Windlidar
 
 
 Radiation
@@ -51,6 +48,20 @@ Surface Weather
    :toctree: generated
 
    SfcWeather
+
+
+Windlidar
+=========
+
+.. automodule:: BCO.Instruments.Windlidar
+
+.. currentmodule:: BCO.Instruments.Windlidar
+
+.. autosummary::
+   :toctree: generated
+
+   Windlidar
+
 
 
 

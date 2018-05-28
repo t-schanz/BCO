@@ -23,6 +23,7 @@ from netCDF4 import Dataset
 #     range = coral.getRange()
 #     coral.quickplot2D(ref,ylim=(100,2000))
 
+
 if __name__ == "__main__":
     # FTP-settings:
 
@@ -33,16 +34,17 @@ if __name__ == "__main__":
 
 
     # working devices:
-
-    Rad = Radiation("20180101","20180101")
-    Wx = SfcWeather("20180101","20180101")
-    coral = Radar("20180101","20180101",device="CORAL") # does not work due to coral-katrin-radar problem
-
-    #not working devices:
+    #
+    # Rad = Radiation("20180102","20180105")
+    # rad_time = Rad.getTime()
+    # Wx = SfcWeather("20180101","20180130")
+    # wx_time = Wx.getTime()
+    # coral = Radar("20180129","20180203",device="CORAL")
+    # coral_time = coral.getTime()
     # lidar = Windlidar("20180401","20180401") #seems to work with data version 1.01!
-    # ceilo = Ceilometer("20180101","20180101") # can not work yet as the data is not there.
+    # lidar_time = lidar.getTime()
+    # ceilo = Ceilometer("20180101","20180130") # can not work yet as the data is not there.
+    # ceilo_time = ceilo.getTime()
 
-
-
-
-
+    nc = tools.bz2Dataset(
+        "/pool/OBS/BARBADOS_CLOUD_OBSERVATORY/Level_1/H_Liquid_water_content/201805/MRR__CIMH__LWC__60s_100m__20180523.nc.bz2")

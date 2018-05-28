@@ -8,6 +8,7 @@ import glob
 import numpy as np
 from datetime import timedelta
 
+import BCO.tools.convert
 import BCO.tools.tools as tools
 from BCO.Instruments.Device_module import __Device
 import BCO
@@ -113,7 +114,7 @@ class Windlidar(__Device):
 
         time = self._getArrayFromNc('time')
 
-        time = tools.num2time(time)  # converting seconds since 1970 to datetime objects
+        time = BCO.tools.convert.num2time(time)  # converting seconds since 1970 to datetime objects
         time = self._local2UTC(time)
 
         return time

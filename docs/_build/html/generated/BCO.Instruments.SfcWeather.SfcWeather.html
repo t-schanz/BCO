@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>SfcWeather &mdash; BCO version=1.1.3 documentation</title>
+  <title>SfcWeather &mdash; BCO version=1.1.4 documentation</title>
   
 
   
@@ -37,10 +37,10 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="BCO version=1.1.3 documentation" href="../index.html"/>
-        <link rel="up" title="Radar" href="../BCO.Instruments.html"/>
-        <link rel="next" title="close" href="BCO.Instruments.SfcWeather.SfcWeather.close.html"/>
-        <link rel="prev" title="getVoltage" href="BCO.Instruments.Radiation.Radiation.getVoltage.html"/> 
+    <link rel="top" title="BCO version=1.1.4 documentation" href="../index.html"/>
+        <link rel="up" title="Ceilometer" href="../BCO.Instruments.html"/>
+        <link rel="next" title="Windlidar" href="BCO.Instruments.Windlidar.Windlidar.html"/>
+        <link rel="prev" title="Radiation" href="BCO.Instruments.Radiation.Radiation.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                version=1.1.3
+                version=1.1.4
               </div>
             
           
@@ -98,25 +98,14 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Instruments</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../BCO.Instruments.html">Radar</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../BCO.Instruments.html#windlidar">Windlidar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../BCO.Instruments.html">Ceilometer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../BCO.Instruments.html#module-BCO.Instruments.Radar">Radar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../BCO.Instruments.html#module-BCO.Instruments.Radiation">Radiation</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../BCO.Instruments.html#module-BCO.Instruments.SfcWeather">Surface Weather</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">SfcWeather</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.close.html">close</a></li>
-<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getDataQuality.html">getDataQuality</a></li>
-<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getHumidity.html">getHumidity</a></li>
-<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getPrecipitation.html">getPrecipitation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getPressure.html">getPressure</a></li>
-<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getTechnicalValues.html">getTechnicalValues</a></li>
-<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getTemperature.html">getTemperature</a></li>
-<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getTime.html">getTime</a></li>
-<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getWindDirection.html">getWindDirection</a></li>
-<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getWindSpeed.html">getWindSpeed</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">SfcWeather</a></li>
 </ul>
 </li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../BCO.Instruments.html#module-BCO.Instruments.Windlidar">Windlidar</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../modules.html#tools">Tools</a></li>
@@ -175,7 +164,7 @@
         
           <li><a href="../modules.html">Instruments</a> &raquo;</li>
         
-          <li><a href="../BCO.Instruments.html">Radar</a> &raquo;</li>
+          <li><a href="../BCO.Instruments.html">Ceilometer</a> &raquo;</li>
         
       <li>SfcWeather</li>
     
@@ -235,7 +224,79 @@
 <dl class="class">
 <dt id="BCO.Instruments.SfcWeather.SfcWeather">
 <em class="property">class </em><code class="descclassname">BCO.Instruments.SfcWeather.</code><code class="descname">SfcWeather</code><span class="sig-paren">(</span><em>start</em>, <em>end</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BCO/Instruments/SfcWeather.html#SfcWeather"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BCO.Instruments.SfcWeather.SfcWeather" title="Permalink to this definition">¶</a></dt>
-<dd><p class="rubric">Methods</p>
+<dd><p>Class for working with the data collected by the ground weather station.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>start</strong> – Either String or datetime.datetime-object indicating the start of the timewindow.</li>
+<li><strong>end</strong> – Either String or datetime.datetime-object indicating the end of the timewindow.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="BCO.Instruments.SfcWeather.SfcWeather.start">
+<code class="descname">start</code><a class="headerlink" href="#BCO.Instruments.SfcWeather.SfcWeather.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>datetime.datetime object indicating the beginning of the chosen timewindow.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="BCO.Instruments.SfcWeather.SfcWeather.end">
+<code class="descname">end</code><a class="headerlink" href="#BCO.Instruments.SfcWeather.SfcWeather.end" title="Permalink to this definition">¶</a></dt>
+<dd><p>datetime.datetime object indicating the end of the chosen timewindow.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="BCO.Instruments.SfcWeather.SfcWeather.title">
+<code class="descname">title</code><a class="headerlink" href="#BCO.Instruments.SfcWeather.SfcWeather.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the device as in the netCDF file.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="BCO.Instruments.SfcWeather.SfcWeather.device">
+<code class="descname">device</code><a class="headerlink" href="#BCO.Instruments.SfcWeather.SfcWeather.device" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the device as in the Settings.ini.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="BCO.Instruments.SfcWeather.SfcWeather.temporalResolution">
+<code class="descname">temporalResolution</code><a class="headerlink" href="#BCO.Instruments.SfcWeather.SfcWeather.temporalResolution" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="BCO.Instruments.SfcWeather.SfcWeather.location">
+<code class="descname">location</code><a class="headerlink" href="#BCO.Instruments.SfcWeather.SfcWeather.location" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the location.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="BCO.Instruments.SfcWeather.SfcWeather.position">
+<code class="descname">position</code><a class="headerlink" href="#BCO.Instruments.SfcWeather.SfcWeather.position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Position of the instrument.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="BCO.Instruments.SfcWeather.SfcWeather.height">
+<code class="descname">height</code><a class="headerlink" href="#BCO.Instruments.SfcWeather.SfcWeather.height" title="Permalink to this definition">¶</a></dt>
+<dd><p>height above surface.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="BCO.Instruments.SfcWeather.SfcWeather.lat">
+<code class="descname">lat</code><a class="headerlink" href="#BCO.Instruments.SfcWeather.SfcWeather.lat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Latitude of the instruments location.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="BCO.Instruments.SfcWeather.SfcWeather.lon">
+<code class="descname">lon</code><a class="headerlink" href="#BCO.Instruments.SfcWeather.SfcWeather.lon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Longitude of the instruments location.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -291,10 +352,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="BCO.Instruments.SfcWeather.SfcWeather.close.html" class="btn btn-neutral float-right" title="close" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="BCO.Instruments.Windlidar.Windlidar.html" class="btn btn-neutral float-right" title="Windlidar" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="BCO.Instruments.Radiation.Radiation.getVoltage.html" class="btn btn-neutral" title="getVoltage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="BCO.Instruments.Radiation.Radiation.html" class="btn btn-neutral" title="Radiation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -325,7 +386,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'version=1.1.3',
+            VERSION:'version=1.1.4',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
