@@ -119,7 +119,20 @@ def bz2Dataset(bz2file: str):
     return nc
 
 
-def download_from_zmaw_ftp(device,start,end,output_folder):
+def download_from_zmaw_ftp(device,start,end,output_folder="./"):
+    """
+    This function can be used to download data from the bco ftp-server
+    to store it on your local machine.
+
+    Args:
+        device: str: one of: "CORAL","KATRIN","CEILOMETER","RADIATION","WEATHER","WINDLIDAR".
+        start: datetime.datetime object: start of the timeframe of which data will be downloaded.
+        end:  datetime.datetime object: end of the timeframe of which data will be downloaded.
+        output_folder: str: Where to store the downloaded data.
+
+    Returns:
+
+    """
 
     devs = ["CORAL","KATRIN","CEILOMETER","RADIATION","WEATHER","WINDLIDAR"]
     assert device in devs
@@ -162,6 +175,28 @@ def download_from_zmaw_ftp(device,start,end,output_folder):
 
 
 def getFileName(instrument, date, use_ftp=BCO.USE_FTP_ACCESS):
+    """
+    This function can be used to get the full path and name of the file as on
+    the server. The path will vary if you are switching between the ftp-server or
+    beeing inside the mpi-network.
+
+    Examples:
+        If you for example want to now  the name of the file holding the reflectivities
+        from the coral radar on the 23.01.2018 and you are using the ftp-server:
+
+            >>> from BCO.tools.tools import getFileName
+            >>> from datetime import datetime as dt
+            >>> print(getFileName("CORAL",date=dt(2018,1,23)))
+            '/B_Reflectivity/Version_2/MMCR__MBR__Spectral_Moments__10s__155m-25km__180123.nc'
+
+    Args:
+        instrument: str: one of "CORAL", "KATRIN", "CEILOMETER", "RADIATION", "WEATHER", "WINDLIDAR"
+        date: datetime.datetime object: Date from when you want the name. (Names usually include the date.)
+        use_ftp: boolean: Whether to use the ftp-access or not. (Usually automatically set.)
+
+    Returns:
+        String containing full path and name of the file.
+    """
 
     # check if instrument is supported:
     instruments = ["CORAL", "KATRIN", "CEILOMETER", "RADIATION", "WEATHER", "WINDLIDAR"]
@@ -212,8 +247,31 @@ def getFileName(instrument, date, use_ftp=BCO.USE_FTP_ACCESS):
     return name
 
 def getFTPClient(user=None,passwd=None):
+    """
+    This function can be used to get an open ftp-client to our ftp-server using
+    the python library 'ftplib'.
 
-    if not user:
+    Examples:
+        The client can be used to browse the ftp-server
+        in a python command line interface:
+
+        >>> from BCO.tools.tools import getFTPClient
+        >>> ftp = getFTPClient(user="Heinz",passwd="secret")
+
+        To then e.g. show the content of the diretory:
+
+        >>> ftp.dir()
+
+    Args:
+        user: str: Username
+        passwd: str: Password
+
+    Returns:
+        ftplib.FTP object.
+
+    """
+
+    if user == None:
         user = BCO.FTP_USER
         passwd = BCO.FTP_PASSWD
 

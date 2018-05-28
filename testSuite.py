@@ -30,7 +30,7 @@ if __name__ == "__main__":
     BCO.settings.set_ftp(True)
     # BCO.settings.path_to_ftp_file("/home/tobias/Documents/ftp_access.txt")
     # BCO.settings.path_to_ftp_file("/home/mpim/m300517/ftp_access.txt",verbose=True)
-    # BCO.settings.path_to_ftp_file("C:/Users/darkl/Documents/ftp_access.txt")
+    BCO.settings.path_to_ftp_file("C:/Users/darkl/Documents/ftp_access.txt")
 
 
     # working devices:
