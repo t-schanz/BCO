@@ -35,12 +35,16 @@ if __name__ == "__main__":
 
     # working devices:
     #
-    Rad = Radiation("20180103","20180104")
-    rad_time = Rad.getTime()
-    # Wx = SfcWeather("20180101","20180130")
-    # wx_time = Wx.getTime()
-    # coral = Radar("20180129","20180203",device="CORAL")
+    # Rad = Radiation("20180103","20180104")
+    # rad_time = Rad.getTime()
+    Wx = SfcWeather("20180101","20180101")
+    wx_time = Wx.getTime()
+    # coral = Radar("20180129","20180130",device="CORAL")
     # coral_time = coral.getTime()
+    # coral_pow = coral.getTransmitPower()
+
+    # plt.plot(coral_time,coral_pow)
+    # plt.show()
     # lidar = Windlidar("20180401","20180401") #seems to work with data version 1.01!
     # lidar_time = lidar.getTime()
     # ceilo = Ceilometer("20180101","20180130") # can not work yet as the data is not there.

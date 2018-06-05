@@ -110,7 +110,10 @@ class Radar(__Device):
         self.lon = self._getValueFromNc("lon")
         self.azimuth = self._getValueFromNc("azi")
         self.elevation = self._getValueFromNc("elv")
-        self.north = self._getValueFromNc("northangle")
+        try:
+            self.north = self._getValueFromNc("northangle")
+        except:
+            self.north = self._getValueFromNc("north")
         self.skipped = None
 
     def __str__(self):
