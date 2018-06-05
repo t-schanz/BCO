@@ -6,7 +6,7 @@ Blueprint for creating new Instrument modules.
 
 import BCO
 from BCO import tools
-from BCO.Instruments.Device_module import __Device, getValueFromSettings
+from BCO.Instruments.Device_module import __Device
 
 class Instrument(__Device):
     def __init__(self, start, end, device="CORAL", version=2):

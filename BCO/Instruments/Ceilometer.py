@@ -11,7 +11,7 @@ import fnmatch
 
 import BCO.tools.convert
 from BCO.tools import tools
-from BCO.Instruments.Device_module import __Device,getValueFromSettings
+from BCO.Instruments.Device_module import __Device
 import BCO
 
 

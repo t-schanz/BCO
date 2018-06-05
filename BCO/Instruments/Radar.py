@@ -435,7 +435,7 @@ class Radar(__Device):
             ["Zf","Ze","Zu"]
         """
 
-        _vars = getValueFromSettings("RADAR_VERSION_%i_REFLECTIVITY_VARIABLES" % self.data_version).split(",")
+        _vars = BCO.config[self._instrument]["VERSION_%i_REFLECTIVITY_VARIABLES"%self.data_version].split(",")
         return _vars
 
 
