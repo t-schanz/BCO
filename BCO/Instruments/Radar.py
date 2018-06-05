@@ -7,7 +7,7 @@ from datetime import datetime as dt
 import datetime
 
 import BCO.tools.convert
-from BCO.Instruments.Device_module import __Device, getValueFromSettings
+from BCO.Instruments.Device_module import __Device
 import BCO.tools.tools as tools
 import glob
 import numpy as np

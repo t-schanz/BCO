@@ -397,39 +397,3 @@ class __Device(object):
             nc = Dataset(_file)
 
         return nc
-
-
-def getValueFromSettings(value: str):
-    """
-    This function gets a value from the settings.ini and returns it:
-
-    Args:
-        value: String of the value of which you want to get the data-path to the netCDF-file from.
-
-    Returns:
-        String of the value which is written in the file settings.ini behind the ':'. Only the string having the 'device'
-        somewhere in the line will be returned.
-
-    """
-    package_directory = os.path.dirname(os.path.abspath(__file__))
-
-    if BCO.USE_FTP_ACCESS:
-        ini_file = package_directory + "/../ftp_settings.ini"
-    else:
-        ini_file = package_directory + "/../settings.ini"
-
-    # print(value)
-
-    __counter = 0
-    with open(ini_file, "r") as f:
-        while __counter < 1e5:
-            try:
-                line = f.readline().rstrip()
-                if value + ":" in line:
-                    return line.split(":")[1]
-                __counter += 1
-            except:
-                break
-
-        print("Function getValueFromSettings could not find %s"%value)
-        return None
