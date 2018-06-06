@@ -3,8 +3,7 @@ This module contains functions to convert units.
 """
 from datetime import datetime as dt
 from datetime import timedelta
-
-
+import collections
 import numpy as np
 
 
@@ -46,7 +45,7 @@ def num2time(num,utc=False):
         datetime.datetime object
     """
 
-    if type(num) == np.ndarray:
+    if isinstance(num,collections.Iterable):
         f = np.vectorize(dt.fromtimestamp)
         date = f(num)
     else:
@@ -71,7 +70,7 @@ def time2num(time,utc=False):
         Float of seconds since 1970 / ndarray of floats.
     """
 
-    if type(time) == np.ndarray:
+    if isinstance(time,collections.Iterable):
         epo = lambda x: x.timestamp()
 
         date = np.asarray(list(map(epo, time)))

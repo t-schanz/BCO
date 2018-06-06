@@ -179,7 +179,7 @@ def download_from_zmaw_ftp(device,start,end,output_folder="./"):
     ftp.close()
 
 
-def getFileName(instrument, date, use_ftp=BCO.USE_FTP_ACCESS):
+def getFileName(instrument, date, use_ftp):
     """
     This function can be used to get the full path and name of the file as on
     the server. The path will vary if you are switching between the ftp-server or
@@ -191,13 +191,13 @@ def getFileName(instrument, date, use_ftp=BCO.USE_FTP_ACCESS):
 
             >>> from BCO.tools.tools import getFileName
             >>> from datetime import datetime as dt
-            >>> print(getFileName("CORAL",date=dt(2018,1,23)))
+            >>> print(getFileName("CORAL",date=dt(2018,1,23),use_ftp=True))
             '/B_Reflectivity/Version_2/MMCR__MBR__Spectral_Moments__10s__155m-25km__180123.nc'
 
     Args:
         instrument: str: one of "CORAL", "KATRIN", "CEILOMETER", "RADIATION", "WEATHER", "WINDLIDAR"
         date: datetime.datetime object: Date from when you want the name. (Names usually include the date.)
-        use_ftp: boolean: Whether to use the ftp-access or not. (Usually automatically set.)
+        use_ftp: boolean: Whether to use the ftp-access or not.
 
     Returns:
         String containing full path and name of the file.

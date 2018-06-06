@@ -145,7 +145,7 @@ class Radar(__Device):
         print(self.path)
         try:  # check if device was running on selected timeframe
             for _date in tools.daterange(self.start, self.end):
-                _nameStr = tools.getFileName(self.device,_date).split("/")[-1]
+                _nameStr = tools.getFileName(self.device,_date,use_ftp=BCO.USE_FTP_ACCESS).split("/")[-1]
                 print("CheckInput: " +self.path + _nameStr)
                 _file = glob.glob(self.path + _nameStr)[0]
         except:

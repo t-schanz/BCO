@@ -183,9 +183,9 @@ class __Device(object):
         skippedDates = []
         for _date in tools.daterange(self.start.date(), self.end.date()):
             if not self._path_addition:
-                _nameStr = tools.getFileName(self._instrument, _date).split("/")[-1]
+                _nameStr = tools.getFileName(self._instrument, _date, use_ftp=BCO.USE_FTP_ACCESS).split("/")[-1]
             else:
-                _nameStr = "/".join(tools.getFileName(self._instrument, _date).split("/")[-2:])
+                _nameStr = "/".join(tools.getFileName(self._instrument, _date, use_ftp=BCO.USE_FTP_ACCESS).split("/")[-2:])
 
             if BCO.USE_FTP_ACCESS:
                 for _f in self._ftp_files:
@@ -241,9 +241,9 @@ class __Device(object):
         """
         _date = self.start.date()
         if not self._path_addition:
-            _nameStr = tools.getFileName(self._instrument, _date).split("/")[-1]
+            _nameStr = tools.getFileName(self._instrument, _date, use_ftp=BCO.USE_FTP_ACCESS).split("/")[-1]
         else:
-            _nameStr = "/".join(tools.getFileName(self._instrument, _date).split("/")[-2:])
+            _nameStr = "/".join(tools.getFileName(self._instrument, _date, use_ftp=BCO.USE_FTP_ACCESS).split("/")[-2:])
 
         # print(_nameStr)
         if BCO.USE_FTP_ACCESS:
@@ -284,9 +284,10 @@ class __Device(object):
         _date = self.start.date()
 
         if not self._path_addition:
-            _nameStr = tools.getFileName(self._instrument, _date).split("/")[-1]
+            _nameStr = tools.getFileName(self._instrument, _date, use_ftp=BCO.USE_FTP_ACCESS).split("/")[-1]
         else:
-            _nameStr = "/".join(tools.getFileName(self._instrument, _date).split("/")[-2:])
+            print(self._instrument,_date)
+            _nameStr = "/".join(tools.getFileName(self._instrument, _date,use_ftp=BCO.USE_FTP_ACCESS).split("/")[-2:])
 
         if BCO.USE_FTP_ACCESS:
             for _f in self._ftp_files:
@@ -378,9 +379,9 @@ class __Device(object):
         """
         _date = self.start.date()
         if not self._path_addition:
-            _nameStr = tools.getFileName(self._instrument, _date).split("/")[-1]
+            _nameStr = tools.getFileName(self._instrument, _date,use_ftp=BCO.USE_FTP_ACCESS).split("/")[-1]
         else:
-            _nameStr = "/".join(tools.getFileName(self._instrument, _date).split("/")[-2:])
+            _nameStr = "/".join(tools.getFileName(self._instrument, _date, use_ftp=BCO.USE_FTP_ACCESS).split("/")[-2:])
 
 
         if BCO.USE_FTP_ACCESS:
