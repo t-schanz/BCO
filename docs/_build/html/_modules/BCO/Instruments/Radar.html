@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>BCO.Instruments.Radar &mdash; BCO version=1.1.4 documentation</title>
+  <title>BCO.Instruments.Radar &mdash; BCO version=1.2.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="BCO version=1.1.4 documentation" href="../../../index.html"/>
+    <link rel="top" title="BCO version=1.2.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                version=1.1.4
+                version=1.2.0
               </div>
             
           
@@ -280,8 +280,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getValueFromNc</span><span class="p">(</span><span class="s2">&quot;lon&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">azimuth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getValueFromNc</span><span class="p">(</span><span class="s2">&quot;azi&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">elevation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getValueFromNc</span><span class="p">(</span><span class="s2">&quot;elv&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">north</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getValueFromNc</span><span class="p">(</span><span class="s2">&quot;northangle&quot;</span><span class="p">)</span></div>
-        <span class="bp">self</span><span class="o">.</span><span class="n">skipped</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">north</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getValueFromNc</span><span class="p">(</span><span class="s2">&quot;northangle&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skipped</span> <span class="o">=</span> <span class="kc">None</span></div>
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">returnStr</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> Radar.</span><span class="se">\n</span><span class="s2">Used data version </span><span class="si">%i</span><span class="s2">.</span><span class="se">\n</span><span class="s2">Load data from </span><span class="si">%s</span><span class="s2"> to </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> \
@@ -353,8 +353,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ERROR: </span><span class="si">%s</span><span class="s2"> is not a valid postprocessing operator for data version </span><span class="si">%i</span><span class="s2">.&quot;</span> <span class="o">%</span>
                   <span class="p">(</span><span class="n">postprocessing</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_version</span><span class="p">))</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Allowed operators are: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__getPostProcessingForVersion</span><span class="p">())))</span></div>
-            <span class="k">return</span> <span class="kc">None</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Allowed operators are: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__getPostProcessingForVersion</span><span class="p">())))</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="Radar.getVelocity"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radar.Radar.getVelocity.html#BCO.Instruments.Radar.Radar.getVelocity">[docs]</a>    <span class="k">def</span> <span class="nf">getVelocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;hydrometeors&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -382,8 +382,8 @@
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="n">velocity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="n">targets</span><span class="p">[</span><span class="n">target</span><span class="p">])</span>
-</div>
-        <span class="k">return</span> <span class="n">velocity</span>
+
+        <span class="k">return</span> <span class="n">velocity</span></div>
 
 <div class="viewcode-block" id="Radar.getTime"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radar.Radar.getTime.html#BCO.Instruments.Radar.Radar.getTime">[docs]</a>    <span class="k">def</span> <span class="nf">getTime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -402,8 +402,8 @@
 
         <span class="n">time</span> <span class="o">=</span> <span class="n">BCO</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">convert</span><span class="o">.</span><span class="n">num2time</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>  <span class="c1"># converting seconds since 1970 to datetime objects</span>
         <span class="n">time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_local2UTC</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
-</div>
-        <span class="k">return</span> <span class="n">time</span>
+
+        <span class="k">return</span> <span class="n">time</span></div>
 
 <div class="viewcode-block" id="Radar.getMeltHeight"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radar.Radar.getMeltHeight.html#BCO.Instruments.Radar.Radar.getMeltHeight">[docs]</a>    <span class="k">def</span> <span class="nf">getMeltHeight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -413,8 +413,8 @@
 <span class="sd">            A numpy array containing the melting layer height in meters.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">meltHeight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="s1">&#39;MeltHei&#39;</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">meltHeight</span>
+        <span class="n">meltHeight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="s1">&#39;MeltHei&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">meltHeight</span></div>
 
 <div class="viewcode-block" id="Radar.getRadarConstant"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radar.Radar.getRadarConstant.html#BCO.Instruments.Radar.Radar.getRadarConstant">[docs]</a>    <span class="k">def</span> <span class="nf">getRadarConstant</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -425,8 +425,8 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">radarConstant</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="s1">&#39;RadarConst&#39;</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="n">radarConstant</span>
+        <span class="n">radarConstant</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="s1">&#39;RadarConst&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">radarConstant</span></div>
 
 <div class="viewcode-block" id="Radar.getNoisePower"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radar.Radar.getNoisePower.html#BCO.Instruments.Radar.Radar.getNoisePower">[docs]</a>    <span class="k">def</span> <span class="nf">getNoisePower</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -446,8 +446,8 @@
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="n">noise</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="n">channels</span><span class="p">[</span><span class="n">channel</span><span class="p">])</span>
-</div>
-        <span class="k">return</span> <span class="n">noise</span>
+
+        <span class="k">return</span> <span class="n">noise</span></div>
 
 <div class="viewcode-block" id="Radar.getLDR"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radar.Radar.getLDR.html#BCO.Instruments.Radar.Radar.getLDR">[docs]</a>    <span class="k">def</span> <span class="nf">getLDR</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;hydrometeors&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -470,8 +470,8 @@
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="n">ldr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="n">targets</span><span class="p">[</span><span class="n">target</span><span class="p">])</span>
-</div>
-        <span class="k">return</span> <span class="n">ldr</span>
+
+        <span class="k">return</span> <span class="n">ldr</span></div>
 
 <div class="viewcode-block" id="Radar.getRMS"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radar.Radar.getRMS.html#BCO.Instruments.Radar.Radar.getRMS">[docs]</a>    <span class="k">def</span> <span class="nf">getRMS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;hydrometeors&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -494,8 +494,8 @@
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="n">rms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="n">targets</span><span class="p">[</span><span class="n">target</span><span class="p">])</span>
-</div>
-        <span class="k">return</span> <span class="n">rms</span>
+
+        <span class="k">return</span> <span class="n">rms</span></div>
 
 <div class="viewcode-block" id="Radar.getSNR"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radar.Radar.getSNR.html#BCO.Instruments.Radar.Radar.getSNR">[docs]</a>    <span class="k">def</span> <span class="nf">getSNR</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;hydrometeors&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -519,8 +519,8 @@
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="n">snr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="n">targets</span><span class="p">[</span><span class="n">target</span><span class="p">])</span>
-</div>
-        <span class="k">return</span> <span class="n">snr</span>
+
+        <span class="k">return</span> <span class="n">snr</span></div>
 
 <div class="viewcode-block" id="Radar.getRange"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radar.Radar.getRange.html#BCO.Instruments.Radar.Radar.getRange">[docs]</a>    <span class="k">def</span> <span class="nf">getRange</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -541,8 +541,8 @@
 
         <span class="c1"># in case of many days being loaded and their range might be concatenated they will be split here:</span>
         <span class="nb">range</span> <span class="o">=</span> <span class="nb">range</span><span class="p">[:</span><span class="n">np</span><span class="o">.</span><span class="n">nanargmax</span><span class="p">(</span><span class="nb">range</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
-</div>
-        <span class="k">return</span> <span class="nb">range</span>
+
+        <span class="k">return</span> <span class="nb">range</span></div>
 
 <div class="viewcode-block" id="Radar.getTransmitPower"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radar.Radar.getTransmitPower.html#BCO.Instruments.Radar.Radar.getTransmitPower">[docs]</a>    <span class="k">def</span> <span class="nf">getTransmitPower</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -553,8 +553,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">tpow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="s2">&quot;tpow&quot;</span><span class="p">)</span>
-</div>
-        <span class="k">return</span> <span class="n">tpow</span>
+
+        <span class="k">return</span> <span class="n">tpow</span></div>
 
 <div class="viewcode-block" id="Radar.quickplot2D"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radar.Radar.quickplot2D.html#BCO.Instruments.Radar.Radar.quickplot2D">[docs]</a>    <span class="k">def</span> <span class="nf">quickplot2D</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">save_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -590,8 +590,8 @@
 
         <span class="k">if</span> <span class="n">save_name</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">save_path</span><span class="p">:</span>
-                <span class="n">save_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div>
-            <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">save_path</span> <span class="o">+</span> <span class="n">save_name</span><span class="p">)</span>
+                <span class="n">save_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">save_path</span> <span class="o">+</span> <span class="n">save_name</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">__getPostProcessingForVersion</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -633,8 +633,8 @@
               <span class="s2">&quot;   Note: not all parameters might be available for every data_version&quot;</span><span class="p">)</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Please have a look at the documentation. It contains examples for many usecases.</span><span class="se">\n</span><span class="s2">&quot;</span>
-              <span class="s2">&quot;www.hereWillBeTheDocumentationAtSomePoint.de </span><span class="se">\n</span><span class="s2">&quot;</span></div></div>
-              <span class="s2">&quot;at the moment: docs/_build/html/index.html&quot;</span><span class="p">)</span>
+              <span class="s2">&quot;www.hereWillBeTheDocumentationAtSomePoint.de </span><span class="se">\n</span><span class="s2">&quot;</span>
+              <span class="s2">&quot;at the moment: docs/_build/html/index.html&quot;</span><span class="p">)</span></div></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;main&quot;</span><span class="p">:</span>
@@ -675,7 +675,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'version=1.1.4',
+            VERSION:'version=1.2.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

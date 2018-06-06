@@ -1,5 +1,5 @@
 SfcWeather
-=====================================
+========================================
 
 .. currentmodule:: BCO.Instruments.SfcWeather
 
@@ -12,8 +12,6 @@ SfcWeather
 
    .. autosummary::
       :toctree:
-
-     :toctree:
 
   
       ~SfcWeather.close

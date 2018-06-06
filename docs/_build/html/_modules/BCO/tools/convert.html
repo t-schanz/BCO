@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>BCO.tools.convert &mdash; BCO version=1.1.4 documentation</title>
+  <title>BCO.tools.convert &mdash; BCO version=1.2.0 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="BCO version=1.1.4 documentation" href="../../../index.html"/>
+    <link rel="top" title="BCO version=1.2.0 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                version=1.1.4
+                version=1.2.0
               </div>
             
           
@@ -185,8 +185,8 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Same as input format, containing values in K.</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="mf">273.15</span><span class="p">)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="mf">273.15</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Kelvin2Celsius"><a class="viewcode-back" href="../../../generated/BCO.tools.convert.Kelvin2Celsius.html#BCO.tools.convert.Kelvin2Celsius">[docs]</a><span class="k">def</span> <span class="nf">Kelvin2Celsius</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
@@ -198,8 +198,8 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Same as input format, containing values in °C.</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="mf">273.15</span><span class="p">)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="mf">273.15</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="num2time"><a class="viewcode-back" href="../../../generated/BCO.tools.convert.num2time.html#BCO.tools.convert.num2time">[docs]</a><span class="k">def</span> <span class="nf">num2time</span><span class="p">(</span><span class="n">num</span><span class="p">,</span><span class="n">utc</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -223,8 +223,8 @@
     <span class="k">if</span> <span class="n">utc</span><span class="p">:</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span> <span class="n">x</span><span class="o">-</span><span class="n">y</span><span class="p">)</span>
         <span class="n">date</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">date</span><span class="p">,</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
-</div>
-    <span class="k">return</span> <span class="n">date</span>
+
+    <span class="k">return</span> <span class="n">date</span></div>
 
 
 <div class="viewcode-block" id="time2num"><a class="viewcode-back" href="../../../generated/BCO.tools.convert.time2num.html#BCO.tools.convert.time2num">[docs]</a><span class="k">def</span> <span class="nf">time2num</span><span class="p">(</span><span class="n">time</span><span class="p">,</span><span class="n">utc</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -247,8 +247,8 @@
         <span class="n">date</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">timestamp</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">utc</span><span class="p">:</span>
-        <span class="n">date</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">date</span><span class="p">,</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">seconds</span><span class="p">)</span></div>
-    <span class="k">return</span> <span class="n">date</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">date</span><span class="p">,</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">seconds</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">date</span></div>
 </pre></div>
 
            </div>
@@ -285,7 +285,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'version=1.1.4',
+            VERSION:'version=1.2.0',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
