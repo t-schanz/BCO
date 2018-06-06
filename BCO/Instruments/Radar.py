@@ -7,7 +7,7 @@ from datetime import datetime as dt
 import datetime
 
 import BCO.tools.convert
-from BCO.Instruments.Device_module import __Device, getValueFromSettings
+from BCO.Instruments.Device_module import __Device
 import BCO.tools.tools as tools
 import glob
 import numpy as np
@@ -110,7 +110,10 @@ class Radar(__Device):
         self.lon = self._getValueFromNc("lon")
         self.azimuth = self._getValueFromNc("azi")
         self.elevation = self._getValueFromNc("elv")
-        self.north = self._getValueFromNc("northangle")
+        try:
+            self.north = self._getValueFromNc("northangle")
+        except:
+            self.north = self._getValueFromNc("north")
         self.skipped = None
 
     def __str__(self):
@@ -432,7 +435,7 @@ class Radar(__Device):
             ["Zf","Ze","Zu"]
         """
 
-        _vars = getValueFromSettings("RADAR_VERSION_%i_REFLECTIVITY_VARIABLES" % self.data_version).split(",")
+        _vars = BCO.config[self._instrument]["VERSION_%i_REFLECTIVITY_VARIABLES"%self.data_version].split(",")
         return _vars
 
 
