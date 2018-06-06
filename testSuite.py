@@ -27,22 +27,26 @@ from netCDF4 import Dataset
 if __name__ == "__main__":
     # FTP-settings:
 
-    BCO.settings.set_ftp(True)
+    # BCO.settings.set_ftp(True)
     # BCO.settings.path_to_ftp_file("/home/tobias/Documents/ftp_access.txt")
     # BCO.settings.path_to_ftp_file("/home/mpim/m300517/ftp_access.txt",verbose=True)
-    BCO.settings.path_to_ftp_file("C:/Users/darkl/Documents/ftp_access.txt")
+    # BCO.settings.path_to_ftp_file("C:/Users/darkl/Documents/ftp_access.txt")
 
 
     # working devices:
     #
     # Rad = Radiation("20180103","20180104")
     # rad_time = Rad.getTime()
-    Wx = SfcWeather("20180101","20180101")
-    wx_time = Wx.getTime()
-    # coral = Radar("20180129","20180130",device="CORAL")
-    # coral_time = coral.getTime()
-    # coral_pow = coral.getTransmitPower()
+    # Wx = SfcWeather("20180101","20180101")
+    # wx_time = Wx.getTime()
+    coral = Radar("20180519","20180519",device="CORAL",version=3)
+    coral_time = coral.getTime()
+    coral_ref = coral.getReflectivity()
+    coral_range = coral.getRange()
 
+
+    plt.contourf(coral_time,coral_range,coral_ref.T)
+    plt.show()
     # plt.plot(coral_time,coral_pow)
     # plt.show()
     # lidar = Windlidar("20180401","20180401") #seems to work with data version 1.01!

@@ -14,10 +14,10 @@ with open("version.txt","r") as f:
 
 setup(name='BCO',
       version=version_from_file,
-      description='Python Interface to the Max-Planck-Institut Barbados Cloud Observatory data.',
+      description='Python Interface to the Max-Planck-Institute Barbados Cloud Observatory data.',
       author='Tobias Machnitzki',
       author_email='tobias.machnitzki@mpimet.mpg.de',
-      url='https://github.com/darklefknight/BCO/',
+      url='https://github.com/tmachnitzki/BCO/',
 
       classifiers=[
             # How mature is this project? Common values are
@@ -33,11 +33,13 @@ setup(name='BCO',
             # Specify the Python versions you support here. In particular, ensure
             # that you indicate whether you support Python 2, Python 3 or both.
             'Programming Language :: Python :: 3.6',
+
+            'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
       ],
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    packages=find_packages(exclude=['contrib', 'docs', 'tests']),
+    packages=find_packages(exclude=['contrib', 'docs', 'tests','build']),
 
     # List run-time dependencies here.  These will be installed by pip when
     # your project is installed. For an analysis of "install_requires" vs pip's
@@ -51,7 +53,12 @@ setup(name='BCO',
 
     python_requires='>=3',
 
-    include_package_data=True
+    include_package_data=True,
 
+    project_urls = {
+        'Documentation': 'http://bcoweb.mpimet.mpg.de/systems/BCO_python_doc/index.html',
+        'BCO Blog' :  'https://barbados.mpimet.mpg.de/',
+        'Development': 'https://github.com/tmachnitzki/BCO'
+    }
 
      )

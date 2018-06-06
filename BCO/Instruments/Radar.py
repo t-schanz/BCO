@@ -94,12 +94,15 @@ class Radar(__Device):
         self.data_version = version
         self._instrument = BCO.config[device]["INSTRUMENT"] # String used for retrieving the filepath from settings.ini
         print(self._instrument)
+
+        BCO.config[self._instrument]["DATA_VERSION"] = "Version_%i/"%self.data_version
         self._name_str = BCO.config[self._instrument]["NAME_SCHEME"]
         self._path_addition = BCO.config[self._instrument]["PATH_ADDITION"]
         self._path_addition = None if self._path_addition == "None" else self._path_addition # convert str to None
         print("Name Str: " + self._name_str)
         self._ftp_files = []
         self.path = self._getPath()
+
 
         if not BCO.USE_FTP_ACCESS:
             self.path += "Version_%i/" % version
