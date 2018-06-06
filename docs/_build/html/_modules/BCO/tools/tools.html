@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>BCO.tools.tools &mdash; BCO version=1.2.0 documentation</title>
+  <title>BCO.tools.tools &mdash; BCO version=1.2.2 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="BCO version=1.2.0 documentation" href="../../../index.html"/>
+    <link rel="top" title="BCO version=1.2.2 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                version=1.2.0
+                version=1.2.2
               </div>
             
           
@@ -349,7 +349,7 @@
     <span class="n">ftp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="getFileName"><a class="viewcode-back" href="../../../generated/BCO.tools.tools.getFileName.html#BCO.tools.tools.getFileName">[docs]</a><span class="k">def</span> <span class="nf">getFileName</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">use_ftp</span><span class="o">=</span><span class="n">BCO</span><span class="o">.</span><span class="n">USE_FTP_ACCESS</span><span class="p">):</span>
+<div class="viewcode-block" id="getFileName"><a class="viewcode-back" href="../../../generated/BCO.tools.tools.getFileName.html#BCO.tools.tools.getFileName">[docs]</a><span class="k">def</span> <span class="nf">getFileName</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">use_ftp</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function can be used to get the full path and name of the file as on</span>
 <span class="sd">    the server. The path will vary if you are switching between the ftp-server or</span>
@@ -361,13 +361,13 @@
 
 <span class="sd">            &gt;&gt;&gt; from BCO.tools.tools import getFileName</span>
 <span class="sd">            &gt;&gt;&gt; from datetime import datetime as dt</span>
-<span class="sd">            &gt;&gt;&gt; print(getFileName(&quot;CORAL&quot;,date=dt(2018,1,23)))</span>
+<span class="sd">            &gt;&gt;&gt; print(getFileName(&quot;CORAL&quot;,date=dt(2018,1,23),use_ftp=True))</span>
 <span class="sd">            &#39;/B_Reflectivity/Version_2/MMCR__MBR__Spectral_Moments__10s__155m-25km__180123.nc&#39;</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        instrument: str: one of &quot;CORAL&quot;, &quot;KATRIN&quot;, &quot;CEILOMETER&quot;, &quot;RADIATION&quot;, &quot;WEATHER&quot;, &quot;WINDLIDAR&quot;</span>
 <span class="sd">        date: datetime.datetime object: Date from when you want the name. (Names usually include the date.)</span>
-<span class="sd">        use_ftp: boolean: Whether to use the ftp-access or not. (Usually automatically set.)</span>
+<span class="sd">        use_ftp: boolean: Whether to use the ftp-access or not.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        String containing full path and name of the file.</span>
@@ -496,7 +496,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'version=1.2.0',
+            VERSION:'version=1.2.2',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
