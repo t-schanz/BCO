@@ -1,5 +1,5 @@
 daterange
-=========================
+============================
 
 .. currentmodule:: BCO.tools.tools
 

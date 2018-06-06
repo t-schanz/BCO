@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>getWindSpeed &mdash; BCO version=1.1.4 documentation</title>
+  <title>getWindSpeed &mdash; BCO version=1.2.2 documentation</title>
   
 
   
@@ -37,7 +37,10 @@
         <link rel="index" title="Index"
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="BCO version=1.1.4 documentation" href="../index.html"/> 
+    <link rel="top" title="BCO version=1.2.2 documentation" href="../index.html"/>
+        <link rel="up" title="SfcWeather" href="BCO.Instruments.SfcWeather.SfcWeather.html"/>
+        <link rel="next" title="Windlidar" href="BCO.Instruments.Windlidar.Windlidar.html"/>
+        <link rel="prev" title="getWindDirection" href="BCO.Instruments.SfcWeather.SfcWeather.getWindDirection.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -66,7 +69,7 @@
             
             
               <div class="version">
-                version=1.1.4
+                version=1.2.2
               </div>
             
           
@@ -93,8 +96,30 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../intro.html">First Steps</a></li>
 </ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../modules.html">Instruments</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">Instruments</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../BCO.Instruments.html">Ceilometer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../BCO.Instruments.html#module-BCO.Instruments.Radar">Radar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../BCO.Instruments.html#module-BCO.Instruments.Radiation">Radiation</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../BCO.Instruments.html#module-BCO.Instruments.SfcWeather">Surface Weather</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.html">SfcWeather</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.close.html">close</a></li>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getDataQuality.html">getDataQuality</a></li>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getHumidity.html">getHumidity</a></li>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getPrecipitation.html">getPrecipitation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getPressure.html">getPressure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getTechnicalValues.html">getTechnicalValues</a></li>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getTemperature.html">getTemperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getTime.html">getTime</a></li>
+<li class="toctree-l4"><a class="reference internal" href="BCO.Instruments.SfcWeather.SfcWeather.getWindDirection.html">getWindDirection</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">getWindSpeed</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../BCO.Instruments.html#module-BCO.Instruments.Windlidar">Windlidar</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../modules.html#tools">Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../modules.html#quicklooks">Quicklooks</a></li>
 </ul>
@@ -148,6 +173,12 @@
   <ul class="wy-breadcrumbs">
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../modules.html">Instruments</a> &raquo;</li>
+        
+          <li><a href="../BCO.Instruments.html">Ceilometer</a> &raquo;</li>
+        
+          <li><a href="BCO.Instruments.SfcWeather.SfcWeather.html">SfcWeather</a> &raquo;</li>
         
       <li>getWindSpeed</li>
     
@@ -223,7 +254,7 @@ the mean or the maximum of this 10s accumulation.</p>
 </table>
 <p>Example
 To get the 10s maximum values:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">BCO.Instruments</span> <span class="k">import</span> <span class="n">SfcWeather</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">BCO.Instruments</span> <span class="k">import</span> <span class="n">SfcWeather</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">met</span> <span class="o">=</span> <span class="n">SfcWeather</span><span class="p">(</span><span class="s2">&quot;20180101&quot;</span><span class="p">,</span><span class="s2">&quot;20180101&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">max_velocity</span> <span class="o">=</span> <span class="n">met</span><span class="o">.</span><span class="n">getWindSpeed</span><span class="p">(</span><span class="s2">&quot;max&quot;</span><span class="p">)</span>
 </pre></div>
@@ -239,6 +270,15 @@ To get the 10s maximum values:</p>
            </div>
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="BCO.Instruments.Windlidar.Windlidar.html" class="btn btn-neutral float-right" title="Windlidar" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="BCO.Instruments.SfcWeather.SfcWeather.getWindDirection.html" class="btn btn-neutral" title="getWindDirection" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -267,7 +307,7 @@ To get the 10s maximum values:</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'version=1.1.4',
+            VERSION:'version=1.2.2',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

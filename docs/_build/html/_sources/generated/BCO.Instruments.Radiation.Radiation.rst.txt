@@ -1,5 +1,5 @@
 Radiation
-===================================
+======================================
 
 .. currentmodule:: BCO.Instruments.Radiation
 
@@ -12,8 +12,6 @@ Radiation
 
    .. autosummary::
       :toctree:
-
-     :toctree:
 
   
       ~Radiation.close

@@ -1,5 +1,5 @@
 Windlidar
-===================================
+======================================
 
 .. currentmodule:: BCO.Instruments.Windlidar
 
@@ -12,8 +12,6 @@ Windlidar
 
    .. autosummary::
       :toctree:
-
-     :toctree:
 
   
       ~Windlidar.close

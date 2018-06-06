@@ -1,5 +1,5 @@
 Radar
-===========================
+==============================
 
 .. currentmodule:: BCO.Instruments.Radar
 
@@ -12,8 +12,6 @@ Radar
 
    .. autosummary::
       :toctree:
-
-     :toctree:
 
   
       ~Radar.close
