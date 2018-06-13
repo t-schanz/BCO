@@ -11,7 +11,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 
 # Setting the version:
-version_path = os.path.split(here)[:-1]
+version_path = os.path.split(here)
 import re
 VERSIONFILE=os.path.join(*version_path,"_version.py")
 verstrline = open(VERSIONFILE, "rt").read()
