@@ -60,9 +60,10 @@ setup(name='BCO',
         'matplotlib>=1.4',
         'netCDF4>=1.1.1',
         'numpy>=1.6',
+        'future>=0.15.0',
       ],
 
-    python_requires='>=3',
+    python_requires='>=2.7',
 
     include_package_data=True,
 

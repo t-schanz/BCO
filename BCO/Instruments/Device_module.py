@@ -15,6 +15,8 @@ import tempfile
 import re
 import fnmatch
 import configparser
+from six import reraise as raise_
+from future.utils import raise_from
 
 try:
     from netCDF4 import Dataset
@@ -124,9 +126,12 @@ class __Device(object):
 
 
     def _local2UTC(self, time):
-        f1 = lambda x : x.astimezone(self.__de_tz).astimezone(utc)
-        return np.asarray(list(map(f1, time)))
-
+        if sys.version_info >= (3,0):
+            f1 = lambda x : x.astimezone(self.__de_tz).astimezone(utc)
+            return np.asarray(list(map(f1, time)))
+        else:
+            f1 = lambda x: self.__de_tz.localize(x).replace(tzinfo=self.__utc_tz)
+            return np.asarray(list(map(f1, time)))
 
     def _downloadFromFTP(self,file,ftp_client=None):
         """
@@ -204,9 +209,11 @@ class __Device(object):
 
             except KeyError:
                 nc.close()
-                raise
+                raise_
 
-            except FileNotFoundError:
+
+            except IOError as exc:
+                raise_from(DatabaseError('failed to open'), exc)
                 skippedDates.append(_date)
                 continue
 
@@ -224,7 +231,7 @@ class __Device(object):
         return _var
 
 
-    def _getValueFromNc(self, value: str):
+    def _getValueFromNc(self, value):
         """
         This function gets values from the netCDF-Dataset, which stay constant over the whole timeframe. So its very
         similar to _getArrayFromNc(), but without the looping.

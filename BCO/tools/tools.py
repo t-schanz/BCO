@@ -85,7 +85,7 @@ def datestr(dt_obj):
     return dt_obj.strftime("%y%m%d")
 
 
-def bz2Dataset(bz2file: str):
+def bz2Dataset(bz2file):
     """
     Generates a netCDF Dataset from a .nc.bz2 file. It therefore needs the "dummy_nc_file.nc".
 
@@ -255,8 +255,8 @@ def getFileName(instrument, date, use_ftp, filelist=[], ftp_client=None):
 
         else:
             for fl in filelist:
-                _path = list(os.path.split(fl))[:-1]
-                _name = os.path.join(*_path, tmp_name)
+                _path = list(os.path.split(fl))
+                _name = os.path.join(_path[0], tmp_name)
                 name = glob.glob(_name)
                 if len(name) != 0:
                     break
