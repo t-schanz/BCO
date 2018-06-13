@@ -26,7 +26,7 @@ except:
 class __Device(object):
     """
     This class provide some general functions to work with. Many of the instrument classes will inherit from this
-    calass.
+    class.
 
     """
 
@@ -64,7 +64,7 @@ class __Device(object):
             sys.exit(1)
 
         _input = input
-        if type(_input) == str:
+        if isinstance(_input,str):
 
             def __repeat_to_length(string_to_expand, length):
                 while len(string_to_expand) < length:
@@ -80,7 +80,7 @@ class __Device(object):
             except:
                 _raiseError(_input)
 
-        elif type(_input) == datetime.datetime:
+        elif isinstance(_input, datetime.datetime):
             _timeObj = _input
 
         else:
@@ -128,7 +128,7 @@ class __Device(object):
         return np.asarray(list(map(f1, time)))
 
 
-    def _downloadFromFTP(self,file):
+    def _downloadFromFTP(self,file,ftp_client=None):
         """
         Downloads the file from the mpi-zmaw server and saves it on the local machine.
 
@@ -139,26 +139,30 @@ class __Device(object):
             Path to the local directory of the downloaded file.
         """
 
-        tmpdir = tempfile.gettempdir() + "/"
+        tmpdir = tempfile.gettempdir()
 
-        ftp = FTP(BCO.FTP_SERVER)
-        ftp.login(user=BCO.FTP_USER, passwd=BCO.FTP_PASSWD)
+        _close_ftp_client = False
+        if ftp_client == None:
+            ftp_client = FTP(BCO.FTP_SERVER)
+            ftp_client.login(user=BCO.FTP_USER, passwd=BCO.FTP_PASSWD)
+            _close_ftp_client = True
         # print(ftp_path + file)
-        file_to_retrieve = ftp.nlst(file)[0]
+        file_to_retrieve = ftp_client.nlst(file)[0]
         try:
-            __save_file = file_to_retrieve.split("/")[-1]
+            __save_file = os.path.split(file_to_retrieve)[-1]
         except:
             __save_file = file_to_retrieve
 
-        if not os.path.isfile(tmpdir + __save_file): # check if the file is already there:
+        if not os.path.isfile(os.path.join(tmpdir, __save_file)): # check if the file is already there:
             print("Downloading %s"%__save_file)
-            ftp.retrbinary('RETR ' + file_to_retrieve, open(tmpdir + __save_file, 'wb').write)
+            ftp_client.retrbinary('RETR ' + file_to_retrieve, open(os.path.join(tmpdir, __save_file), 'wb').write)
         else:
-            print("Found file in temporary folder. No need to download it again.")
-        self._ftp_files.append(tmpdir + __save_file)
+            print("File already in temporary folder: %s"%__save_file)
+        self._ftp_files.append(os.path.join(tmpdir, __save_file))
 
-        ftp.close()
-        return tmpdir
+        if _close_ftp_client:
+            ftp_client.close()
+        return tmpdir +"/"
 
 
     def _getArrayFromNc(self, value):
@@ -182,25 +186,10 @@ class __Device(object):
         var_list = []
         skippedDates = []
         for _date in tools.daterange(self.start.date(), self.end.date()):
-            if not self._path_addition:
-                _nameStr = tools.getFileName(self._instrument, _date, use_ftp=BCO.USE_FTP_ACCESS).split("/")[-1]
-            else:
-                _nameStr = "/".join(tools.getFileName(self._instrument, _date, use_ftp=BCO.USE_FTP_ACCESS).split("/")[-2:])
-
-            if BCO.USE_FTP_ACCESS:
-                for _f in self._ftp_files:
-                    if fnmatch.fnmatch(_f,"*"+_nameStr.split("/")[-1]):
-                        _file = _f
-                        break
-            else:
-                _file = glob.glob(self.path + _nameStr)[0]
+            _file = self._getFile(_date)
 
             try:
-                if "bz2" in _file[-5:]:
-                    nc = tools.bz2Dataset(_file)
-                    print("bz file")
-                else:
-                    nc = Dataset(_file)
+                nc = self._getNc(_date)
 
                 # print(_date)
                 _start, _end = self._getStartEnd(_date, nc)
@@ -211,9 +200,16 @@ class __Device(object):
                     varFromDate = nc.variables[value][_start:].copy()
                 var_list.append(varFromDate)
                 nc.close()
-            except:
+
+            except KeyError:
+                nc.close()
+                raise
+
+            except FileNotFoundError:
                 skippedDates.append(_date)
                 continue
+
+
 
 
         _var = var_list[0]
@@ -240,28 +236,7 @@ class __Device(object):
             Numpy array
         """
         _date = self.start.date()
-        if not self._path_addition:
-            _nameStr = tools.getFileName(self._instrument, _date, use_ftp=BCO.USE_FTP_ACCESS).split("/")[-1]
-        else:
-            _nameStr = "/".join(tools.getFileName(self._instrument, _date, use_ftp=BCO.USE_FTP_ACCESS).split("/")[-2:])
-
-        # print(_nameStr)
-        if BCO.USE_FTP_ACCESS:
-            for _f in self._ftp_files:
-                if fnmatch.fnmatch(_f, "*" + _nameStr.split("/")[-1]):
-                    _file = _f
-                    break
-        else:
-            # print(self.path)
-            # print(_nameStr)
-            # print(self._path_addition)
-            _file = glob.glob(self.path + _nameStr)[0]
-
-        if "bz2" in _file[-5:]:
-            nc = tools.bz2Dataset(_file)
-        else:
-            nc = Dataset(_file)
-
+        nc = self._getNc(_date)
         _var = nc.variables[value][:].copy()
         nc.close()
 
@@ -282,31 +257,12 @@ class __Device(object):
         """
 
         _date = self.start.date()
-
-        if not self._path_addition:
-            _nameStr = tools.getFileName(self._instrument, _date, use_ftp=BCO.USE_FTP_ACCESS).split("/")[-1]
-        else:
-            print(self._instrument,_date)
-            _nameStr = "/".join(tools.getFileName(self._instrument, _date,use_ftp=BCO.USE_FTP_ACCESS).split("/")[-2:])
-
-        if BCO.USE_FTP_ACCESS:
-            for _f in self._ftp_files:
-                if fnmatch.fnmatch(_f, "*" + _nameStr.split("/")[-1]):
-                    _file = _f
-                    break
-        else:
-            _file = glob.glob(self.path + _nameStr)[0]
-
-        assert _file
-
-        if "bz2" in _file[-5:]:
-            nc = tools.bz2Dataset(_file)
-        else:
-            nc = Dataset(_file)
+        nc = self._getNc(_date)
 
         nc_lines = str(nc).split("\n")
         for line in nc_lines:
             if value in line:
+                nc.close()
                 return ":".join(line.split(":")[1:]).lstrip()
 
 
@@ -338,14 +294,36 @@ class __Device(object):
 
         """
         if BCO.USE_FTP_ACCESS:
+            ftp_client = tools.getFTPClient(user=BCO.FTP_USER,passwd=BCO.FTP_PASSWD)
             for _date in tools.daterange(self.start.date(), self.end.date()):
-                tmp_file = tools.getFileName(self._instrument,_date,use_ftp=BCO.USE_FTP_ACCESS)
-                __path = self._downloadFromFTP(file=tmp_file)
+                tmp_file = tools.getFileName(self._instrument,_date,use_ftp=BCO.USE_FTP_ACCESS,ftp_client=ftp_client)
+                __path = self._downloadFromFTP(file=tmp_file,ftp_client=ftp_client)
+
+            ftp_client.close()
             return __path
 
         else:
             tmp_path =  BCO.config[self._instrument]["PATH"]
             return tmp_path
+
+
+    def _getFile(self,date):
+
+        if not self._path_addition:
+            _nameStr = tools.getFileName(self._instrument, date, use_ftp=BCO.USE_FTP_ACCESS,filelist=self._ftp_files).split("/")[-1]
+        else:
+            # print(self._instrument, date)
+            _nameStr = "/".join(tools.getFileName(self._instrument, date, use_ftp=BCO.USE_FTP_ACCESS,filelist=self._ftp_files).split("/")[-2:])
+
+        if BCO.USE_FTP_ACCESS:
+            for _f in self._ftp_files:
+                if fnmatch.fnmatch(_f, "*" + _nameStr.split("/")[-1]):
+                    _file = _f
+                    break
+        else:
+            _file = glob.glob(os.path.join(self.path, _nameStr))[0]
+
+        return _file
 
 
     def getTime(self):
@@ -369,7 +347,7 @@ class __Device(object):
         return time
 
 
-    def _get_nc(self):
+    def _getNc(self,date):
         """
         Only for development.
 
@@ -377,20 +355,7 @@ class __Device(object):
             Instance of open Dataset from nc-file.
 
         """
-        _date = self.start.date()
-        if not self._path_addition:
-            _nameStr = tools.getFileName(self._instrument, _date,use_ftp=BCO.USE_FTP_ACCESS).split("/")[-1]
-        else:
-            _nameStr = "/".join(tools.getFileName(self._instrument, _date, use_ftp=BCO.USE_FTP_ACCESS).split("/")[-2:])
-
-
-        if BCO.USE_FTP_ACCESS:
-            for _f in self._ftp_files:
-                if fnmatch.fnmatch(_f, "*" + _nameStr):
-                    _file = _f
-                    break
-        else:
-            _file = glob.glob(self.path + _nameStr)[0]
+        _file = self._getFile(date)
 
         if "bz2" in _file[-5:]:
             nc = tools.bz2Dataset(_file)

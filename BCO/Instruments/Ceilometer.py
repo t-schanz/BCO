@@ -53,11 +53,9 @@ class Ceilometer(__Device):
 
 
         self._instrument = BCO.config["CEILOMETER"]["INSTRUMENT"] # String used for retrieving the filepath from settings.ini
-        print(self._instrument)
         self._name_str = BCO.config[self._instrument]["NAME_SCHEME"]
         self._path_addition = BCO.config[self._instrument]["PATH_ADDITION"]
         self._path_addition = None if self._path_addition == "None" else self._path_addition # convert str to None
-        print("Name Str: " + self._name_str)
         self._ftp_files = []
         self.path = self._getPath()
 
@@ -109,9 +107,11 @@ class Ceilometer(__Device):
         skippedDates = []
         for _date in tools.daterange(self.start.date(), self.end.date(), step="month"):
             if not self._path_addition:
-                _nameStr = tools.getFileName(self._instrument, _date, use_ftp=BCO.USE_FTP_ACCESS).split("/")[-1]
+                _nameStr = tools.getFileName(self._instrument, _date, use_ftp=BCO.USE_FTP_ACCESS,
+                                             filelist=self._ftp_files).split("/")[-1]
             else:
-                _nameStr = "/".join(tools.getFileName(self._instrument, _date, use_ftp=BCO.USE_FTP_ACCESS).split("/")[-2:])
+                _nameStr = "/".join(tools.getFileName(self._instrument, _date, use_ftp=BCO.USE_FTP_ACCESS,
+                                                      filelist=self._ftp_files).split("/")[-2:])
 
             if BCO.USE_FTP_ACCESS:
                 for _f in self._ftp_files:
@@ -121,15 +121,10 @@ class Ceilometer(__Device):
             else:
                 _file = glob.glob(self.path + _nameStr)[0]
 
-            if "bz2" in _file[-5:]:
-                nc = tools.bz2Dataset(_file)
-                print("bz file")
-            else:
-                nc = Dataset(_file)
+            nc = self._getNc(_date)
 
             # print(_date)
             _start, _end = self._getStartEnd(_date, nc)
-            print(_start,_end)
             if _end != 0:
                 varFromDate = nc.variables[value][_start:_end].copy()
             else:

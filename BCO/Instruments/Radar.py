@@ -93,20 +93,18 @@ class Radar(__Device):
         self.end = self._checkInputTime(end)
         self.data_version = version
         self._instrument = BCO.config[device]["INSTRUMENT"] # String used for retrieving the filepath from settings.ini
-        print(self._instrument)
+        # print(self._instrument)
 
         BCO.config[self._instrument]["DATA_VERSION"] = "Version_%i/"%self.data_version
         self._name_str = BCO.config[self._instrument]["NAME_SCHEME"]
         self._path_addition = BCO.config[self._instrument]["PATH_ADDITION"]
         self._path_addition = None if self._path_addition == "None" else self._path_addition # convert str to None
-        print("Name Str: " + self._name_str)
         self._ftp_files = []
         self.path = self._getPath()
 
 
         if not BCO.USE_FTP_ACCESS:
             self.path += "Version_%i/" % version
-        print("PATH: " + self.path)
         self.__checkInput()
 
         self.lat = self._getValueFromNc("lat")
@@ -142,11 +140,9 @@ class Radar(__Device):
                 "The version of the Dataset needs to be between %i and %i" % (_versions_avail[0], _versions_avail[-1]))
             sys.exit(1)
 
-        print(self.path)
         try:  # check if device was running on selected timeframe
             for _date in tools.daterange(self.start, self.end):
-                _nameStr = tools.getFileName(self.device,_date,use_ftp=BCO.USE_FTP_ACCESS).split("/")[-1]
-                print("CheckInput: " +self.path + _nameStr)
+                _nameStr = tools.getFileName(self.device,_date,use_ftp=BCO.USE_FTP_ACCESS,filelist=self._ftp_files).split("/")[-1]
                 _file = glob.glob(self.path + _nameStr)[0]
         except:
             print("The Device %s was not running on %s. Please adjust timeframe.\n"

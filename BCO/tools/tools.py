@@ -124,7 +124,7 @@ def bz2Dataset(bz2file: str):
     return nc
 
 
-def download_from_zmaw_ftp(device,start,end,output_folder="./"):
+def download_from_zmaw_ftp(device,start,end,output_folder="./",ftp_client=None):
     """
     This function can be used to download data from the bco ftp-server
     to store it on your local machine.
@@ -160,11 +160,14 @@ def download_from_zmaw_ftp(device,start,end,output_folder="./"):
         files.append(_nameStr)
 
     # download the file:
-    ftp = FTP(BCO.FTP_SERVER)
-    ftp.login(user=BCO.FTP_USER, passwd=BCO.FTP_PASSWD)
+    _close_ftp_client = False
+    if ftp_client == None:
+        ftp_client = FTP(BCO.FTP_SERVER)
+        ftp_client.login(user=BCO.FTP_USER, passwd=BCO.FTP_PASSWD)
+        _close_ftp_client = True
 
     for file in files:
-        file_to_retrieve = ftp.nlst(file)[0]
+        file_to_retrieve = ftp_client.nlst(file)[0]
         try:
             __save_file = file_to_retrieve.split("/")[-1]
         except:
@@ -173,13 +176,15 @@ def download_from_zmaw_ftp(device,start,end,output_folder="./"):
         if not os.path.isfile(output_folder + __save_file): # check if the file is already there:
             print("Downloading %s"%__save_file)
             os.system("touch %s"%output_folder+__save_file)
-            ftp.retrbinary('RETR ' + file_to_retrieve, open(output_folder + __save_file, 'wb').write)
+            ftp_client.retrbinary('RETR ' + file_to_retrieve, open(output_folder + __save_file, 'wb').write)
         else:
             print("File already in provided output folder. No need to download it again.")
-    ftp.close()
+
+    if _close_ftp_client:
+        ftp_client.close()
 
 
-def getFileName(instrument, date, use_ftp):
+def getFileName(instrument, date, use_ftp, filelist=[], ftp_client=None):
     """
     This function can be used to get the full path and name of the file as on
     the server. The path will vary if you are switching between the ftp-server or
@@ -230,17 +235,31 @@ def getFileName(instrument, date, use_ftp):
         path_addition = BCO.config[instrument]["PATH_ADDITION"]
         tmp_path += date.strftime(path_addition)
 
-    tmp_path += date.strftime(BCO.config[instrument]["NAME_SCHEME"])
+    tmp_name = date.strftime(BCO.config[instrument]["NAME_SCHEME"])
+    tmp_path += tmp_name
 
     # get the resolved filename:
     if not use_ftp:
         name = glob.glob(tmp_path)
 
     else:
-        ftp = FTP(BCO.FTP_SERVER)
-        ftp.login(user=BCO.FTP_USER, passwd=BCO.FTP_PASSWD)
-        name = ftp.nlst(tmp_path)
-        ftp.close()
+        if len(filelist) == 0:
+            if ftp_client == None:
+                ftp_client = FTP(BCO.FTP_SERVER)
+                ftp_client.login(user=BCO.FTP_USER, passwd=BCO.FTP_PASSWD)
+                name = ftp_client.nlst(tmp_path)
+                ftp_client.close()
+
+            else:
+                name = ftp_client.nlst(tmp_path)
+
+        else:
+            for fl in filelist:
+                _path = list(os.path.split(fl))[:-1]
+                _name = os.path.join(*_path, tmp_name)
+                name = glob.glob(_name)
+                if len(name) != 0:
+                    break
 
     # print(tmp_path)
     # print(name)
@@ -288,5 +307,5 @@ def getFTPClient(user=None,passwd=None):
     assert passwd
 
     ftp = FTP(BCO.FTP_SERVER)
-    ftp.login(user=passwd, passwd=passwd)
+    ftp.login(user=user, passwd=passwd)
     return ftp

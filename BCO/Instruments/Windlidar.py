@@ -195,7 +195,7 @@ class Windlidar(__Device):
         if BCO.USE_FTP_ACCESS:
             _file = self._ftp_files[0]
         else:
-            _file = tools.getFileName(self._instrument,_date, use_ftp=BCO.USE_FTP_ACCESS)
+            _file = tools.getFileName(self._instrument,_date, use_ftp=BCO.USE_FTP_ACCESS,filelist=self._ftp_files)
 
         if "bz2" in _file[-5:]:
             nc = tools.bz2Dataset(_file)
