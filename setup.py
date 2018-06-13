@@ -1,6 +1,7 @@
 from setuptools import setup, find_packages
 from codecs import open
 from os import path
+import os
 
 here = path.abspath(path.dirname(__file__))
 
@@ -8,9 +9,19 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
-with open("version.txt","r") as f:
-    lines = f.readlines()
-    version_from_file = lines[0].rstrip().lstrip()
+
+# Setting the version:
+version_path = os.path.split(here)[:-1]
+import re
+VERSIONFILE=os.path.join(*version_path,"_version.py")
+verstrline = open(VERSIONFILE, "rt").read()
+VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"  # Pattern for finding the version string in the file _version.py
+mo = re.search(VSRE, verstrline, re.M)
+if mo:
+    version_from_file = mo.group(1)
+else:
+    raise RuntimeError("Unable to find version string in %s." % (VERSIONFILE,))
+
 
 setup(name='BCO',
       version=version_from_file,

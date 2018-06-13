@@ -90,9 +90,16 @@ author = 'Tobias Machnitzki'
 # built documents.
 #
 # The short X.Y version.
-with open("../version.txt","r") as f:
-    lines = f.readlines()
-    version_from_file = lines[0].rstrip().lstrip()
+# Setting the version:
+import re
+VERSIONFILE=os.path.join(module_path,"_version.py")
+verstrline = open(VERSIONFILE, "rt").read()
+VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"  # Pattern for finding the version string in the file _version.py
+mo = re.search(VSRE, verstrline, re.M)
+if mo:
+    version_from_file = mo.group(1)
+else:
+    raise RuntimeError("Unable to find version string in %s." % (VERSIONFILE,))
 version = version_from_file
 # The full version, including alpha/beta/rc tags.
 release = version_from_file

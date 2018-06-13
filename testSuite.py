@@ -52,15 +52,5 @@ if __name__ == "__main__":
 
     # nc = tools.bz2Dataset(
     #     "/pool/OBS/BARBADOS_CLOUD_OBSERVATORY/Level_1/H_Liquid_water_content/201805/MRR__CIMH__LWC__60s_100m__20180523.nc.bz2")
-
-    class Test(object):
-
-        def __init__(self):
-            foo = 1
-            self.test_method()
-
-        def test_method(self, Input=self.foo):
-            print(Input)
-
-    Test()
+    print("asdf")
 
