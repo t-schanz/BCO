@@ -157,7 +157,8 @@ class __Device(object):
             print("Downloading %s"%__save_file)
             ftp_client.retrbinary('RETR ' + file_to_retrieve, open(os.path.join(tmpdir, __save_file), 'wb').write)
         else:
-            print("File already in temporary folder: %s"%__save_file)
+            # print("File already in temporary folder: %s"%__save_file)
+            pass
         self._ftp_files.append(os.path.join(tmpdir, __save_file))
 
         if _close_ftp_client:
