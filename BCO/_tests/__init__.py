@@ -1,2 +1,2 @@
-from . import Classtests
-from . import Functiontests
+from .Classtests import ClassTesting
+from .Functiontests import ConverterTesting, ToolsTesting
