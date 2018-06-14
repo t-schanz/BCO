@@ -48,6 +48,7 @@ from . import Instruments
 from . import Quicklooks
 from . import tools
 from . import settings
+from . import _tests
 
 
 __all__ = ["Instruments",

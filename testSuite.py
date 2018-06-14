@@ -14,15 +14,6 @@ import matplotlib.pyplot as plt
 from netCDF4 import Dataset
 
 
-def testRadar():
-    # coral  = Radar(start="20140813092350",end="20140913000050", device="KATRIN")
-    coral = Radar(start="20180212",end="20180212", device="CORAL")
-    ref = coral.getReflectivity(postprocessing="Ze")
-    vel = coral.getVelocity()
-    time = coral.getTime()
-    range = coral.getRange()
-    coral.quickplot2D(ref,ylim=(100,2000))
-
 
 if __name__ == "__main__":
     # FTP-settings:
