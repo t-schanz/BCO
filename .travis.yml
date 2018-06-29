@@ -1,0 +1,23 @@
+language: python
+
+
+matrix:
+    include:
+        - os: linux
+          sudo: false
+          python: 3.6
+          env: TOXENV=py36
+        - os: linux
+          sudo: false
+          python: 3.3
+          env: TOXENV=py35
+        - os: linux
+          sudo: false
+          python: 2.7
+          env: TOXENV=py27
+        - os: osx
+          language: generic
+          env: TOXENV=py27
+        - os: osx
+          language: generic
+          env: TOXENV=py36
