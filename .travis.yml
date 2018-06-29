@@ -9,15 +9,17 @@ matrix:
           env: TOXENV=py36
         - os: linux
           sudo: false
-          python: 3.3
+          python: 35
           env: TOXENV=py35
         - os: linux
           sudo: false
           python: 2.7
           env: TOXENV=py27
         - os: osx
-          language: generic
+          python: 2.7
           env: TOXENV=py27
         - os: osx
-          language: generic
+          python: 3.6
           env: TOXENV=py36
+
+script: BCO/_tests/runAll.py
