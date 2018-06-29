@@ -23,10 +23,10 @@ matrix:
           env: TOXENV=py36
 
 
-
 before_install:
   - chmod +x BCO/_tests/runAll.py
 
 
-
-script: BCO/_tests/runAll.py
+script:
+  - python setup.py install
+  - python BCO/_test/runAl.py
