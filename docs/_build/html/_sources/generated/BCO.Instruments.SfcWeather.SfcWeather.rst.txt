@@ -13,6 +13,8 @@ SfcWeather
    .. autosummary::
       :toctree:
 
+     :toctree:
+
   
       ~SfcWeather.close
       ~SfcWeather.getDataQuality

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>General Tools &mdash; BCO version=1.2.2 documentation</title>
+  <title>General Tools &mdash; BCO 1.2.3 documentation</title>
   
 
   
@@ -37,10 +37,10 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="BCO version=1.2.2 documentation" href="index.html"/>
+    <link rel="top" title="BCO 1.2.3 documentation" href="index.html"/>
         <link rel="up" title="Instruments" href="modules.html"/>
         <link rel="next" title="daterange" href="generated/BCO.tools.tools.daterange.html"/>
-        <link rel="prev" title="getVelocity" href="generated/BCO.Instruments.Windlidar.Windlidar.getVelocity.html"/> 
+        <link rel="prev" title="Windlidar" href="generated/BCO.Instruments.Windlidar.Windlidar.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                version=1.2.2
+                1.2.3
               </div>
             
           
@@ -229,6 +229,9 @@
 <span id="general-tools"></span><h1>General Tools<a class="headerlink" href="#module-BCO.tools.tools" title="Permalink to this headline">¶</a></h1>
 <p>This toolbox contains some functions which are being used by the MPPy package but might be usefull to the
 enduser, as well.</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">BCO.tools.tools</span>
+</pre></div>
+</div>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -241,13 +244,13 @@ enduser, as well.</p>
 <tr class="row-even"><td><a class="reference internal" href="generated/BCO.tools.tools.datestr.html#BCO.tools.tools.datestr" title="BCO.tools.tools.datestr"><code class="xref py py-obj docutils literal"><span class="pre">datestr</span></code></a>(dt_obj)</td>
 <td>Converts a datetime.datetime object to a string in the commonly used shape for this module.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.tools.tools.bz2Dataset.html#BCO.tools.tools.bz2Dataset" title="BCO.tools.tools.bz2Dataset"><code class="xref py py-obj docutils literal"><span class="pre">bz2Dataset</span></code></a>(bz2file:&nbsp;str)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.tools.tools.bz2Dataset.html#BCO.tools.tools.bz2Dataset" title="BCO.tools.tools.bz2Dataset"><code class="xref py py-obj docutils literal"><span class="pre">bz2Dataset</span></code></a>(bz2file)</td>
 <td>Generates a netCDF Dataset from a .nc.bz2 file.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/BCO.tools.tools.download_from_zmaw_ftp.html#BCO.tools.tools.download_from_zmaw_ftp" title="BCO.tools.tools.download_from_zmaw_ftp"><code class="xref py py-obj docutils literal"><span class="pre">download_from_zmaw_ftp</span></code></a>(device,&nbsp;start,&nbsp;end[,&nbsp;…])</td>
 <td>This function can be used to download data from the bco ftp-server to store it on your local machine.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.tools.tools.getFileName.html#BCO.tools.tools.getFileName" title="BCO.tools.tools.getFileName"><code class="xref py py-obj docutils literal"><span class="pre">getFileName</span></code></a>(instrument,&nbsp;date,&nbsp;use_ftp)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/BCO.tools.tools.getFileName.html#BCO.tools.tools.getFileName" title="BCO.tools.tools.getFileName"><code class="xref py py-obj docutils literal"><span class="pre">getFileName</span></code></a>(instrument,&nbsp;date,&nbsp;use_ftp[,&nbsp;…])</td>
 <td>This function can be used to get the full path and name of the file as on the server.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/BCO.tools.tools.getFTPClient.html#BCO.tools.tools.getFTPClient" title="BCO.tools.tools.getFTPClient"><code class="xref py py-obj docutils literal"><span class="pre">getFTPClient</span></code></a>([user,&nbsp;passwd])</td>
@@ -259,6 +262,9 @@ enduser, as well.</p>
 <div class="section" id="module-BCO.tools.convert">
 <span id="converters"></span><h1>Converters<a class="headerlink" href="#module-BCO.tools.convert" title="Permalink to this headline">¶</a></h1>
 <p>This module contains functions to convert units.</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">BCO.tools.convert</span>
+</pre></div>
+</div>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -294,7 +300,7 @@ enduser, as well.</p>
         <a href="generated/BCO.tools.tools.daterange.html" class="btn btn-neutral float-right" title="daterange" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="generated/BCO.Instruments.Windlidar.Windlidar.getVelocity.html" class="btn btn-neutral" title="getVelocity" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="generated/BCO.Instruments.Windlidar.Windlidar.html" class="btn btn-neutral" title="Windlidar" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -325,7 +331,7 @@ enduser, as well.</p>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'version=1.2.2',
+            VERSION:'1.2.3',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

@@ -145,12 +145,144 @@ class ClassTesting(object):
 
 
     def testCeilometer(self):
-        pass
+        from BCO.Instruments import Ceilometer
+
+        print("==========================================")
+        print("||>>>Testing the Ceilometer          ")
+        print("||>>>Timeframe from %s to %s"%(self.start.strftime("%x"),self.end.strftime("%x")))
+        print("==========================================")
+
+        dev = Ceilometer(start=self.start,end=self.end)
+
+
+        ref = dev.getTime()
+        info = ("\n========================================================\n"
+                "Error occured while testing the >>>getTime()<<< method \n"
+                "self.end.day=%i \n"
+                "ref[-1].day =%i \n"
+                "========================================================" % (self.end.day, ref[-1].day))
+        assert (ref[-1] - timedelta(hours=1)).day == self.end.day, info
+        del ref
+
+        ref = dev.getCBH()
+        assert isinstance(ref, collections.Iterable)
+        del ref
+
+        ref = dev.getInstrumentStatusFlag()
+        assert isinstance(ref, collections.Iterable)
+        del ref
+
+        ref = dev.getJenoptikOutputFlag()
+        assert isinstance(ref, collections.Iterable)
+        del ref
+
+        ref = dev.getMRRStatusFlag()
+        assert isinstance(ref, collections.Iterable)
+        del ref
+
+        ref = dev.getRainFlag()
+        assert isinstance(ref, collections.Iterable)
+        del ref
+
+
+        print("===========================================")
+        print("||>>> Ceilometer test Finished succesfully <<<||")
+        print("===========================================")
+
 
     def testWeather(self):
-        pass
+        from BCO.Instruments import SfcWeather
+
+        print("==========================================")
+        print("||>>>Testing the SfcWeather          ")
+        print("||>>>Timeframe from %s to %s" % (self.start.strftime("%x"), self.end.strftime("%x")))
+        print("==========================================")
+
+        dev = SfcWeather(start=self.start, end=self.end)
+
+        ref = dev.getTime()
+        info = ("\n========================================================\n"
+                "Error occured while testing the >>>getTime()<<< method \n"
+                "self.end.day=%i \n"
+                "ref[-1].day =%i \n"
+                "========================================================" % (self.end.day, ref[-1].day))
+        assert (ref[-1] - timedelta(hours=1)).day == self.end.day, info
+        del ref
+
+        ref = dev.getPrecipitation()
+        assert isinstance(ref, collections.Iterable)
+        del ref
+
+        ref = dev.getWindDirection()
+        assert isinstance(ref, collections.Iterable)
+        del ref
+
+        ref = dev.getDataQuality()
+        assert isinstance(ref, collections.Iterable)
+        del ref
+
+        ref = dev.getHumidity()
+        assert isinstance(ref, collections.Iterable)
+        del ref
+
+        ref = dev.getPressure()
+        assert isinstance(ref, collections.Iterable)
+        del ref
+
+        ref = dev.getTechnicalValues(value="TI")
+        assert isinstance(ref, collections.Iterable)
+        del ref
+
+        ref = dev.getTemperature()
+        assert isinstance(ref, collections.Iterable)
+        del ref
+
+        ref = dev.getWindSpeed()
+        assert isinstance(ref, collections.Iterable)
+        del ref
+
+
+        print("===========================================")
+        print("||>>> Radar test Finished succesfully <<<||")
+        print("===========================================")
+
 
     def testRadiation(self):
-        pass
+        from BCO.Instruments import Radiation
+
+        print("==========================================")
+        print("||>>>Testing the SfcWeather          ")
+        print("||>>>Timeframe from %s to %s" % (self.start.strftime("%x"), self.end.strftime("%x")))
+        print("==========================================")
+
+        dev = Radiation(start=self.start, end=self.end)
+
+        ref = dev.getTime()
+        info = ("\n========================================================\n"
+                "Error occured while testing the >>>getTime()<<< method \n"
+                "self.end.day=%i \n"
+                "ref[-1].day =%i \n"
+                "========================================================" % (self.end.day, ref[-1].day))
+        assert (ref[-1] - timedelta(hours=1)).day == self.end.day, info
+        del ref
+
+        ref = dev.getRadiation(scope="LW")
+        assert isinstance(ref, collections.Iterable)
+        del ref
+
+        ref = dev.getSensitivity()
+        assert isinstance(ref, collections.Iterable)
+        del ref
+
+        ref = dev.getTemperature()
+        assert isinstance(ref, collections.Iterable)
+        del ref
+
+        ref = dev.getVoltage()
+        assert isinstance(ref, collections.Iterable)
+        del ref
 
 
+        print("===============================================")
+        print("||>>> Radiation test Finished succesfully <<<||")
+        print("===============================================")

@@ -31,8 +31,8 @@ if __name__ == "__main__":
     # Wx = SfcWeather("20180101","20180101")
     # wx_time = Wx.getTime()
 
-    coral = Radar("20180520","20180522",device="CORAL",version=3)
-    coral_time = coral.getTime()
+    # coral = Radar("20180520","20180522",device="CORAL",version=3)
+    # coral_time = coral.getTime()
 
     # coral_pow = coral.getTransmitPower()
     # testRadar()
@@ -44,10 +44,13 @@ if __name__ == "__main__":
     # ceilo_time = ceilo.getTime()
 
 
-    clstst = BCO._tests.ClassTesting(start=dt(2018,5,20,15),end=dt(2018,5,22),duration=1)
+    clstst = BCO._tests.ClassTesting(start=dt(2018,5,1),end=dt(2018,5,2),duration=1)
     # clstst = BCO._tests.ClassTesting(duration=1)
     # clstst.testRadar(version=3)
-    clstst.testWindlidar()
+    # clstst.testWindlidar()
+    # clstst.testCeilometer()
+    # clstst.testWeather()
+    clstst.testEverything()
 
     # nc = tools.bz2Dataset(
     #     "/pool/OBS/BARBADOS_CLOUD_OBSERVATORY/Level_1/H_Liquid_water_content/201805/MRR__CIMH__LWC__60s_100m__20180523.nc.bz2")

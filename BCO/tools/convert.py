@@ -2,6 +2,8 @@
 
 """
 This module contains functions to convert units.
+
+>>> import BCO.tools.convert
 """
 from datetime import datetime as dt
 from datetime import timedelta

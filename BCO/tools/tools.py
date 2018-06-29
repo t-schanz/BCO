@@ -1,6 +1,9 @@
 """
 This toolbox contains some functions which are being used by the MPPy package but might be usefull to the
 enduser, as well.
+
+>>> import BCO.tools.tools
+
 """
 
 import numpy as np
