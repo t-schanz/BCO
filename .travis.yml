@@ -7,24 +7,20 @@ matrix:
           sudo: false
           python: 3.6
           env: TOXENV=py36
-        - os: linux
-          sudo: false
-          python: 3.5
-          env: TOXENV=py35
-        - os: linux
-          sudo: false
-          python: 2.7
-          env: TOXENV=py27
-        - os: osx
-          python: 2.7
-          env: TOXENV=py27
-        - os: osx
-          python: 3.6
-          env: TOXENV=py36
-
-
-before_install:
-  - chmod +x BCO/_tests/runAll.py
+#        - os: linux
+#          sudo: false
+#          python: 3.5
+#          env: TOXENV=py35
+#        - os: linux
+#          sudo: false
+#          python: 2.7
+#          env: TOXENV=py27
+#        - os: osx
+#          python: 2.7
+#          env: TOXENV=py27
+#        - os: osx
+#          python: 3.6
+#          env: TOXENV=py36
 
 
 script:

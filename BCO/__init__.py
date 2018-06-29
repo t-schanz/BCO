@@ -32,8 +32,12 @@ FTP_SERVER = config["DEFAULT"]["SERVER_NAME"]
 # ----------------------------------------------------------
 # Setting the version:
 version_path = os.path.split(package_directory)
-VERSIONFILE=os.path.join(version_path[0],"_version.py")
-verstrline = open(VERSIONFILE, "rt").read()
+try:
+    VERSIONFILE=os.path.join(version_path[0],"_version.py")
+    verstrline = open(VERSIONFILE, "rt").read()
+except:
+    VERSIONFILE = os.path.join(version_path, "_version.py")
+    verstrline = open(VERSIONFILE, "rt").read()
 VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"  # Pattern for finding the version string in the file _version.py
 mo = re.search(VSRE, verstrline, re.M)
 if mo:
