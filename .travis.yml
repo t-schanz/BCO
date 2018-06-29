@@ -22,4 +22,4 @@ matrix:
           python: 3.6
           env: TOXENV=py36
 
-script: BCO/_tests/runAll.py
+script: BCO/_tests2/runAll.py
