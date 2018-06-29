@@ -9,7 +9,7 @@ matrix:
           env: TOXENV=py36
         - os: linux
           sudo: false
-          python: 35
+          python: 3.5
           env: TOXENV=py35
         - os: linux
           sudo: false
@@ -22,4 +22,11 @@ matrix:
           python: 3.6
           env: TOXENV=py36
 
-script: BCO/_tests2/runAll.py
+
+
+before_install:
+  - chmod +x BCO/_tests/runAll.py
+
+
+
+script: BCO/_tests/runAll.py
