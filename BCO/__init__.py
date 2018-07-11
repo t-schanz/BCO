@@ -37,6 +37,7 @@ try:
     print("Version: ", version_path)
     print("Package: ", package_directory )
     VERSIONFILE=os.path.join(version_path[0],"_version.py")
+    print("FILE: " ,VERSIONFILE)
     verstrline = open(VERSIONFILE, "rt").read()
 except:
     VERSIONFILE = os.path.join(package_directory, "_version.py")
