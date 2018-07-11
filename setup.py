@@ -61,6 +61,7 @@ setup(name='BCO',
         'netCDF4>=1.1.1',
         'numpy>=1.6',
         'future>=0.15.0',
+        'scipy>=0.19.1',
       ],
 
     python_requires='>=2.7',
