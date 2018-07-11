@@ -34,6 +34,8 @@ FTP_SERVER = config["DEFAULT"]["SERVER_NAME"]
 
 try:
     version_path = os.path.split(package_directory)
+    print("Version: ", version_path)
+    print("Package: ", package_directory )
     VERSIONFILE=os.path.join(version_path[0],"_version.py")
     verstrline = open(VERSIONFILE, "rt").read()
 except:
