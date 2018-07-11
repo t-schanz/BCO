@@ -29,17 +29,17 @@ FTP_PASSWD = None
 FTP_SERVER = config["DEFAULT"]["SERVER_NAME"]
 
 # ----------------------------------------------------------
-# Setting the version:
-version_path = os.path.split(package_directory)[:-1]
-import re
-VERSIONFILE=os.path.join(*version_path,"_version.py")
-verstrline = open(VERSIONFILE, "rt").read()
-VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"  # Pattern for finding the version string in the file _version.py
-mo = re.search(VSRE, verstrline, re.M)
-if mo:
-    __version__ = mo.group(1)
-else:
-    raise RuntimeError("Unable to find version string in %s." % (VERSIONFILE,))
+# Setting the version: Switched off for bugfix
+# version_path = os.path.split(package_directory)[:-1]
+# import re
+# VERSIONFILE=os.path.join(*version_path,"_version.py")
+# verstrline = open(VERSIONFILE, "rt").read()
+# VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"  # Pattern for finding the version string in the file _version.py
+# mo = re.search(VSRE, verstrline, re.M)
+# if mo:
+#     __version__ = mo.group(1)
+# else:
+#     raise RuntimeError("Unable to find version string in %s." % (VERSIONFILE,))
 
 # -----------------------------------------------------------
 # Import all Modules
