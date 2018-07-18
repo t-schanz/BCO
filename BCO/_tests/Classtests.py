@@ -270,15 +270,15 @@ class ClassTesting(object):
         assert isinstance(ref, collections.Iterable)
         del ref
 
-        ref = dev.getSensitivity()
+        ref = dev.getSensitivity(instrument="GeoSh")
         assert isinstance(ref, collections.Iterable)
         del ref
 
-        ref = dev.getTemperature()
+        ref = dev.getTemperature("GeoSh")
         assert isinstance(ref, collections.Iterable)
         del ref
 
-        ref = dev.getVoltage()
+        ref = dev.getVoltage("LW")
         assert isinstance(ref, collections.Iterable)
         del ref
 
