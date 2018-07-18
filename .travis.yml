@@ -1,3 +1,24 @@
+matrix:
+    include:
+        - os: linux
+          sudo: false
+          language: python
+          python: 3.6
+          env: TOXENV=py36
+        - os: linux
+          sudo: false
+          language: python
+          python: 3.5
+          env: TOXENV=py35
+#        - os: linux
+#          sudo: false
+#          language: python
+#          python: 2.7
+#          env: TOXENV=py27
+        - os: osx
+          language: generic
+          env: PYTHON=3.6
+
 before_install: |
   if [ "$TRAVIS_OS_NAME" == "osx" ]; then
     brew update
@@ -20,29 +41,6 @@ before_install: |
     # A manual check that the correct version of Python is running.
     python --version
   fi
-
-
-
-matrix:
-    include:
-        - os: linux
-          sudo: false
-          language: python
-          python: 3.6
-          env: TOXENV=py36
-        - os: linux
-          sudo: false
-          language: python
-          python: 3.5
-          env: TOXENV=py35
-#        - os: linux
-#          sudo: false
-#          language: python
-#          python: 2.7
-#          env: TOXENV=py27
-        - os: osx
-          language: generic
-          env: PYTHON=3.4.4
 
 install:
   - python -m pip install -U pip
