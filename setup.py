@@ -56,11 +56,11 @@ setup(name='BCO',
       # requirements files see:
       # https://packaging.python.org/en/latest/requirements.html
       install_requires=[
-          'matplotlib>=1.4',
-          'netCDF4>=1.1.1',
           'numpy>=1.6',
+          'matplotlib>=1.4',
           'future>=0.15.0',
           'scipy>=0.19.1',
+          'netCDF4>=1.1.1',
       ],
 
       python_requires='>=2.7',
