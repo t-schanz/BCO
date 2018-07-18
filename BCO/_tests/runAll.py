@@ -23,7 +23,7 @@ from datetime import datetime as dt
 
 
 print("Creating ClassTesting Instance...")
-clstst = ClassTesting(start=dt(2018,5,1),end=dt(2018,5,2),duration=1)
+clstst = ClassTesting(start=dt(2018,3,1),end=dt(2018,3,1),duration=1)
 
 print("Running testEverything()...")
 clstst.testEverything()
