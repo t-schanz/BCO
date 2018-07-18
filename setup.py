@@ -11,8 +11,8 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 # Setting the version:
-version_path = os.path.split(here)
-version_path = (*version_path, "_version.py")
+version_path = list(os.path.split(here))
+version_path.append("_version.py")
 VERSIONFILE = os.path.join(*version_path)
 verstrline = open(VERSIONFILE, "rt").read()
 VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"  # Pattern for finding the version string in the file _version.py
