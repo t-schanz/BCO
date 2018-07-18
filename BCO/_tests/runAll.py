@@ -5,6 +5,7 @@ import socket
 __server = socket.getfqdn()
 __server_list = ["mpi","zmaw"]
 
+on_local_machine = False
 for s in __server_list:
     if s in __server.lower():
         on_local_machine = True
