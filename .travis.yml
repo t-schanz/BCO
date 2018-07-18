@@ -24,6 +24,5 @@ matrix:
 
 
 script:
-  - python BCO/_tests/hello.py
-#  - python setup.py install
-#  - python BCO/_tests/runAll.py
+  - python setup.py install
+  - python BCO/_tests/runAll.py

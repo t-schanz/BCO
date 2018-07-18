@@ -243,7 +243,7 @@ class ClassTesting(object):
 
 
         print("===========================================")
-        print("||>>> Radar test Finished succesfully <<<||")
+        print("||>>> Weather test Finished succesfully <<<||")
         print("===========================================")
 
 
@@ -251,7 +251,7 @@ class ClassTesting(object):
         from BCO.Instruments import Radiation
 
         print("==========================================")
-        print("||>>>Testing the SfcWeather          ")
+        print("||>>>Testing the Radiation          ")
         print("||>>>Timeframe from %s to %s" % (self.start.strftime("%x"), self.end.strftime("%x")))
         print("==========================================")
 
