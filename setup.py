@@ -64,7 +64,7 @@ setup(name='BCO',
           'configparser>3'
       ],
 
-      python_requires='>=3.6, <3.7',
+      python_requires='==2.7,>=3.6, <3.7',
 
       include_package_data=True,
 
