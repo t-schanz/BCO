@@ -1,15 +1,15 @@
 matrix:
     include:
-        - os: linux
-          sudo: false
-          language: python
-          python: 3.6
-          env: TOXENV=py36
-        - os: linux
-          sudo: false
-          language: python
-          python: 3.5
-          env: TOXENV=py35
+#        - os: linux
+#          sudo: false
+#          language: python
+#          python: 3.6
+#          env: TOXENV=py36
+#        - os: linux
+#          sudo: false
+#          language: python
+#          python: 3.5
+#          env: TOXENV=py35
 #        - os: linux
 #          sudo: false
 #          language: python
@@ -17,7 +17,7 @@ matrix:
 #          env: TOXENV=py27
         - os: osx
           language: generic
-          env: PYTHON=3.6
+          env: PYTHON=3.6.5
 
 before_install: |
   if [ "$TRAVIS_OS_NAME" == "osx" ]; then
