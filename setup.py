@@ -2,6 +2,7 @@ from setuptools import setup, find_packages
 from codecs import open
 from os import path
 import os
+import re
 
 here = path.abspath(path.dirname(__file__))
 
@@ -12,8 +13,8 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 # Setting the version:
 version_path = os.path.split(here)
-import re
-VERSIONFILE=os.path.join(*version_path,"_version.py")
+version_path.append("_version.py")
+VERSIONFILE=os.path.join(*version_path)
 verstrline = open(VERSIONFILE, "rt").read()
 VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"  # Pattern for finding the version string in the file _version.py
 mo = re.search(VSRE, verstrline, re.M)
