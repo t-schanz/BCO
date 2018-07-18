@@ -2,19 +2,20 @@ language: python
 
 matrix:
     include:
-#        - os: linux
-#          sudo: false
-#          python: 3.6
-#          env: TOXENV=py36
-#        - os: linux
-#          sudo: false
-#          python: 3.5
-#          env: TOXENV=py35
+        - os: linux
+          sudo: false
+          python: 3.6
+          env: TOXENV=py36
+        - os: linux
+          sudo: false
+          python: 3.7
+          env: TOXENV=py37
 #        - os: linux
 #          sudo: false
 #          python: 2.7
 #          env: TOXENV=py27
         - os: osx
+          osx_image: xcode9.4
           language: generic
           env: TOXENV=py36
 
@@ -26,18 +27,12 @@ before_install:
          brew update
          brew install hdf5 netcdf
 
-
          if [ "$PYTHON" = "2" ]; then
            brew install python@2
            export PATH="/usr/local/opt/python@2/libexec/bin:$PATH"
          else
            brew upgrade python  # upgrade to Python 3
 
-         curl -O -L https://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.11.5.tar.gz
-         tar -zxvf virtualenv-1.11.5.tar.gz
-         python3 virtualenv-1.11.5/virtualenv.py scitools
-
-         source scitools/bin/activate
          fi
        fi
 
