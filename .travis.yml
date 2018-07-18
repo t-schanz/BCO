@@ -26,9 +26,6 @@ before_install:
          if [ "$PYTHON" = "2" ]; then
            brew install python@2
            export PATH="/usr/local/opt/python@2/libexec/bin:$PATH"
-#         else
-#           brew install python3  # upgrade to Python 3
-
          fi
        fi
 
