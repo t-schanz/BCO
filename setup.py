@@ -63,7 +63,7 @@ setup(name='BCO',
           'netCDF4>=1.1.1',
       ],
 
-      python_requires='>=2.7',
+      python_requires='=3.6',
 
       include_package_data=True,
 
