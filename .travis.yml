@@ -2,20 +2,20 @@ language: python
 
 matrix:
     include:
-        - os: linux
-          sudo: false
-          python: 3.5
-          env:
-            global:
-              - TOXENV=py35
-              - PYTHON=3
-        - os: linux
-          sudo: false
-          python: 3.6
-          env:
-            global:
-              - TOXENV=py36
-              - PYTHON=3
+#        - os: linux
+#          sudo: false
+#          python: 3.5
+#          env:
+#            global:
+#              - TOXENV=py35
+#              - PYTHON=3
+#        - os: linux
+#          sudo: false
+#          python: 3.6
+#          env:
+#            global:
+#              - TOXENV=py36
+#              - PYTHON=3
 #        - os: linux
 #          sudo: false
 #          python: 2.7
@@ -30,13 +30,13 @@ matrix:
             global:
               - TOXENV=py35
               - PYTHON=35
-        - os: osx
-          osx_image: xcode9.4
-          language: generic
-          env:
-            global:
-              - TOXENV=py36
-              - PYTHON=3
+#        - os: osx
+#          osx_image: xcode9.4
+#          language: generic
+#          env:
+#            global:
+#              - TOXENV=py36
+#              - PYTHON=3
 #        - os: osx
 #          osx_image: xcode9.4
 #          language: generic
@@ -100,6 +100,8 @@ script:
             python BCO/_tests/runAll.py
 
         elif ["$PYTHON" = "35"]; then
+            touch ~/.matplotlib/matplotlibrc
+            echo backend: TkAgg > ~/.matplotlib/matplotlibrc
             python BCO/_tests/runAll.py
         else
             python3 BCO/_tests/runAll.py
