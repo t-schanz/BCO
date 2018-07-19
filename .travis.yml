@@ -4,46 +4,66 @@ matrix:
     include:
         - os: linux
           sudo: false
-          python: 3.6
+          python: 3.7
           env:
             global:
-              - TOXENV=py36
+              - TOXENV=py37
               - PYTHON=3
-        - os: linux
-          sudo: false
-          python: 2.7
-          env:
-            global:
-              - TOXENV=py27
-              - PYTHON=2
+#        - os: linux
+#          sudo: false
+#          python: 3.6
+#          env:
+#            global:
+#              - TOXENV=py36
+#              - PYTHON=3
+#        - os: linux
+#          sudo: false
+#          python: 2.7
+#          env:
+#            global:
+#              - TOXENV=py27
+#              - PYTHON=2
         - os: osx
           osx_image: xcode9.4
           language: generic
           env:
             global:
-              - TOXENV=py36
-              - PYTHON=3
-        - os: osx
-          osx_image: xcode9.4
-          language: generic
-          env:
-            global:
-              - TOXENV=py27
-              - PYTHON=2
+              - TOXENV=py37
+              - PYTHON=37
+#        - os: osx
+#          osx_image: xcode9.4
+#          language: generic
+#          env:
+#            global:
+#              - TOXENV=py36
+#              - PYTHON=3
+#        - os: osx
+#          osx_image: xcode9.4
+#          language: generic
+#          env:
+#            global:
+#              - TOXENV=py27
+#              - PYTHON=2
+
+
 
 
 
 before_install:
     - |
-       if [ "$TRAVIS_OS_NAME" = "osx" ]; then
-         brew update
-         brew install hdf5 netcdf
+        if [ "$TRAVIS_OS_NAME" = "osx" ]; then
+          brew update
+          brew install hdf5 netcdf
 
-         if [ "$PYTHON" = "2" ]; then
-           brew install python@2
-           export PATH="/usr/local/opt/python@2/libexec/bin:$PATH"
-         fi
-       fi
+          if [ "$PYTHON" = "2" ]; then
+            brew install python@2
+            export PATH="/usr/local/opt/python@2/libexec/bin:$PATH"
+          fi
+
+          if [ "$PYTHON" = "37" ]; then
+            brew upgrade python
+          fi
+        fi
 
 install:
     - |
