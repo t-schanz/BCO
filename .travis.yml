@@ -68,6 +68,8 @@ before_install:
             pyenv install 3.5.2
             pyenv local 3.5.2
             PATH="~/.pyenv/versions/3.5.2/bin:${PATH}"
+            pip3 install numpy
+            pip3 install matplotlib
           fi
         fi
 
@@ -76,6 +78,11 @@ install:
         if [ "$PYTHON" = "2" ]; then
             python --version
             python setup.py install
+
+        elif ["$PYTHON" = "35"]; then
+            python --version
+            python setup.py install
+
         else
             python3 --version
             python3 setup.py install
@@ -87,6 +94,8 @@ script:
         if [ "$PYTHON" = "2" ]; then
             python BCO/_tests/runAll.py
 
+        elif ["$PYTHON" = "35"]; then
+            python BCO/_tests/runAll.py
         else
             python3 BCO/_tests/runAll.py
         fi
