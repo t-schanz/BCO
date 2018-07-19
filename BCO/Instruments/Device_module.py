@@ -126,7 +126,7 @@ class __Device(object):
 
 
     def _local2UTC(self, time):
-        if sys.version_info >= (3,0):
+        if sys.version_info >= (3,6):
             f1 = lambda x : x.astimezone(self.__de_tz).astimezone(utc)
             return np.asarray(list(map(f1, time)))
         else:
