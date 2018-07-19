@@ -4,10 +4,10 @@ matrix:
     include:
         - os: linux
           sudo: false
-          python: 3.7
+          python: 3.5
           env:
             global:
-              - TOXENV=py37
+              - TOXENV=py35
               - PYTHON=3
 #        - os: linux
 #          sudo: false
@@ -28,8 +28,8 @@ matrix:
           language: generic
           env:
             global:
-              - TOXENV=py37
-              - PYTHON=37
+              - TOXENV=py35
+              - PYTHON=35
 #        - os: osx
 #          osx_image: xcode9.4
 #          language: generic
@@ -62,6 +62,12 @@ before_install:
 
           if [ "$PYTHON" = "37" ]; then
             brew upgrade python
+          fi
+
+          if [ "$PYTHON" = "35" ]; then
+            pyenv install 3.5.2
+            pyenv local 3.5.2
+            PATH="~/.pyenv/versions/3.5.2/bin:${PATH}"
           fi
         fi
 
