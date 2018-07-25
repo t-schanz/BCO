@@ -2,48 +2,48 @@ language: python
 
 matrix:
     include:
-#        - os: linux
-#          sudo: false
-#          python: 3.5
+        - os: linux
+          sudo: false
+          python: 3.5
+          env:
+            global:
+              - TOXENV=py35
+              - PYTHON=3
+        - os: linux
+          sudo: false
+          python: 3.6
+          env:
+            global:
+              - TOXENV=py36
+              - PYTHON=3
+        - os: linux
+          sudo: false
+          python: 2.7
+          env:
+            global:
+              - TOXENV=py27
+              - PYTHON=2
+#        - os: osx
+#          osx_image: xcode9.4
+#          language: generic
 #          env:
 #            global:
 #              - TOXENV=py35
-#              - PYTHON=3
-#        - os: linux
-#          sudo: false
-#          python: 3.6
-#          env:
-#            global:
-#              - TOXENV=py36
-#              - PYTHON=3
-#        - os: linux
-#          sudo: false
-#          python: 2.7
-#          env:
-#            global:
-#              - TOXENV=py27
-#              - PYTHON=2
+#              - PYTHON=35
         - os: osx
           osx_image: xcode9.4
           language: generic
           env:
             global:
-              - TOXENV=py35
-              - PYTHON=35
-#        - os: osx
-#          osx_image: xcode9.4
-#          language: generic
-#          env:
-#            global:
-#              - TOXENV=py36
-#              - PYTHON=3
-#        - os: osx
-#          osx_image: xcode9.4
-#          language: generic
-#          env:
-#            global:
-#              - TOXENV=py27
-#              - PYTHON=2
+              - TOXENV=py36
+              - PYTHON=3
+        - os: osx
+          osx_image: xcode9.4
+          language: generic
+          env:
+            global:
+              - TOXENV=py27
+              - PYTHON=2
 
 
 
