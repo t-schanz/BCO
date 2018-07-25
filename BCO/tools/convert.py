@@ -1,10 +1,16 @@
+# coding=utf-8
+
 """
 This module contains functions to convert units.
+
+>>> import BCO.tools.convert
 """
 from datetime import datetime as dt
 from datetime import timedelta
 import collections
 import numpy as np
+import time as time_module
+import sys
 
 
 def Celsius2Kelvin(value):
@@ -69,13 +75,23 @@ def time2num(time,utc=False):
     Returns:
         Float of seconds since 1970 / ndarray of floats.
     """
+    if sys.version_info >= (3,0):
+        if isinstance(time,collections.Iterable):
+            epo = lambda x: x.timestamp()
 
-    if isinstance(time,collections.Iterable):
-        epo = lambda x: x.timestamp()
+            date = np.asarray(list(map(epo, time)))
+        else:
+            date = time.timestamp()
 
-        date = np.asarray(list(map(epo, time)))
     else:
-        date = time.timestamp()
+
+        if isinstance(time, collections.Iterable):
+            epo = lambda x: dt.fromtimestamp(x)
+            date = np.asarray(list(map(epo, time)))
+            date = time_module.mktime(date.timetuple())
+        else:
+
+            date = time_module.mktime(time.timetuple())
 
     if utc:
         date = np.subtract(date,timedelta(hours=1).seconds)

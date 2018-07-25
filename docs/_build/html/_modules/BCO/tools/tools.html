@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>BCO.tools.tools &mdash; BCO version=1.2.2 documentation</title>
+  <title>BCO.tools.tools &mdash; BCO 1.2.3 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="BCO version=1.2.2 documentation" href="../../../index.html"/>
+    <link rel="top" title="BCO 1.2.3 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                version=1.2.2
+                1.2.3
               </div>
             
           
@@ -171,6 +171,9 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This toolbox contains some functions which are being used by the MPPy package but might be usefull to the</span>
 <span class="sd">enduser, as well.</span>
+
+<span class="sd">&gt;&gt;&gt; import BCO.tools.tools</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -255,7 +258,7 @@
     <span class="k">return</span> <span class="n">dt_obj</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="bz2Dataset"><a class="viewcode-back" href="../../../generated/BCO.tools.tools.bz2Dataset.html#BCO.tools.tools.bz2Dataset">[docs]</a><span class="k">def</span> <span class="nf">bz2Dataset</span><span class="p">(</span><span class="n">bz2file</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<div class="viewcode-block" id="bz2Dataset"><a class="viewcode-back" href="../../../generated/BCO.tools.tools.bz2Dataset.html#BCO.tools.tools.bz2Dataset">[docs]</a><span class="k">def</span> <span class="nf">bz2Dataset</span><span class="p">(</span><span class="n">bz2file</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generates a netCDF Dataset from a .nc.bz2 file. It therefore needs the &quot;dummy_nc_file.nc&quot;.</span>
 
@@ -294,7 +297,7 @@
     <span class="k">return</span> <span class="n">nc</span></div>
 
 
-<div class="viewcode-block" id="download_from_zmaw_ftp"><a class="viewcode-back" href="../../../generated/BCO.tools.tools.download_from_zmaw_ftp.html#BCO.tools.tools.download_from_zmaw_ftp">[docs]</a><span class="k">def</span> <span class="nf">download_from_zmaw_ftp</span><span class="p">(</span><span class="n">device</span><span class="p">,</span><span class="n">start</span><span class="p">,</span><span class="n">end</span><span class="p">,</span><span class="n">output_folder</span><span class="o">=</span><span class="s2">&quot;./&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="download_from_zmaw_ftp"><a class="viewcode-back" href="../../../generated/BCO.tools.tools.download_from_zmaw_ftp.html#BCO.tools.tools.download_from_zmaw_ftp">[docs]</a><span class="k">def</span> <span class="nf">download_from_zmaw_ftp</span><span class="p">(</span><span class="n">device</span><span class="p">,</span><span class="n">start</span><span class="p">,</span><span class="n">end</span><span class="p">,</span><span class="n">output_folder</span><span class="o">=</span><span class="s2">&quot;./&quot;</span><span class="p">,</span><span class="n">ftp_client</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function can be used to download data from the bco ftp-server</span>
 <span class="sd">    to store it on your local machine.</span>
@@ -330,11 +333,14 @@
         <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_nameStr</span><span class="p">)</span>
 
     <span class="c1"># download the file:</span>
-    <span class="n">ftp</span> <span class="o">=</span> <span class="n">FTP</span><span class="p">(</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_SERVER</span><span class="p">)</span>
-    <span class="n">ftp</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_USER</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_PASSWD</span><span class="p">)</span>
+    <span class="n">_close_ftp_client</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">ftp_client</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ftp_client</span> <span class="o">=</span> <span class="n">FTP</span><span class="p">(</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_SERVER</span><span class="p">)</span>
+        <span class="n">ftp_client</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_USER</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_PASSWD</span><span class="p">)</span>
+        <span class="n">_close_ftp_client</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-        <span class="n">file_to_retrieve</span> <span class="o">=</span> <span class="n">ftp</span><span class="o">.</span><span class="n">nlst</span><span class="p">(</span><span class="n">file</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">file_to_retrieve</span> <span class="o">=</span> <span class="n">ftp_client</span><span class="o">.</span><span class="n">nlst</span><span class="p">(</span><span class="n">file</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">__save_file</span> <span class="o">=</span> <span class="n">file_to_retrieve</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
@@ -343,13 +349,15 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">output_folder</span> <span class="o">+</span> <span class="n">__save_file</span><span class="p">):</span> <span class="c1"># check if the file is already there:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Downloading </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">__save_file</span><span class="p">)</span>
             <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;touch </span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">output_folder</span><span class="o">+</span><span class="n">__save_file</span><span class="p">)</span>
-            <span class="n">ftp</span><span class="o">.</span><span class="n">retrbinary</span><span class="p">(</span><span class="s1">&#39;RETR &#39;</span> <span class="o">+</span> <span class="n">file_to_retrieve</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_folder</span> <span class="o">+</span> <span class="n">__save_file</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">)</span>
+            <span class="n">ftp_client</span><span class="o">.</span><span class="n">retrbinary</span><span class="p">(</span><span class="s1">&#39;RETR &#39;</span> <span class="o">+</span> <span class="n">file_to_retrieve</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_folder</span> <span class="o">+</span> <span class="n">__save_file</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File already in provided output folder. No need to download it again.&quot;</span><span class="p">)</span>
-    <span class="n">ftp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+    <span class="k">if</span> <span class="n">_close_ftp_client</span><span class="p">:</span>
+        <span class="n">ftp_client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="getFileName"><a class="viewcode-back" href="../../../generated/BCO.tools.tools.getFileName.html#BCO.tools.tools.getFileName">[docs]</a><span class="k">def</span> <span class="nf">getFileName</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">use_ftp</span><span class="p">):</span>
+<div class="viewcode-block" id="getFileName"><a class="viewcode-back" href="../../../generated/BCO.tools.tools.getFileName.html#BCO.tools.tools.getFileName">[docs]</a><span class="k">def</span> <span class="nf">getFileName</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">use_ftp</span><span class="p">,</span> <span class="n">filelist</span><span class="o">=</span><span class="p">[],</span> <span class="n">ftp_client</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function can be used to get the full path and name of the file as on</span>
 <span class="sd">    the server. The path will vary if you are switching between the ftp-server or</span>
@@ -400,17 +408,31 @@
         <span class="n">path_addition</span> <span class="o">=</span> <span class="n">BCO</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">instrument</span><span class="p">][</span><span class="s2">&quot;PATH_ADDITION&quot;</span><span class="p">]</span>
         <span class="n">tmp_path</span> <span class="o">+=</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">path_addition</span><span class="p">)</span>
 
-    <span class="n">tmp_path</span> <span class="o">+=</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">BCO</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">instrument</span><span class="p">][</span><span class="s2">&quot;NAME_SCHEME&quot;</span><span class="p">])</span>
+    <span class="n">tmp_name</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">BCO</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">instrument</span><span class="p">][</span><span class="s2">&quot;NAME_SCHEME&quot;</span><span class="p">])</span>
+    <span class="n">tmp_path</span> <span class="o">+=</span> <span class="n">tmp_name</span>
 
     <span class="c1"># get the resolved filename:</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">use_ftp</span><span class="p">:</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">ftp</span> <span class="o">=</span> <span class="n">FTP</span><span class="p">(</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_SERVER</span><span class="p">)</span>
-        <span class="n">ftp</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_USER</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_PASSWD</span><span class="p">)</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">ftp</span><span class="o">.</span><span class="n">nlst</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">)</span>
-        <span class="n">ftp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filelist</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ftp_client</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">ftp_client</span> <span class="o">=</span> <span class="n">FTP</span><span class="p">(</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_SERVER</span><span class="p">)</span>
+                <span class="n">ftp_client</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_USER</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_PASSWD</span><span class="p">)</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">ftp_client</span><span class="o">.</span><span class="n">nlst</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">)</span>
+                <span class="n">ftp_client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">ftp_client</span><span class="o">.</span><span class="n">nlst</span><span class="p">(</span><span class="n">tmp_path</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">fl</span> <span class="ow">in</span> <span class="n">filelist</span><span class="p">:</span>
+                <span class="n">_path</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">fl</span><span class="p">))</span>
+                <span class="n">_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_path</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tmp_name</span><span class="p">)</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">_name</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">break</span>
 
     <span class="c1"># print(tmp_path)</span>
     <span class="c1"># print(name)</span>
@@ -458,7 +480,7 @@
     <span class="k">assert</span> <span class="n">passwd</span>
 
     <span class="n">ftp</span> <span class="o">=</span> <span class="n">FTP</span><span class="p">(</span><span class="n">BCO</span><span class="o">.</span><span class="n">FTP_SERVER</span><span class="p">)</span>
-    <span class="n">ftp</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">passwd</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="n">passwd</span><span class="p">)</span>
+    <span class="n">ftp</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="n">passwd</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ftp</span></div>
 </pre></div>
 
@@ -496,7 +518,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'version=1.2.2',
+            VERSION:'1.2.3',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
