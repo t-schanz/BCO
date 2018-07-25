@@ -58,13 +58,13 @@ before_install:
           if [ "$PYTHON" = "2" ]; then
             brew install python@2
             export PATH="/usr/local/opt/python@2/libexec/bin:$PATH"
-          fi
 
-          if [ "$PYTHON" = "37" ]; then
+
+          elif [ "$PYTHON" = "37" ]; then
             brew upgrade python
-          fi
 
-          if [ "$PYTHON" = "35" ]; then
+
+          elif [ "$PYTHON" = "35" ]; then
             pyenv install 3.5.2
             pyenv local 3.5.2
             PATH="~/.pyenv/versions/3.5.2/bin:${PATH}"
@@ -85,8 +85,8 @@ install:
             python setup.py install
 
         elif ["$PYTHON" = "35"]; then
-            python --version
-            python setup.py install
+            python3 --version
+            python3 setup.py install
 
         else
             python3 --version
@@ -100,9 +100,12 @@ script:
             python BCO/_tests/runAll.py
 
         elif ["$PYTHON" = "35"]; then
+          if [ "$TRAVIS_OS_NAME" = "osx" ]; then
             touch ~/.matplotlib/matplotlibrc
             echo backend: TkAgg > ~/.matplotlib/matplotlibrc
-            python BCO/_tests/runAll.py
+          fi
+
+            python3 BCO/_tests/runAll.py
         else
             python3 BCO/_tests/runAll.py
         fi
