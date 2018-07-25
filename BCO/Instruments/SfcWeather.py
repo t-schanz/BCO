@@ -1,3 +1,5 @@
+# coding=utf-8
+
 """
 This Module contains the SfcWeather class. This class is for easy working with data collected from the surface weather
 station (height ~ 20m) at the BCO site.

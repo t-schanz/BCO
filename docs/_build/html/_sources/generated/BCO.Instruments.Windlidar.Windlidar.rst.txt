@@ -13,6 +13,8 @@ Windlidar
    .. autosummary::
       :toctree:
 
+     :toctree:
+
   
       ~Windlidar.close
       ~Windlidar.getIntensity

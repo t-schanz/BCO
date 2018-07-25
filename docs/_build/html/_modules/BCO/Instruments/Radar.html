@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>BCO.Instruments.Radar &mdash; BCO version=1.2.2 documentation</title>
+  <title>BCO.Instruments.Radar &mdash; BCO 1.2.3 documentation</title>
   
 
   
@@ -37,7 +37,7 @@
         <link rel="index" title="Index"
               href="../../../genindex.html"/>
         <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="BCO version=1.2.2 documentation" href="../../../index.html"/>
+    <link rel="top" title="BCO 1.2.3 documentation" href="../../../index.html"/>
         <link rel="up" title="Module code" href="../../index.html"/> 
 
   
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                version=1.2.2
+                1.2.3
               </div>
             
           
@@ -263,20 +263,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_checkInputTime</span><span class="p">(</span><span class="n">end</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data_version</span> <span class="o">=</span> <span class="n">version</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_instrument</span> <span class="o">=</span> <span class="n">BCO</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">device</span><span class="p">][</span><span class="s2">&quot;INSTRUMENT&quot;</span><span class="p">]</span> <span class="c1"># String used for retrieving the filepath from settings.ini</span>
-        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_instrument</span><span class="p">)</span>
+        <span class="c1"># print(self._instrument)</span>
 
         <span class="n">BCO</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_instrument</span><span class="p">][</span><span class="s2">&quot;DATA_VERSION&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Version_</span><span class="si">%i</span><span class="s2">/&quot;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">data_version</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_name_str</span> <span class="o">=</span> <span class="n">BCO</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_instrument</span><span class="p">][</span><span class="s2">&quot;NAME_SCHEME&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_path_addition</span> <span class="o">=</span> <span class="n">BCO</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_instrument</span><span class="p">][</span><span class="s2">&quot;PATH_ADDITION&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_path_addition</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_path_addition</span> <span class="o">==</span> <span class="s2">&quot;None&quot;</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_path_addition</span> <span class="c1"># convert str to None</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Name Str: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name_str</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ftp_files</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getPath</span><span class="p">()</span>
 
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">BCO</span><span class="o">.</span><span class="n">USE_FTP_ACCESS</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">+=</span> <span class="s2">&quot;Version_</span><span class="si">%i</span><span class="s2">/&quot;</span> <span class="o">%</span> <span class="n">version</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;PATH: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__checkInput</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">lat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getValueFromNc</span><span class="p">(</span><span class="s2">&quot;lat&quot;</span><span class="p">)</span>
@@ -312,11 +310,9 @@
                 <span class="s2">&quot;The version of the Dataset needs to be between </span><span class="si">%i</span><span class="s2"> and </span><span class="si">%i</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_versions_avail</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">_versions_avail</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>  <span class="c1"># check if device was running on selected timeframe</span>
             <span class="k">for</span> <span class="n">_date</span> <span class="ow">in</span> <span class="n">tools</span><span class="o">.</span><span class="n">daterange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="p">):</span>
-                <span class="n">_nameStr</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">getFileName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span><span class="n">_date</span><span class="p">,</span><span class="n">use_ftp</span><span class="o">=</span><span class="n">BCO</span><span class="o">.</span><span class="n">USE_FTP_ACCESS</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CheckInput: &quot;</span> <span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="n">_nameStr</span><span class="p">)</span>
+                <span class="n">_nameStr</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">getFileName</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span><span class="n">_date</span><span class="p">,</span><span class="n">use_ftp</span><span class="o">=</span><span class="n">BCO</span><span class="o">.</span><span class="n">USE_FTP_ACCESS</span><span class="p">,</span><span class="n">filelist</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ftp_files</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
                 <span class="n">_file</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="n">_nameStr</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The Device </span><span class="si">%s</span><span class="s2"> was not running on </span><span class="si">%s</span><span class="s2">. Please adjust timeframe.</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -391,25 +387,6 @@
 
         <span class="k">return</span> <span class="n">velocity</span></div>
 
-<div class="viewcode-block" id="Radar.getTime"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radar.Radar.getTime.html#BCO.Instruments.Radar.Radar.getTime">[docs]</a>    <span class="k">def</span> <span class="nf">getTime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Loads the time steps over the desired timeframe from all netCDF-files and returns them as one array.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            A numpy array containing datetime.datetime objects</span>
-
-<span class="sd">        Example:</span>
-<span class="sd">            Getting the time-stamps from an an already initiated radar object &#39;coral&#39;:</span>
-
-<span class="sd">            &gt;&gt;&gt; coral.getTime()</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getArrayFromNc</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
-
-        <span class="n">time</span> <span class="o">=</span> <span class="n">BCO</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">convert</span><span class="o">.</span><span class="n">num2time</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>  <span class="c1"># converting seconds since 1970 to datetime objects</span>
-        <span class="n">time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_local2UTC</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">time</span></div>
 
 <div class="viewcode-block" id="Radar.getMeltHeight"><a class="viewcode-back" href="../../../generated/BCO.Instruments.Radar.Radar.getMeltHeight.html#BCO.Instruments.Radar.Radar.getMeltHeight">[docs]</a>    <span class="k">def</span> <span class="nf">getMeltHeight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -681,7 +658,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../',
-            VERSION:'version=1.2.2',
+            VERSION:'1.2.3',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

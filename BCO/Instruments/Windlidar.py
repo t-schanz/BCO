@@ -1,3 +1,5 @@
+# coding=utf-8
+
 """
 This Module contains the Windlidar class. This class is for easy working with the BCO Windlidar data.
 """

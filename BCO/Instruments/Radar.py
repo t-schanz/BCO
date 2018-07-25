@@ -217,25 +217,6 @@ class Radar(__Device):
 
         return velocity
 
-    def getTime(self):
-        """
-        Loads the time steps over the desired timeframe from all netCDF-files and returns them as one array.
-
-        Returns:
-            A numpy array containing datetime.datetime objects
-
-        Example:
-            Getting the time-stamps from an an already initiated radar object 'coral':
-
-            >>> coral.getTime()
-        """
-
-        time = self._getArrayFromNc('time')
-
-        time = BCO.tools.convert.num2time(time)  # converting seconds since 1970 to datetime objects
-        time = self._local2UTC(time)
-
-        return time
 
     def getMeltHeight(self):
         """

@@ -13,6 +13,8 @@ Radar
    .. autosummary::
       :toctree:
 
+     :toctree:
+
   
       ~Radar.close
       ~Radar.getLDR

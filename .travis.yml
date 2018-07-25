@@ -1,23 +1,111 @@
 language: python
 
-
 matrix:
     include:
         - os: linux
           sudo: false
-          python: 3.6
-          env: TOXENV=py36
+          python: 3.5
+          env:
+            global:
+              - TOXENV=py35
+              - PYTHON=3
         - os: linux
           sudo: false
-          python: 3.3
-          env: TOXENV=py35
+          python: 3.6
+          env:
+            global:
+              - TOXENV=py36
+              - PYTHON=3
         - os: linux
           sudo: false
           python: 2.7
-          env: TOXENV=py27
+          env:
+            global:
+              - TOXENV=py27
+              - PYTHON=2
+#        - os: osx
+#          osx_image: xcode9.4
+#          language: generic
+#          env:
+#            global:
+#              - TOXENV=py35
+#              - PYTHON=35
         - os: osx
+          osx_image: xcode9.4
           language: generic
-          env: TOXENV=py27
+          env:
+            global:
+              - TOXENV=py36
+              - PYTHON=3
         - os: osx
+          osx_image: xcode9.4
           language: generic
-          env: TOXENV=py36
+          env:
+            global:
+              - TOXENV=py27
+              - PYTHON=2
+
+
+
+
+
+before_install:
+    - |
+        if [ "$TRAVIS_OS_NAME" = "osx" ]; then
+          brew update
+          brew install hdf5 netcdf
+
+          if [ "$PYTHON" = "2" ]; then
+            brew install python@2
+            export PATH="/usr/local/opt/python@2/libexec/bin:$PATH"
+
+
+          elif [ "$PYTHON" = "37" ]; then
+            brew upgrade python
+
+
+          elif [ "$PYTHON" = "35" ]; then
+            pyenv install 3.5.2
+            pyenv local 3.5.2
+            PATH="~/.pyenv/versions/3.5.2/bin:${PATH}"
+            pip3 install --upgrade pip
+            pip3 install numpy
+            pip3 install matplotlib
+            pip3 install scipy
+            pip3 install future
+            pip3 install configparser
+            pip3 install netcdf4
+          fi
+        fi
+
+install:
+    - |
+        if [ "$PYTHON" = "2" ]; then
+            python --version
+            python setup.py install
+
+        elif ["$PYTHON" = "35"]; then
+            python3 --version
+            python3 setup.py install
+
+        else
+            python3 --version
+            python3 setup.py install
+        fi
+
+
+script:
+    - |
+        if [ "$PYTHON" = "2" ]; then
+            python BCO/_tests/runAll.py
+
+        elif ["$PYTHON" = "35"]; then
+          if [ "$TRAVIS_OS_NAME" = "osx" ]; then
+            touch ~/.matplotlib/matplotlibrc
+            echo backend: TkAgg > ~/.matplotlib/matplotlibrc
+          fi
+
+            python3 BCO/_tests/runAll.py
+        else
+            python3 BCO/_tests/runAll.py
+        fi

@@ -5,7 +5,7 @@ Module for setting global attributes.
 
 import BCO
 
-def set_ftp(ftp:bool,user=None,passwd=None):
+def set_ftp(ftp,user=None,passwd=None):
     """
     Function to set-up ftp-access.
 
@@ -38,7 +38,7 @@ def set_ftp(ftp:bool,user=None,passwd=None):
         BCO.FTP_PASSWD = passwd
 
 
-def path_to_ftp_file(file_path:str,verbose=True):
+def path_to_ftp_file(file_path,verbose=True):
     """
     Sets the path to the file with the username and password in it.
     Please do not have this file in the same directory as you other python files and
