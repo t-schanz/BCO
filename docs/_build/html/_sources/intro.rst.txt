@@ -6,13 +6,7 @@ In this section we will try to cover some basics to work with this module.
 
 Installation
 ------------
-1. Download or clone this directory (green button upper right corner on github)
-2. In a terminal navigate to the folder "BCO"
-3. Run:
-
->>> python setup.py install
-
-4. Check with "pip list" or "conda list" if it worked.
+Just use: pip install BCO
 
 Documentation
 -------------
