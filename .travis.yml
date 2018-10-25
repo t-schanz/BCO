@@ -38,6 +38,13 @@ jobs:
 #          - TOXENV=py27
 #          - PYTHON=2
     - stage: Deploying
+      os: linux
+      sudo: false
+      python: 3.5
+      env:
+        global:
+        - TOXENV=py35
+        - PYTHON=3
       deploy:
         provider: pipy
         server: https://test.pypi.org
