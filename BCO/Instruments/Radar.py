@@ -117,11 +117,6 @@ class Radar(__Device):
             self.north = self._getValueFromNc("north")
         self.skipped = None
 
-    def __str__(self):
-        returnStr = "%s Radar.\nUsed data version %i.\nLoad data from %s to %s." % \
-                    (self.device, self.data_version, self.start, self.end)
-        return str(returnStr)
-
     def __checkInput(self):
         """
         This funcion checks for mistakes made by the user.  \n

@@ -17,6 +17,10 @@ Windlidar
 
      :toctree:
 
+     :toctree:
+
+     :toctree:
+
   
       ~Windlidar.close
       ~Windlidar.getIntensity

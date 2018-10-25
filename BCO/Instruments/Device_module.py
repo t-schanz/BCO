@@ -354,6 +354,32 @@ class __Device(object):
 
         return time
 
+    def __str__(self):
+        callables = {"Methods": [func+"()" for func in dir(self) if callable(getattr(self, func)) and func[0] is not "_"],
+                     "Attributes": [attr for attr in dir(self) if
+                                    not callable(getattr(self, attr)) and attr[0] is not "_"]
+                     }
+        a0 = "==================================================\n"
+        a1 = "Instrument : %s\n"%self._instrument
+        a2 = "Timespan   : %s to %s\n"%(self.start.strftime("%x"), self.end.strftime("%x"))
+        a3 = "Timesteps  : %s\n"%(len(self.getTime()))
+        a4 = "Files from : %s\n"%self.path
+        a5 = "--------------------------------------------------\n"
+        a6 = "Methods    : %s\n"%"\n             ".join(callables["Methods"])
+        a7 = "Attributes : %s\n"%"\n             ".join(callables["Attributes"])
+        a8 = "=================================================="
+
+        a_radar = None
+        if "data_version" in locals():
+            a9 = "Data version : %i"%int(self.data_version)
+            to_print = [a0,a1,a2,a3,a9,a4,a5,a6,a7,a8]
+        else:
+
+            to_print = [a0,a1,a2,a3,a4,a5,a6,a7,a8]
+        return "".join(to_print)
+
+
+
 
     def _getNc(self,date):
         """

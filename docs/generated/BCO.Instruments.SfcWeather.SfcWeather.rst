@@ -17,6 +17,10 @@ SfcWeather
 
      :toctree:
 
+     :toctree:
+
+     :toctree:
+
   
       ~SfcWeather.close
       ~SfcWeather.getDataQuality

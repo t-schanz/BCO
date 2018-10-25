@@ -17,6 +17,10 @@ Radar
 
      :toctree:
 
+     :toctree:
+
+     :toctree:
+
   
       ~Radar.close
       ~Radar.getLDR

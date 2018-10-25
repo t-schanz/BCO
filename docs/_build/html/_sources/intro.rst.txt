@@ -37,6 +37,45 @@ In this example we will use the default CORAL data and therefore name our class 
 Now we have initiated an instance named "coral" which uses data from the 1st January 2018 00:00 UTC to the 3rd January
 2018 15:00 UTC. Trailing Zeros do not need to be supplied.
 
+To review the loaded data and to see all the available methods and attributes we can simply print out the class itself:
+
+>>> print(coral)
+==================================================
+Instrument : CORAL
+Timespan   : 01/01/2018 to 01/03/2018
+Timesteps  : 21440
+Files from : /pool/OBS/BARBADOS_CLOUD_OBSERVATORY/Level_1/B_Reflectivity/Version_2/
+--------------------------------------------------
+Methods    : close()
+             getLDR()
+             getMeltHeight()
+             getNoisePower()
+             getRMS()
+             getRadarConstant()
+             getRange()
+             getReflectivity()
+             getSNR()
+             getTime()
+             getTransmitPower()
+             getVelocity()
+             help()
+             quickplot2D()
+Attributes : azimuth
+             data_version
+             device
+             elevation
+             end
+             lat
+             lon
+             north
+             path
+             pathFlag
+             skipped
+             start
+==================================================
+
+
+
 Lets get started loading some data with this class using its methods. We want the timesteps,
 the range and the reflectivity:
 
