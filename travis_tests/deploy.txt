@@ -1,0 +1,6 @@
+ deploy:
+    provider: pipy
+    user: tmachnitzki
+    server: https://test.pypi.org
+    password:
+    - secure: r8zcms2woD2SNdjXk3pyUzXybHw3PY7XdNqnmwJyZ3P8ltlVK4yYuKj8/JpLls6HIfQC2Dy41pO70F3fVX8ilWiyOisuixC1P5Z/hdmujBk+zyUxDIV6Q7aN7HQZFwDTb2ujOJv9kcA9giiGMDy+9FSE6r9ge9pcQdszQjaCrYYDoTL6a3TPJp4v/MU1fyqxxyKBpnzD4Z24R7YFRevZUEKeMw3J81lKyfjHVj1aTf9lKYdC/imi/2ofWas0RLQzXkUpq0TWAMJPiJbFIFYicpOcpGmVGGkYIeJhAKItWOZYnkuDPLR9JbXrdkeWXB8WtcCQ5xaif7MY+dXeZe/sjm05qquCbOaFfMIHEYhGlBU09Z8Wi/sOz1u8bIAzTWcKbBan5eG9/2ER0ogftAFNl2BY64Ke0vsBeThbUO1p/VRLscefLBylsbtbC4VEigQq0mqYwqKSwUJqlI+LGDY5rEgJwlLKvSlI6zkdIHqM2W5bgCp2RxJWanw43tT8vk+v93KqlrsQ6gLXVVfo/mAAK4Alpd0vyLlFVDFX0eFihrRjh6YBuR+y5qz4FamhlYTsdHzgs7QSZdTOJD2Y1bDuOJ4EqWLToNBV+CwxYcb5FA1xR2NNAcdOCibEb+o1PBDLu9NdcEva9ChzR5JXNsamTAJbd4d+tlG6fdBI6QhJ+Jw=
