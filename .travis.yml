@@ -1,27 +1,41 @@
 language: python
 matrix:
   include:
-#  - os: linux
-#    sudo: false
-#    python: 3.5
-#    env:
-#      global:
-#      - TOXENV=py35
-#      - PYTHON=3
-#  - os: linux
-#    sudo: false
-#    python: 3.6
-#    env:
-#      global:
-#      - TOXENV=py36
-#      - PYTHON=3
-    - os: linux
-      sudo: false
-      python: 2.7
-      env:
-        global:
-        - TOXENV=py27
-        - PYTHON=2
+  - os: linux
+    sudo: false
+    python: 3.5
+    env:
+      global:
+      - TOXENV=py35
+      - PYTHON=3
+  - os: linux
+    sudo: false
+    python: 3.6
+    env:
+      global:
+      - TOXENV=py36
+      - PYTHON=3
+  - os: linux
+    sudo: false
+    python: 2.7
+    env:
+      global:
+      - TOXENV=py27
+      - PYTHON=2
+  - os: osx
+    osx_image: xcode9.4
+    language: generic
+    env:
+      global:
+      - TOXENV=py36
+      - PYTHON=3
+  - os: osx
+    osx_image: xcode9.4
+    language: generic
+    env:
+      global:
+      - TOXENV=py27
+      - PYTHON=2
 cache:
 - pip
 before_install:
@@ -69,8 +83,7 @@ install:
 script:
 - |
   if [ "$PYTHON" = "2" ]; then
-#      python BCO/_tests/runAll.py
-      echo "asdf"
+      python BCO/_tests/runAll.py
 
   elif ["$PYTHON" = "35"]; then
     if [ "$TRAVIS_OS_NAME" = "osx" ]; then
@@ -86,7 +99,7 @@ deploy:
   provider: pypi
   user: tmachnitzki
   password:
-    secure: fCCSZCe8vUu/lScQJN/m3ZP4FAdYUC+gu4vIdqpZZEolKlXOkn332HPKoHriAdNQX8U3gn0aZgKIOzPSQF/cn1D2F8Gsofg4AWT3EdjP89qaBMRkhNryTiUXZrB8t6/ujZ7oojb/Q1PbBK8q6cdLzysfcG987Hdn2voPtzv6TSA4wWIcnaqflhUN58RL6b+9uewXf91JVzSBoboy4l6bGqlQgWJ5RcWI2QkQjwR7dK/BCf+pXKDJcXr2aRBoGvhahBGj+pUyyYkvSj8mt4rO4K85PXQWs/yGYxqxYP8sRPCYU3gaXKpFDcsV4rQPp04rvHcieJfWeWtcPlVD4cQUf4t5tEYN7lTH77CzyYA66NuRsKDHVDAlGlTht2hIe+M0cwS7VAp28s24a+C+yk8ehLh9/8oW9d3Yi0eJc0XdoJ2iEifayi85BS+yOHOwc254EpzLuSpaUaQisTY8PwKeZze+em1xJXlbJZnhlNkCK+MsxX+NWds1+0yh4HzI9yUp5hmM7DN5YidFfzHS/g+rlFsOvMOHKOEdQkIvCDr/Al659EGbcXB38FjEsPWC+luYC2fk+T81kqg/OMwYSEedvDIcQjkPONfWWOYc95E58zeu3pRSkMixQHyBUezZ50OIn501Utob2MwB1FuUlg/d7eYx6jcd2cn7fWZc4UkMrgE=
+    secure: L5nuW3np9ercQXGLSjV77QhEA6lYAgwLtp1cLUnuoJGIEJ6W62c1aObSLSbRa6nz1Lt2PPRYMiCavKVNXvMsvspk6t42P777hGawzVyyC84zCV2q+5U7O2YEpqqZDxrxTzK13FVcXbcipp9DHwJaFLiTwS7/0P5kNOssA3MKaj5Gf9+QpvSk36VZNFPvr9EeEIN4EgViYgkimK9ASTMCpKXJJkOfxTXcHv2CLQ0I97Sjh+yb7POThrQI7EhHJ4qJce4vu9NENoa9Aywm19FzuHtzPbyYqmA1C4kYweoYvLHMjXXWMse5SM/9dO6nq/bhCmp77YBIlfTrY+7uM40DqmYOY62VDayiUWIAoMmeOmn5NAKP197AhPFfiOcxTveP+p2LeRqHFCuMxfulKnP/GdUUw03HCkE1Nb4AxSrVzEff2sdSxuend5wN1rVtOndJxpIzbWYp+/6P6exLEpGfi94PJO+SAYNM/vjM2rNqzXkjSK/3u2H9Kd8GurmS9UZPKB76r/W/DpIwMcEU6YZBC91NNJ450WyKJtCHmoB2greetPjUQyr/6qjw4JyQHcFM2I04HCnPt/brylTdwklPvoqxOVFmMntoVwWKqVlOq7MZrJ6YjycjufZGchqPpiccpY6WSUk4bSV8yGELuIznBTrxPUQM+N43Ql1/fal1bP0=
   on:
     branch: master
     python: 2.7
