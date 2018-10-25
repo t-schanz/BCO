@@ -37,7 +37,8 @@ matrix:
 #      - TOXENV=py27
 #      - PYTHON=2
 cache:
-- pip
+  - pip
+
 before_install:
 - |
   if [ "$TRAVIS_OS_NAME" = "osx" ]; then
@@ -64,6 +65,7 @@ before_install:
       pip3 install netcdf4
     fi
   fi
+
 install:
 - |
   if [ "$PYTHON" = "2" ]; then
@@ -80,6 +82,7 @@ install:
       python3 --version
       python3 setup.py install
   fi
+
 script:
 - |
   if [ "$PYTHON" = "2" ]; then
@@ -96,6 +99,7 @@ script:
   else
       python3 BCO/_tests/runAll.py
   fi
+
 deploy:
   provider: pypi
   user: tmachnitzki
