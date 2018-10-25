@@ -1,6 +1,7 @@
 language: python
-matrix:
+jobs:
   include:
+  - stage: test
   - os: linux
     sudo: false
     python: 3.5
@@ -36,6 +37,9 @@ matrix:
       global:
       - TOXENV=py27
       - PYTHON=2
+  -stage: deploy
+
+
 before_install:
 - |
   if [ "$TRAVIS_OS_NAME" = "osx" ]; then
@@ -95,6 +99,8 @@ script:
   else
       python3 BCO/_tests/runAll.py
   fi
+
+
 deploy:
   provider: pipy
   user: tmachnitzki
