@@ -65,7 +65,8 @@ setup(name='BCO',
           'future>=0.15.0',
           'scipy>=0.19.1',
           'netCDF4>=1.1.1',
-          'configparser>3'
+          'configparser>3',
+          'pytz'
       ],
 
       include_package_data=True,
