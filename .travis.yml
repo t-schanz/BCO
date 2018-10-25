@@ -2,7 +2,7 @@ language: python
 jobs:
   include:
     - stage: test
-      script: ./travis_tests/linux_35.txt
+      script: travis_tests/linux_35.txt
 #  - os: linux
 #    sudo: false
 #    python: 3.5
@@ -38,8 +38,8 @@ jobs:
 #      global:
 #      - TOXENV=py27
 #      - PYTHON=2
-    -stage: deploy
-      script: ./travis_tests/deploy.txt
+    - stage: deploy
+      script: travis_tests/deploy.txt
 
 
 #
