@@ -2,6 +2,7 @@
 jobs:
   include:
     - stage: test
+      language: python
       script: travis_tests/linux_35.txt
 #  - os: linux
 #    sudo: false
@@ -41,6 +42,9 @@ jobs:
     - stage: deploy
       script: travis_tests/deploy.txt
 
+
+before_install:
+  - chmod +x travis_tests/*
 
 #
 #before_install:
