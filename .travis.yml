@@ -1,127 +1,3 @@
-#language: python
-#jobs:
-#  include:
-#    - stage: testing
-#      os: linux
-#      sudo: false
-#      python: 3.5
-#      env:
-#        global:
-#        - TOXENV=py35
-#        - PYTHON=3
-#        - DEPLOY=0
-##      - os: linux
-##        sudo: false
-##        python: 3.6
-##        env:
-##          global:
-##          - TOXENV=py36
-##          - PYTHON=3
-##      - os: linux
-##        sudo: false
-##        python: 2.7
-##        env:
-##          global:
-##          - TOXENV=py27
-##          - PYTHON=2
-##      - os: osx
-##        osx_image: xcode9.4
-##        language: generic
-##        env:
-##          global:
-##          - TOXENV=py36
-##          - PYTHON=3
-##      - os: osx
-##        osx_image: xcode9.4
-##        language: generic
-##        env:
-##          global:
-##          - TOXENV=py27
-##          - PYTHON=2
-#    - stage: Deploying
-#      os: linux
-#      sudo: false
-#      python: 3.5
-#      env:
-#        global:
-#        - TOXENV=py35
-#        - PYTHON=3
-#        - DEPLOY=1
-#      deploy:
-#        provider: pipy
-#        server: https://test.pypi.org/project/BCO/
-#        user: tmachnitzki
-#        password:
-#          - secure: r8zcms2woD2SNdjXk3pyUzXybHw3PY7XdNqnmwJyZ3P8ltlVK4yYuKj8/JpLls6HIfQC2Dy41pO70F3fVX8ilWiyOisuixC1P5Z/hdmujBk+zyUxDIV6Q7aN7HQZFwDTb2ujOJv9kcA9giiGMDy+9FSE6r9ge9pcQdszQjaCrYYDoTL6a3TPJp4v/MU1fyqxxyKBpnzD4Z24R7YFRevZUEKeMw3J81lKyfjHVj1aTf9lKYdC/imi/2ofWas0RLQzXkUpq0TWAMJPiJbFIFYicpOcpGmVGGkYIeJhAKItWOZYnkuDPLR9JbXrdkeWXB8WtcCQ5xaif7MY+dXeZe/sjm05qquCbOaFfMIHEYhGlBU09Z8Wi/sOz1u8bIAzTWcKbBan5eG9/2ER0ogftAFNl2BY64Ke0vsBeThbUO1p/VRLscefLBylsbtbC4VEigQq0mqYwqKSwUJqlI+LGDY5rEgJwlLKvSlI6zkdIHqM2W5bgCp2RxJWanw43tT8vk+v93KqlrsQ6gLXVVfo/mAAK4Alpd0vyLlFVDFX0eFihrRjh6YBuR+y5qz4FamhlYTsdHzgs7QSZdTOJD2Y1bDuOJ4EqWLToNBV+CwxYcb5FA1xR2NNAcdOCibEb+o1PBDLu9NdcEva9ChzR5JXNsamTAJbd4d+tlG6fdBI6QhJ+Jw=
-#
-#
-#
-#before_install:
-#- |
-#  if [ "$TRAVIS_OS_NAME" = "osx" ]; then
-#    brew update
-#    brew install hdf5 netcdf
-#
-#    if [ "$PYTHON" = "2" ]; then
-#      brew install python@2
-#      export PATH="/usr/local/opt/python@2/libexec/bin:$PATH"
-#
-#
-#    elif [ "$PYTHON" = "37" ]; then
-#      brew upgrade python
-#
-#
-#    elif [ "$PYTHON" = "35" ]; then
-#      pyenv install 3.5.2
-#      pyenv local 3.5.2
-#      PATH="~/.pyenv/versions/3.5.2/bin:${PATH}"
-#      pip3 install --upgrade pip
-#      pip3 install numpy
-#      pip3 install matplotlib
-#      pip3 install scipy
-#      pip3 install future
-#      pip3 install configparser
-#      pip3 install netcdf4
-#    fi
-#  fi
-#
-#install:
-#- |
-#  if ["$DEPLOY" = "0"]; then
-#    if [ "$PYTHON" = "2" ]; then
-#        python --version
-#        pip install --upgrade pip
-#        pip install 'matplotlib==1.4'
-#        python setup.py install
-#
-#    elif ["$PYTHON" = "35"]; then
-#        python3 --version
-#        python3 setup.py install
-#
-#    else
-#        python3 --version
-#        python3 setup.py install
-#    fi
-#  fi
-#script:
-#- |
-#  if ["$DEPLOY" = "0"]; then
-#    if [ "$PYTHON" = "2" ]; then
-#        python BCO/_tests/runAll.py
-#
-#    elif ["$PYTHON" = "35"]; then
-#      if [ "$TRAVIS_OS_NAME" = "osx" ]; then
-#        touch ~/.matplotlib/matplotlibrc
-#        echo backend: TkAgg > ~/.matplotlib/matplotlibrc
-#      fi
-#
-#        python3 BCO/_tests/runAll.py
-#    else
-#        python3 BCO/_tests/runAll.py
-#    fi
-#  fi
-#
-
 language: python
 matrix:
   include:
@@ -227,18 +103,12 @@ script:
       python3 BCO/_tests/runAll.py
   fi
 
-
-
-after_success:
-  - codecov
-
 deploy:
   provider: pypi
   user: tmachnitzki
-  password:
    password:
     secure: r8zcms2woD2SNdjXk3pyUzXybHw3PY7XdNqnmwJyZ3P8ltlVK4yYuKj8/JpLls6HIfQC2Dy41pO70F3fVX8ilWiyOisuixC1P5Z/hdmujBk+zyUxDIV6Q7aN7HQZFwDTb2ujOJv9kcA9giiGMDy+9FSE6r9ge9pcQdszQjaCrYYDoTL6a3TPJp4v/MU1fyqxxyKBpnzD4Z24R7YFRevZUEKeMw3J81lKyfjHVj1aTf9lKYdC/imi/2ofWas0RLQzXkUpq0TWAMJPiJbFIFYicpOcpGmVGGkYIeJhAKItWOZYnkuDPLR9JbXrdkeWXB8WtcCQ5xaif7MY+dXeZe/sjm05qquCbOaFfMIHEYhGlBU09Z8Wi/sOz1u8bIAzTWcKbBan5eG9/2ER0ogftAFNl2BY64Ke0vsBeThbUO1p/VRLscefLBylsbtbC4VEigQq0mqYwqKSwUJqlI+LGDY5rEgJwlLKvSlI6zkdIHqM2W5bgCp2RxJWanw43tT8vk+v93KqlrsQ6gLXVVfo/mAAK4Alpd0vyLlFVDFX0eFihrRjh6YBuR+y5qz4FamhlYTsdHzgs7QSZdTOJD2Y1bDuOJ4EqWLToNBV+CwxYcb5FA1xR2NNAcdOCibEb+o1PBDLu9NdcEva9ChzR5JXNsamTAJbd4d+tlG6fdBI6QhJ+Jw=
   distributions: sdist bdist_wheel
   on:
-#    tags: true
+    branch: master
     python: 2.7
