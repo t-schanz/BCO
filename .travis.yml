@@ -3,35 +3,7 @@ matrix:
   include:
   - os: linux
     sudo: false
-    python: 3.5
-    env:
-      global:
-      - TOXENV=py35
-      - PYTHON=3
-  - os: linux
-    sudo: false
-    python: 3.6
-    env:
-      global:
-      - TOXENV=py36
-      - PYTHON=3
-  - os: linux
-    sudo: false
     python: 2.7
-    env:
-      global:
-      - TOXENV=py27
-      - PYTHON=2
-  - os: osx
-    osx_image: xcode9.4
-    language: generic
-    env:
-      global:
-      - TOXENV=py36
-      - PYTHON=3
-  - os: osx
-    osx_image: xcode9.4
-    language: generic
     env:
       global:
       - TOXENV=py27
@@ -84,6 +56,7 @@ script:
 - |
   if [ "$PYTHON" = "2" ]; then
       python BCO/_tests/runAll.py
+      echo "asdf"
 
   elif ["$PYTHON" = "35"]; then
     if [ "$TRAVIS_OS_NAME" = "osx" ]; then
@@ -99,7 +72,7 @@ deploy:
   provider: pypi
   user: tmachnitzki
   password:
-    secure: L5nuW3np9ercQXGLSjV77QhEA6lYAgwLtp1cLUnuoJGIEJ6W62c1aObSLSbRa6nz1Lt2PPRYMiCavKVNXvMsvspk6t42P777hGawzVyyC84zCV2q+5U7O2YEpqqZDxrxTzK13FVcXbcipp9DHwJaFLiTwS7/0P5kNOssA3MKaj5Gf9+QpvSk36VZNFPvr9EeEIN4EgViYgkimK9ASTMCpKXJJkOfxTXcHv2CLQ0I97Sjh+yb7POThrQI7EhHJ4qJce4vu9NENoa9Aywm19FzuHtzPbyYqmA1C4kYweoYvLHMjXXWMse5SM/9dO6nq/bhCmp77YBIlfTrY+7uM40DqmYOY62VDayiUWIAoMmeOmn5NAKP197AhPFfiOcxTveP+p2LeRqHFCuMxfulKnP/GdUUw03HCkE1Nb4AxSrVzEff2sdSxuend5wN1rVtOndJxpIzbWYp+/6P6exLEpGfi94PJO+SAYNM/vjM2rNqzXkjSK/3u2H9Kd8GurmS9UZPKB76r/W/DpIwMcEU6YZBC91NNJ450WyKJtCHmoB2greetPjUQyr/6qjw4JyQHcFM2I04HCnPt/brylTdwklPvoqxOVFmMntoVwWKqVlOq7MZrJ6YjycjufZGchqPpiccpY6WSUk4bSV8yGELuIznBTrxPUQM+N43Ql1/fal1bP0=
+    secure: umjIj0tdS/Iv+sfMIDX9DMJdpjyc3on+4mja0va+/qP0NBk5S1qJJ+jyrtIXZjPn4g3YKpBc5zExJQye2bsqHnizswYCGynPr+UFSMZFd6ARY16HPUAoUDfFuq5JCDEwlVAuAz4zrb9i/icuyySgvwUEqxmP2aBC/0SXMMBgBX9xNc/oqtqOOB5v6X6oiiMQvlvkHWqN8Zh6vzt56KjokEUX7OBVwFYSRzxUYmozTH7YJC2TKrV7MN5kdhwCh8XMvoT7FHwWKcf+paIkzJ3889ghhGnakmrV4soNR4jhIFEzdA1fSn22ClK4gt+eluFq9xxFAebb2JtAHPEPqClo7DgNcWPfgmjaqfTAXQiTlOY3UjKZwvitawYtYJaOXbzrtAxdw0yAFGBMY9jxc5hYVcp0uPtbiGrIKkcuv2efizB43oCyNRjuGmiyA4OYBS6H/+OmS7hlLDDY5amSMCnB3cn1q3CBMkEBb3VnMkP67n1I/DSLG5tX97/IX2EdkvvY/dzpe5cC8TRZ/mdgaeb9VwBXjj+1WqlV4+zU/fay1VfzIunv0x21uuDR/7kLY9tTBWTzbhSIzii8QN1UgIT+rxgPlXcK8qY+FYVMz6gfp876wkKrZSGTgzLoktK6277lEBbjop917BAJwgKJ44ZOq8ML5HK1hrq4pvvWhUlGco8=
   on:
     branch: master
     python: 2.7
