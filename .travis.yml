@@ -9,6 +9,7 @@ jobs:
         global:
         - TOXENV=py35
         - PYTHON=3
+        - DEPLOY=0
 #      - os: linux
 #        sudo: false
 #        python: 3.6
@@ -45,6 +46,7 @@ jobs:
         global:
         - TOXENV=py35
         - PYTHON=3
+        - DEPLOY=1
       deploy:
         provider: pipy
         server: https://test.pypi.org/project/BCO/
@@ -85,33 +87,37 @@ before_install:
 
 install:
 - |
-  if [ "$PYTHON" = "2" ]; then
-      python --version
-      pip install --upgrade pip
-      pip install 'matplotlib==1.4'
-      python setup.py install
+  if ["$DEPLOY" = "0"]; then
+    if [ "$PYTHON" = "2" ]; then
+        python --version
+        pip install --upgrade pip
+        pip install 'matplotlib==1.4'
+        python setup.py install
 
-  elif ["$PYTHON" = "35"]; then
-      python3 --version
-      python3 setup.py install
+    elif ["$PYTHON" = "35"]; then
+        python3 --version
+        python3 setup.py install
 
-  else
-      python3 --version
-      python3 setup.py install
+    else
+        python3 --version
+        python3 setup.py install
+    fi
   fi
 script:
 - |
-  if [ "$PYTHON" = "2" ]; then
-      python BCO/_tests/runAll.py
+  if ["$DEPLOY" = "0"]; then
+    if [ "$PYTHON" = "2" ]; then
+        python BCO/_tests/runAll.py
 
-  elif ["$PYTHON" = "35"]; then
-    if [ "$TRAVIS_OS_NAME" = "osx" ]; then
-      touch ~/.matplotlib/matplotlibrc
-      echo backend: TkAgg > ~/.matplotlib/matplotlibrc
+    elif ["$PYTHON" = "35"]; then
+      if [ "$TRAVIS_OS_NAME" = "osx" ]; then
+        touch ~/.matplotlib/matplotlibrc
+        echo backend: TkAgg > ~/.matplotlib/matplotlibrc
+      fi
+
+        python3 BCO/_tests/runAll.py
+    else
+        python3 BCO/_tests/runAll.py
     fi
-
-      python3 BCO/_tests/runAll.py
-  else
-      python3 BCO/_tests/runAll.py
   fi
 
