@@ -83,6 +83,7 @@ install:
         if [ "$PYTHON" = "2" ]; then
             python --version
             pip install --upgrade pip
+            pip install 'matplotlib==1.4'
             python setup.py install
 
         elif ["$PYTHON" = "35"]; then
