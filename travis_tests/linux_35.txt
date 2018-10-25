@@ -7,5 +7,5 @@ global:
     - PYTHON=3
 
 
-python3 setup.py install
-python3 BCO/_tests/runAll.py
+python3 ../setup.py install
+python3 ../BCO/_tests/runAll.py
