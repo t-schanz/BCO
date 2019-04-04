@@ -102,4 +102,4 @@ deploy:
     secure: fCCSZCe8vUu/lScQJN/m3ZP4FAdYUC+gu4vIdqpZZEolKlXOkn332HPKoHriAdNQX8U3gn0aZgKIOzPSQF/cn1D2F8Gsofg4AWT3EdjP89qaBMRkhNryTiUXZrB8t6/ujZ7oojb/Q1PbBK8q6cdLzysfcG987Hdn2voPtzv6TSA4wWIcnaqflhUN58RL6b+9uewXf91JVzSBoboy4l6bGqlQgWJ5RcWI2QkQjwR7dK/BCf+pXKDJcXr2aRBoGvhahBGj+pUyyYkvSj8mt4rO4K85PXQWs/yGYxqxYP8sRPCYU3gaXKpFDcsV4rQPp04rvHcieJfWeWtcPlVD4cQUf4t5tEYN7lTH77CzyYA66NuRsKDHVDAlGlTht2hIe+M0cwS7VAp28s24a+C+yk8ehLh9/8oW9d3Yi0eJc0XdoJ2iEifayi85BS+yOHOwc254EpzLuSpaUaQisTY8PwKeZze+em1xJXlbJZnhlNkCK+MsxX+NWds1+0yh4HzI9yUp5hmM7DN5YidFfzHS/g+rlFsOvMOHKOEdQkIvCDr/Al659EGbcXB38FjEsPWC+luYC2fk+T81kqg/OMwYSEedvDIcQjkPONfWWOYc95E58zeu3pRSkMixQHyBUezZ50OIn501Utob2MwB1FuUlg/d7eYx6jcd2cn7fWZc4UkMrgE=
   on:
     branch: master
-    python: 2.7
+    python: 3.6

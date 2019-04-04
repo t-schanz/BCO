@@ -248,7 +248,7 @@ def getFileName(instrument, date, use_ftp, filelist=[], ftp_client=None):
     else:
         if len(filelist) == 0:
             if ftp_client == None:
-                ftp_client = FTP(BCO.FTP_SERVER)
+                ftp_client = FTP(BCO.FTP_SERVER, timeout=600) # timeout in seconds
                 ftp_client.login(user=BCO.FTP_USER, passwd=BCO.FTP_PASSWD)
                 name = ftp_client.nlst(tmp_path)
                 ftp_client.close()
