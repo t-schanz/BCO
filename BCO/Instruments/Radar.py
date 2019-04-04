@@ -107,13 +107,23 @@ class Radar(__Device):
             self.path += "Version_%i/" % version
         self.__checkInput()
 
-        self.lat = self._getValueFromNc("lat")
-        self.lon = self._getValueFromNc("lon")
-        self.azimuth = self._getValueFromNc("azi")
-        self.elevation = self._getValueFromNc("elv")
+        try:
+            self.lat = self._getValueFromNc("lat")
+            self.lon = self._getValueFromNc("lon")
+        except KeyError:
+            self.lat = self._getValueFromNc("latitude")
+            self.lon = self._getValueFromNc("longitude")
+
+        try:
+            self.azimuth = self._getValueFromNc("azi")
+            self.elevation = self._getValueFromNc("elv")
+        except KeyError:
+            self.azimuth = self._getValueFromNc("azimuth")
+            self.elevation = self._getValueFromNc("zenith")
+
         try:
             self.north = self._getValueFromNc("northangle")
-        except:
+        except KeyError:
             self.north = self._getValueFromNc("north")
         self.skipped = None
 
